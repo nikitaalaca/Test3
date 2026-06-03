@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DSP Эквалайзер Pro | iOS Style</title>
+    <style>
+        :root {
+            /* iOS Dark Theme Colors */
+            --bg-color: #000000;
+            --card-bg: rgba(28, 28, 30, 0.6);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #FFFFFF;
+            --text-secondary: rgba(235, 235, 245, 0.6);
+            --accent: #0A84FF; /* Blue */
+            --accent-glow: rgba(10, 132, 255, 0.5);
+            --track-bg: rgba(255, 255, 255, 0.1);
+            
+            --font-ios: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Arial, sans-serif;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-ios);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            padding: 20px 16px;
+        }
+
+        /* Жидкий анимированный фон */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            background: #000;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
+            animation: drift 15s infinite alternate cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .blob-1 { top: -10%; left: -20%; width: 70vw; height: 70vw; background: var(--accent); }
+        .blob-2 { bottom: -10%; right: -20%; width: 60vw; height: 60vw; background: #5E5CE6; animation-delay: -5s; }
+        .blob-3 { top: 40%; left: 50%; width: 40vw; height: 40vw; background: #FF2D55; animation-delay: -10s; opacity: 0.2; }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(10vw, 15vh) scale(1.2); }
+        }
+
+        /* Основной контейнер приложения */
+        .app-wrapper {
+            width: 100%;
+            max-width: 800px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 10;
+        }
+
+        /* Шапка */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 4px 20px 4px;
+        }
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .btn-rta {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            color: var(--accent);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-rta.active {
+            background: #FF3B30;
+            color: #FFF;
+            border-color: #FF3B30;
+            box-shadow: 0 4px 15px rgba(255, 59, 48, 0.4);
+        }
+
+        /* Карточки */
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(30px) saturate(150%);
+            -webkit-backdrop-filter: blur(30px) saturate(150%);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* Визуализатор */
+        .visualizer-card {
+            padding: 0;
+            height: 120px;
+            overflow: hidden;
+            position: relative;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Формы и контролы */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-group label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-left: 4px;
+        }
+
+        /* Сегментированный контрол (iOS Style) */
+        .segmented-control {
+            display: flex;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 3px;
+        }
+        .segment-btn {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 10px 0;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .segment-btn.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        select {
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
+            color: var(--text-primary);
+            padding: 14px 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            font-weight: 500;
+            outline: none;
+            appearance: none;
+            cursor: pointer;
+        }
+        select:focus { border-color: var(--accent); }
+
+        /* Сетка для селектов */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+
+        /* Эквалайзер */
+        .eq-board {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 280px;
+            padding: 10px 0;
+        }
+
+        .slider-column {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            width: 10%;
+            position: relative;
+        }
+
+        .val-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 12px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .freq-label {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-top: 12px;
+        }
+
+        /* Кастомный iOS Ползунок */
+        .slider-wrapper {
+            position: relative;
+            flex: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        input[type=range] {
+            -webkit-appearance: none;
+            position: absolute;
+            width: 180px; /* Длина ползунка */
+            height: 6px;
+            background: transparent;
+            outline: none;
+            transform: rotate(-90deg);
+            z-index: 2;
+        }
+
+        /* Трек ползунка */
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 6px;
+            border-radius: 4px;
+            /* Динамический фон через CSS переменные */
+            background: linear-gradient(to right, var(--accent) var(--val, 50%), var(--track-bg) var(--val, 50%));
+        }
+
+        /* Бегунок (Thumb) */
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4), 0 1px 3px rgba(0,0,0,0.2);
+            margin-top: -9px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.15);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-bg">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="blob blob-3"></div>
+    </div>
+
+    <div class="app-wrapper">
+        <div class="header">
+            <h1>ЭКВАЛАЙЗЕР</h1>
+            <button class="btn-rta" id="mic-btn">АНАЛИЗ</button>
+        </div>
+
+        <div class="card visualizer-card">
+            <canvas id="visualizer"></canvas>
+        </div>
+
+        <div class="card">
+            <div class="input-group">
+                <label>Акустический Режим</label>
+                <div class="segmented-control">
+                    <button class="segment-btn active" data-mode="SQ" data-color="#0A84FF">SQ</button>
+                    <button class="segment-btn" data-mode="SQL" data-color="#FF2D55">SQL</button>
+                    <button class="segment-btn" data-mode="PUNCH" data-color="#FF9F0A">ПАНЧ</button>
+                    <button class="segment-btn" data-mode="BASS" data-color="#30D158">БАС</button>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="input-group">
+                    <label>Пресеты DSP (30+)</label>
+                    <select id="preset-select"></select>
+                </div>
+                <div class="input-group">
+                    <label>Срезы компонентов</label>
+                    <select id="component-select">
+                        <option value="full">Полный диапазон (Вся система)</option>
+                        <option value="tweeter">Рупоры / Твитеры (ВЧ)</option>
+                        <option value="midrange">Эстрада / СЧ (Midrange)</option>
+                        <option value="midbass">Мидбасы (НЧ/СЧ)</option>
+                        <option value="subwoofer">Сабвуферное звено</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="eq-board" id="eq-board">
+                <!-- Слайдеры рендерятся через JS -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. ПРЕСЕТЫ И ДАННЫЕ ---
+        const presets = {
+            "По умолчанию (Flat)": [0,0,0,0,0,0,0,0,0,0],
+            "Акустика": [2,2,1,0,-1,-1,1,2,2,3],
+            "Усиление Баса": [6,5,4,2,0,0,0,0,0,0],
+            "Снижение Баса": [-6,-5,-4,-2,0,0,0,0,0,0],
+            "Классика": [2,2,1,0,-1,-1,0,2,3,3],
+            "Клубная": [3,4,3,1,-1,-1,1,2,3,4],
+            "Танцевальная": [4,5,2,0,-1,-2,0,2,4,4],
+            "Глубокий Звук": [5,4,2,1,0,0,0,-1,-2,-3],
+            "Электроника": [4,4,2,0,-2,-1,1,2,4,5],
+            "Хип-Хоп": [5,4,1,-1,-2,-1,0,1,3,4],
+            "Джаз": [2,2,1,1,-1,-1,0,1,2,3],
+            "Вокал Плюс": [-1,-1,0,2,4,4,2,0,-1,-1],
+            "SPL Монстр": [8,7,5,0,-3,-3,0,4,6,8],
+            "SQ Авто-тюнинг": [2,1,0,-1,0,1,2,3,2,1],
+            "SQL Максимум": [6,5,2,0,-2,0,2,4,6,5],
+            "Король Панча": [1,4,6,4,0,-2,0,2,3,3],
+            "Убийца Сабов": [8,6,2,0,-2,-3,-3,-4,-4,-4],
+            "Чистая Середина": [-4,-3,0,3,6,6,4,1,-2,-3],
+            "Кристальные ВЧ": [-3,-2,-1,0,0,1,3,5,7,8]
+        };
+
+        const frequencies = ['32', '64', '125', '250', '500', '1K', '2K', '4K', '8K', '16K'];
+        let currentValues = [0,0,0,0,0,0,0,0,0,0];
+        let targetValues = [0,0,0,0,0,0,0,0,0,0];
+
+        // --- 2. ГЕНЕРАЦИЯ UI ---
+        const eqBoard = document.getElementById('eq-board');
+        const presetSelect = document.getElementById('preset-select');
+
+        presetSelect.innerHTML = `<option value="custom">Ручная настройка</option>`;
+        for (let name in presets) {
+            presetSelect.innerHTML += `<option value="${name}">${name}</option>`;
+        }
+
+        // Функция обновления дизайна ползунка
+        function updateSliderTrack(input, value) {
+            // Преобразуем значение от -12 до 12 в проценты от 0 до 100
+            const percentage = ((value + 12) / 24) * 100;
+            input.style.setProperty('--val', `${percentage}%`);
+        }
+
+        frequencies.forEach((freq, i) => {
+            const col = document.createElement('div');
+            col.className = 'slider-column';
+
+            const valLabel = document.createElement('div');
+            valLabel.className = 'val-label';
+            valLabel.id = `val-${i}`;
+            valLabel.textContent = '0';
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'slider-wrapper';
+
+            const input = document.createElement('input');
+            input.type = 'range';
+            input.min = '-12'; input.max = '12'; input.step = '0.1'; input.value = '0';
+            updateSliderTrack(input, 0);
+            
+            input.addEventListener('input', (e) => {
+                const val = parseFloat(e.target.value);
+                currentValues[i] = val; targetValues[i] = val;
+                valLabel.textContent = val > 0 ? `+${val.toFixed(1)}` : val.toFixed(1);
+                updateSliderTrack(input, val);
+                presetSelect.value = "custom";
+            });
+
+            const freqLabel = document.createElement('div');
+            freqLabel.className = 'freq-label';
+            freqLabel.textContent = freq;
+
+            wrapper.appendChild(input);
+            col.appendChild(valLabel);
+            col.appendChild(wrapper);
+            col.appendChild(freqLabel);
+            eqBoard.appendChild(col);
+        });
+
+        const inputs = document.querySelectorAll('input[type=range]');
+
+        // --- 3. АНИМАЦИИ И УПРАВЛЕНИЕ ---
+        function applyEQ(arr) {
+            targetValues = [...arr];
+            let animating = true;
+            const animate = () => {
+                animating = false;
+                for(let i=0; i<10; i++) {
+                    const diff = targetValues[i] - currentValues[i];
+                    if(Math.abs(diff) > 0.1) {
+                        currentValues[i] += diff * 0.15; // Плавность анимации
+                        animating = true;
+                    } else {
+                        currentValues[i] = targetValues[i];
+                    }
+                    inputs[i].value = currentValues[i];
+                    document.getElementById(`val-${i}`).textContent = currentValues[i] > 0 ? `+${currentValues[i].toFixed(1)}` : currentValues[i].toFixed(1);
+                    updateSliderTrack(inputs[i], currentValues[i]);
+                }
+                if(animating) requestAnimationFrame(animate);
+            };
+            requestAnimationFrame(animate);
+        }
+
+        presetSelect.addEventListener('change', e => { if(presets[e.target.value]) applyEQ(presets[e.target.value]); });
+
+        document.querySelectorAll('.segment-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.segment-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                const color = btn.dataset.color;
+                document.documentElement.style.setProperty('--accent', color);
+                document.documentElement.style.setProperty('--accent-glow', color + '66');
+                
+                const mode = btn.dataset.mode;
+                if(mode === 'SQ') { applyEQ(presets["SQ Авто-тюнинг"]); presetSelect.value = "SQ Авто-тюнинг"; }
+                if(mode === 'SQL') { applyEQ(presets["SQL Максимум"]); presetSelect.value = "SQL Максимум"; }
+                if(mode === 'PUNCH') { applyEQ(presets["Король Панча"]); presetSelect.value = "Король Панча"; }
+                if(mode === 'BASS') { applyEQ(presets["Убийца Сабов"]); presetSelect.value = "Убийца Сабов"; }
+            });
+        });
+
+        document.getElementById('component-select').addEventListener('change', (e) => {
+            const comp = e.target.value;
+            inputs.forEach((input, index) => {
+                const col = input.closest('.slider-column');
+                col.style.opacity = '1'; col.style.pointerEvents = 'auto';
+                if(comp === 'subwoofer' && index > 2) { col.style.opacity = '0.3'; col.style.pointerEvents = 'none'; }
+                if(comp === 'midbass' && (index < 1 || index > 5)) { col.style.opacity = '0.3'; col.style.pointerEvents = 'none'; }
+                if(comp === 'midrange' && (index < 2 || index > 7)) { col.style.opacity = '0.3'; col.style.pointerEvents = 'none'; }
+                if(comp === 'tweeter' && index < 6) { col.style.opacity = '0.3'; col.style.pointerEvents = 'none'; }
+            });
+        });
+
+        // --- 4. RTA АНАЛИЗАТОР (Микрофон) & LIQUID CANVAS ---
+        let audioCtx, analyser, micStream;
+        const micBtn = document.getElementById('mic-btn');
+        let isMicOn = false;
+
+        micBtn.addEventListener('click', async () => {
+            if (isMicOn) {
+                micStream.getTracks().forEach(track => track.stop());
+                audioCtx.close();
+                isMicOn = false;
+                micBtn.classList.remove('active');
+                micBtn.innerHTML = '🎙 Анализ Салона';
+                return;
+            }
+
+            try {
+                micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                analyser.fftSize = 256;
+                analyser.smoothingTimeConstant = 0.8;
+                
+                const source = audioCtx.createMediaStreamSource(micStream);
+                source.connect(analyser);
+
+                isMicOn = true;
+                micBtn.classList.add('active');
+                micBtn.innerHTML = 'Остановить RTA';
+            } catch (err) {
+                alert('Не удалось получить доступ к микрофону.');
+            }
+        });
+
+        const canvas = document.getElementById('visualizer');
+        const ctx = canvas.getContext('2d');
+        function resize() { 
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = canvas.parentElement.offsetWidth * dpr; 
+            canvas.height = canvas.parentElement.offsetHeight * dpr; 
+            ctx.scale(dpr, dpr);
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        let time = 0;
+        function drawLiquid() {
+            const w = canvas.parentElement.offsetWidth;
+            const h = canvas.parentElement.offsetHeight;
+            ctx.clearRect(0, 0, w, h);
+            
+            const accentColor = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+            
+            let dataArray = null;
+            let currentEnergy = 0;
+            
+            if (isMicOn && analyser) {
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                analyser.getByteFrequencyData(dataArray);
+                currentEnergy = (dataArray[1] + dataArray[2] + dataArray[3]) / 3;
+            }
+
+            for(let j = 0; j < 2; j++) {
+                ctx.beginPath();
+                ctx.moveTo(0, h);
+                
+                for(let i = 0; i <= w; i += 5) {
+                    const normI = i / w;
+                    
+                    let micBoost = 0;
+                    if (dataArray) {
+                        const dataIndex = Math.floor(normI * (dataArray.length * 0.6)); 
+                        micBoost = (dataArray[dataIndex] / 255) * 50; 
+                    }
+
+                    const eqIndex = Math.floor(normI * 9);
+                    const eqBoost = currentValues[eqIndex] || 0;
+                    
+                    const amplitude = 12 + (eqBoost * 1.5) + (j * 4) + micBoost;
+                    const pulse = (currentEnergy / 255) * 10;
+                    
+                    const y = (h / 2) + pulse + Math.sin(i * 0.01 + time + j) * amplitude + Math.cos(i * 0.005 - time) * (amplitude * 0.5);
+                    ctx.lineTo(i, y);
+                }
+                
+                ctx.lineTo(w, h);
+                
+                // Красивые градиенты для волн
+                let grad = ctx.createLinearGradient(0, 0, 0, h);
+                if (j === 0) {
+                    grad.addColorStop(0, accentColor);
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+                } else {
+                    grad.addColorStop(0, 'rgba(255,255,255,0.2)');
+                    grad.addColorStop(1, 'rgba(0,0,0,0)');
+                }
+                
+                ctx.fillStyle = grad;
+                ctx.fill();
+            }
+            
+            time += isMicOn ? 0.06 : 0.02;
+            requestAnimationFrame(drawLiquid);
+        }
+        drawLiquid();
+
+    </script>
+</body>
+</html>
