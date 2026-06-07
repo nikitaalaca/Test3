@@ -195,6 +195,13 @@
         <div class="auth-card" id="auth-main-card-node"></div>
     </div>
 
+    <div id="video-call-overlay-layer" class="fullscreen-overlay" style="background: #000000; flex-direction: column;">
+        <iframe id="jitsi-video-frame-node" allow="camera; microphone; display-capture; autoplay" style="width: 100%; height: 100%; border: none;"></iframe>
+        <button class="circle-action-btn" style="position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: #ff3b30; color: #ffffff; width: 64px; height: 64px; box-shadow: 0 8px 24px rgba(255,59,48,0.4); z-index: 1000;" onclick="terminateActiveVideoCallSession()" title="Завершить звонок">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform: rotate(135deg);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </button>
+    </div>
+
     <div id="settings-modal-overlay" class="modal-overlay-system" onclick="closeProfileSettingsModal()">
         <div class="generic-modal-card" onclick="event.stopPropagation()">
             <h3 style="margin-bottom: 20px; font-size: 20px; font-weight: 700;">Настройки профиля</h3>
@@ -286,6 +293,7 @@
                             <div class="row-sub" id="active-chat-status-target">...</div>
                         </div>
                     </div>
+                    
                     <div style="display:flex; align-items:center; gap:10px;">
                         <button id="header-video-call-btn" class="circle-action-btn" onclick="startVideoCallProcess()" title="Начать видеозвонок">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
@@ -746,7 +754,7 @@
                 
                 let mediaPayloadHTML = '';
                 
-                // ОБРАБОТКА ВИДЖЕТА ВИДЕОВЫЗОВА
+                // ОБРАБОТКА ИНТЕРАКТИВНОГО ВИДЖЕТА ВИДЕОВЫЗОВА
                 if(m.isCall) {
                     const cardBg = isMe ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.04)';
                     const btnBg = isMe ? '#ffffff' : '#34c759';
@@ -758,7 +766,7 @@
                         <div style="background: ${cardBg}; padding: 16px; border-radius: 16px; margin-bottom: 4px; text-align: center; min-width: 230px; border: 1px solid ${borderCol}; box-shadow: var(--shadow-smooth);">
                             <div style="font-size: 24px; margin-bottom: 6px;">📞</div>
                             <div style="font-weight: 700; font-size: 13px; margin-bottom: 12px; color: ${titleColor}; letter-spacing: -0.3px;">Видеозвонок CC Ecosystem</div>
-                            <button onclick="window.open('${m.callUrl}', '_blank')" style="background: ${btnBg}; color: ${btnText}; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
+                            <button onclick="launchInAppVideoSession('${m.callUrl}')" style="background: ${btnBg}; color: ${btnText}; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 700; font-size: 12px; cursor: pointer; width: 100%; box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: all 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'">
                                 Присоединиться
                             </button>
                         </div>
@@ -874,20 +882,17 @@
             clearSelectedAttachmentSlot();
         }
 
-        // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ ЗАПУСКА НАСТОЯЩЕГО ВИДЕОВЫЗОВА
+        // НАЧАЛО ЗВОНКА С АВТОМАТИЧЕСКИМ ЗАПУСКОМ ВНУТРИ ОКНА
         function startVideoCallProcess() {
             if (!activeChatTargetId) return;
             
-            // Формируем полностью уникальное имя комнаты на базе ID чата и текущего времени
             const cleanChatId = activeChatTargetId.replace(/[^a-zA-Z0-9]/g, '_');
-            const roomName = `CC_Ecosystem_Room_${cleanChatId}_${Date.now().toString().slice(-4)}`;
+            const roomName = `CC_Room_${cleanChatId}_${Date.now().toString().slice(-4)}`;
             
-            // Конфигурируем Jitsi (отключаем предпросмотр для максимальной скорости соединения)
+            // Настройка Jitsi: отключаем превью-окно, чтобы соединение шло сразу
             const callUrl = `https://meet.jit.si/${roomName}#config.prejoinPageEnabled=false`;
-            
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
             
-            // Создаем специальную структуру сообщения-вызова
             const msgNode = { 
                 senderId: currentUserId, 
                 text: '', 
@@ -896,10 +901,8 @@
                 callUrl: callUrl
             };
             
-            // Отправляем пакет в Realtime Database
             database.ref('messages/' + activeChatTargetId).push(msgNode);
             
-            // Обновляем статус последнего сообщения в сайдбаре
             database.ref('chats/' + activeChatTargetId).once('value', (snap) => {
                 const meta = snap.val() || {};
                 const currentUnread = meta.unread || {};
@@ -915,8 +918,22 @@
                 });
             });
             
-            // Мгновенно открываем видеокомнату у инициатора звонка в новой вкладке
-            window.open(callUrl, '_blank');
+            // Запуск звонка для создателя прямо в приложении
+            launchInAppVideoSession(callUrl);
+        }
+
+        // ОТКРЫТИЕ ФРЕЙМА ВИДЕОСВЯЗИ
+        function launchInAppVideoSession(url) {
+            const frame = document.getElementById('jitsi-video-frame-node');
+            frame.src = url;
+            document.getElementById('video-call-overlay-layer').classList.add('active');
+        }
+
+        // СБРОС И ЗАКРЫТИЕ ЗВОНКА
+        function terminateActiveVideoCallSession() {
+            const frame = document.getElementById('jitsi-video-frame-node');
+            frame.src = ''; // Полностью разрываем WebRTC-стрим и гасим камеру
+            document.getElementById('video-call-overlay-layer').classList.remove('active');
         }
 
         function toggleVoiceRecordingProcess() {
