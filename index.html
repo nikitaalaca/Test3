@@ -35,7 +35,6 @@
         #sidebar-container { width: var(--sidebar-width); height: 100%; display: flex; flex-direction: column; z-index: 10; flex-shrink: 0; position: relative; }
         #main-chat-container { flex: 1; height: 100%; display: flex; flex-direction: column; position: relative; z-index: 5; border-left: 1px solid var(--inner-border); background: rgba(255, 255, 255, 0.2); }
 
-        /* Мобильная адаптация основного лейаута */
         @media (max-width: 768px) {
             #sidebar-container { width: 100vw; position: absolute; left: 0; top: 0; bottom: 0; z-index: 10; transition: var(--spring-transition); }
             #main-chat-container { width: 100vw; position: absolute; left: 0; top: 0; bottom: 0; z-index: 20; transform: translateX(100vw); transition: var(--spring-transition); }
@@ -47,7 +46,6 @@
         .sidebar-header { padding: 24px 20px 16px; display: flex; align-items: center; justify-content: space-between; }
         .brand-title { font-size: 24px; font-weight: 800; color: var(--text-primary); letter-spacing: -0.5px; display: flex; align-items: center; }
         
-        /* Переливающийся градиентный CC */
         .shimmer-cc {
             background: linear-gradient(90deg, #ff2d55, #ff9500, #4cd964, #0071e3, #ff2d55);
             background-size: 200% auto;
@@ -73,11 +71,54 @@
         .circle-action-btn.primary { background: var(--accent-gradient); color: white; }
         .circle-action-btn.primary:hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(0,113,227,0.2); }
 
-        .tab-bar { display: flex; padding: 0 20px 12px; gap: 6px; border-bottom: 1px solid var(--inner-border); }
-        .tab-btn { flex: 1; padding: 10px; border: none; background: transparent; color: var(--text-secondary); font-size: 14px; font-weight: 600; border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s; }
-        .tab-btn.active { background: rgba(0,113,227,0.08); color: var(--accent); }
+        /* Стили плавающего iOS таб-бара */
+        .ios-tab-dock {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 24px;
+            padding: 8px 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.06);
+            z-index: 100;
+        }
+        .dock-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--spring-transition);
+            padding: 6px 0;
+            border-radius: 16px;
+            flex: 1;
+        }
+        .dock-item.active {
+            color: var(--accent);
+        }
+        .dock-item svg {
+            width: 22px;
+            height: 22px;
+            transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .dock-item:active svg {
+            transform: scale(0.88);
+        }
 
-        .scroller-content { flex: 1; overflow-y: auto; padding: 10px 20px; display: none; -webkit-overflow-scrolling: touch; }
+        /* Скролл-контент с отступом под док */
+        .scroller-content { flex: 1; overflow-y: auto; padding: 10px 20px 95px; display: none; -webkit-overflow-scrolling: touch; }
         .scroller-content.active { display: block; }
 
         .item-row { display: flex; align-items: center; padding: 14px; border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; margin-bottom: 6px; border: 1px solid transparent; }
@@ -110,13 +151,11 @@
         .audio-wrapper { display: flex; align-items: center; gap: 10px; min-width: 200px; padding: 4px 0; }
         .audio-wrapper audio { height: 32px; max-width: 100%; }
 
-        /* Базовые стили панели ввода */
         .chat-input-bar { padding: 16px 24px calc(16px + env(safe-area-inset-bottom)); border-top: 1px solid var(--inner-border); background: rgba(255,255,255,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
         .input-row-container { display: flex; align-items: center; gap: 12px; max-width: 1200px; margin: 0 auto; width: 100%; }
         .chat-input-bar input[type="text"] { flex: 1; padding: 14px 18px; border: 1px solid transparent; border-radius: var(--radius-md); background: rgba(0,0,0,0.04); color: var(--text-primary); font-size: 15px; outline: none; transition: all 0.2s; }
         .chat-input-bar input[type="text"]:focus { background: #fff; border-color: rgba(0,113,227,0.15); }
 
-        /* Изменение масштаба для мобильных устройств (Исправление бага с image.png) */
         @media (max-width: 480px) {
             .chat-input-bar { padding: 10px 12px calc(10px + env(safe-area-inset-bottom)); }
             .input-row-container { gap: 6px; }
@@ -155,7 +194,7 @@
             <div style="display:flex; align-items:center; gap:16px; margin-bottom:20px;">
                 <div id="settings-avatar-preview" class="avatar-ui" style="width:64px; height:64px; font-size:20px;"></div>
                 <input type="file" id="avatar-file-input" accept="image/*" style="display:none;" onchange="processAvatarSelection(event)">
-                <button class="tab-btn" style="background:rgba(0,0,0,0.04); padding:8px 14px;" onclick="document.getElementById('avatar-file-input').click()">Изменить фото</button>
+                <button class="tab-btn" style="background:rgba(0,0,0,0.04); padding:8px 14px; border:none; border-radius:8px; cursor:pointer;" onclick="document.getElementById('avatar-file-input').click()">Изменить фото</button>
             </div>
 
             <label style="font-size:11px; color:var(--text-secondary); font-weight:700; display:block; margin-bottom:6px;">ВАШЕ ИМЯ</label>
@@ -164,7 +203,7 @@
             <input type="text" id="settings-role-input" class="premium-input">
             
             <button class="circle-action-btn primary" style="width:100%; border-radius:12px; font-weight:600;" onclick="saveProfileSettingsChanges()">Сохранить изменения</button>
-            <button class="tab-btn" style="width:100%; margin-top:12px; color:#ff3b30; font-weight:700;" onclick="executeLogoutSystem()">Выйти из аккаунта</button>
+            <button style="width:100%; margin-top:12px; color:#ff3b30; font-weight:700; background:none; border:none; cursor:pointer; padding:8px;" onclick="executeLogoutSystem()">Выйти из аккаунта</button>
         </div>
     </div>
 
@@ -186,7 +225,6 @@
     <div id="app-layout">
         <aside id="sidebar-container" class="glass-panel">
             <div class="sidebar-header">
-                <!-- Изменено по запросу пользователя: Заголовок ЧАТЫ + переливающийся яркий CC -->
                 <span class="brand-title">ЧАТЫ<span class="shimmer-cc">CC</span></span>
                 <div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileSettingsModal()"></div>
             </div>
@@ -201,13 +239,35 @@
                 </button>
             </div>
             
-            <nav class="tab-bar">
-                <button class="tab-btn active" id="tab-btn-chats" onclick="switchSidebarTab('chats')">Диалоги</button>
-                <button class="tab-btn" id="tab-btn-contacts" onclick="switchSidebarTab('contacts')">Коллеги</button>
-            </nav>
-            
+            <!-- Скролл-контент вкладок -->
             <div id="tab-content-chats" class="scroller-content active"></div>
             <div id="tab-content-contacts" class="scroller-content"></div>
+
+            <!-- ПЛАВАЮЩИЙ iOS DOCK TAB BAR -->
+            <nav class="ios-tab-dock">
+                <button class="dock-item active" id="dock-btn-chats" onclick="switchSidebarTab('chats')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <span>Чаты</span>
+                </button>
+                <button class="dock-item" id="dock-btn-contacts" onclick="switchSidebarTab('contacts')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                    </svg>
+                    <span>Коллеги</span>
+                </button>
+                <button class="dock-item" id="dock-btn-settings" onclick="switchSidebarTab('settings')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                    <span>Настройки</span>
+                </button>
+            </nav>
         </aside>
 
         <main id="main-chat-container">
@@ -234,7 +294,7 @@
 
                 <div id="attachment-preview-zone" style="display:none; padding:12px 24px; background:#fff; border-top:1px solid var(--inner-border); align-items:center; justify-content:space-between;">
                     <div id="preview-pill-text" style="font-size:13px; font-weight:600; color:var(--accent); text-overflow:ellipsis; overflow:hidden; white-space:nowrap; max-width:70%;"></div>
-                    <button class="tab-btn" style="color:#ff3b30; padding:0 8px;" onclick="clearSelectedAttachmentSlot()">Удалить</button>
+                    <button style="color:#ff3b30; padding:0 8px; background:none; border:none; cursor:pointer;" onclick="clearSelectedAttachmentSlot()">Удалить</button>
                 </div>
 
                 <footer class="chat-input-bar">
@@ -388,6 +448,9 @@
 
         function closeProfileSettingsModal() {
             document.getElementById('settings-modal-overlay').classList.remove('active');
+            document.getElementById('dock-btn-settings').classList.remove('active');
+            const currentActiveBtn = document.getElementById('dock-btn-' + activeTab);
+            if(currentActiveBtn) currentActiveBtn.classList.add('active');
         }
 
         function processAvatarSelection(event) {
@@ -516,9 +579,18 @@
         }
 
         function switchSidebarTab(target) {
+            if (target === 'settings') {
+                document.querySelectorAll('.dock-item').forEach(b => b.classList.remove('active'));
+                document.getElementById('dock-btn-settings').classList.add('active');
+                openProfileSettingsModal();
+                return;
+            }
+
             activeTab = target;
-            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById('tab-btn-' + target).classList.add('active');
+            document.querySelectorAll('.dock-item').forEach(b => b.classList.remove('active'));
+            const targetBtn = document.getElementById('dock-btn-' + target);
+            if(targetBtn) targetBtn.classList.add('active');
+            
             buildAppUIRenderers();
         }
 
@@ -548,7 +620,7 @@
             });
         }
 
-        /* Полное исправление логики рендеринга обычных (Direct) чатов */
+        /* Полное исправление логики: Фильтрация дубликатов собеседников из Базы Данных */
         function renderChatsTab() {
             const root = document.getElementById('tab-content-chats');
             root.className = "scroller-content active";
@@ -558,7 +630,17 @@
             database.ref('chats').once('value', (snapshot) => {
                 const chatsData = snapshot.val() || {};
                 
-                Object.keys(chatsData).forEach(chatId => {
+                // Сет для отслеживания уникальности отображаемых сущностей в списке
+                const renderedTargetsTrack = new Set();
+
+                // Сортируем ключи чатов так, чтобы чаты с более новыми сообщениями были первыми
+                const sortedChatIds = Object.keys(chatsData).sort((a, b) => {
+                    const timeA = chatsData[a].lastTime || "";
+                    const timeB = chatsData[b].lastTime || "";
+                    return timeB.localeCompare(timeA);
+                });
+                
+                sortedChatIds.forEach(chatId => {
                     const chat = chatsData[chatId];
                     if (!chat) return;
 
@@ -566,12 +648,11 @@
                     let isParticipant = false;
                     let chatTitle = "Диалог";
                     let avatarHTML = "";
+                    let globalUniqueKey = chatId; 
 
-                    // Проверяем участие по структуре members (Безопасно и универсально)
                     if (chat.members && chat.members[currentUserId]) {
                         isParticipant = true;
                     } else {
-                        // Резервный фоллбек по ID для старых записей
                         if (chatId.split('__').includes(currentUserId)) {
                             isParticipant = true;
                         }
@@ -582,12 +663,17 @@
                     if (isGroup) {
                         chatTitle = chat.name || "Группа";
                         avatarHTML = `<div class="avatar-ui" style="background:#53535a;">${chatTitle.substring(0,2).toUpperCase()}</div>`;
+                        globalUniqueKey = chatId; 
                     } else {
-                        // Обработка личного чата
+                        // Для личных диалогов находим ID собеседника
                         const parts = chatId.split('__');
                         const companionId = parts.find(id => id !== currentUserId) || Object.keys(chat.members || {}).find(id => id !== currentUserId) || currentUserId;
-                        const companion = allUsers.find(u => u.id === companionId);
                         
+                        // Критически важная проверка: если этот человек уже отрендерен выше, игнорируем дублирующую ветку
+                        if (renderedTargetsTrack.has(companionId)) return;
+                        globalUniqueKey = companionId;
+
+                        const companion = allUsers.find(u => u.id === companionId);
                         if (companion) {
                             chatTitle = companion.name;
                             avatarHTML = companion.avatar ? `<div class="avatar-ui" style="background-image:url(${companion.avatar})"></div>` : `<div class="avatar-ui" style="background:${companion.color}">${companion.name.substring(0,2).toUpperCase()}</div>`;
@@ -596,6 +682,9 @@
                             avatarHTML = `<div class="avatar-ui" style="background:#86868b;">?</div>`;
                         }
                     }
+
+                    // Фиксируем, что данная сущность успешно добавлена в интерфейс
+                    renderedTargetsTrack.add(globalUniqueKey);
 
                     if (searchString && !chatTitle.toLowerCase().includes(searchString)) return;
 
