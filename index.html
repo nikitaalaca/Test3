@@ -825,76 +825,83 @@
         }
     </script>
 
+<style>
+.unread-badge{
+display:inline-flex;align-items:center;justify-content:center;
+min-width:18px;height:18px;border-radius:999px;
+font-size:11px;padding:0 6px;background:#e53935;color:white;
+margin-left:8px;
+}
+</style>
+
 <script>
-/* Security patch */
+/* Advanced messenger pack */
 (function(){
-window.escapeHtml = function(s){
-  return String(s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-};
 
-const oldFinalize = window.finalizeUserRegistrationDB;
-window.finalizeUserRegistrationDB = function(){
-  const login = (window.tempRegistrationPayload?.login||"").toLowerCase();
-  if ((window.allUsers||[]).some(u => (u.login||"").toLowerCase() === login)){
-      alert("Логин уже существует");
-      return;
-  }
-  return oldFinalize();
-};
+window.openGroupsPanel = function(){
+  let panel=document.getElementById('groups-panel');
+  if(panel){ panel.style.display='block'; return; }
 
-const oldExit = window.exitActiveChatView;
-window.exitActiveChatView = function(){
-  try{ if(window.msgListener) window.msgListener.off(); }catch(e){}
-  return oldExit();
-};
+  panel=document.createElement('div');
+  panel.id='groups-panel';
+  panel.style.cssText='position:fixed;inset:10% 10%;background:white;z-index:10000;padding:16px;overflow:auto;border-radius:12px';
+  panel.innerHTML='<h3>Группы</h3><div id="groups-list"></div><button onclick="this.parentNode.style.display=\'none\'">Закрыть</button>';
+  document.body.appendChild(panel);
 
-window.addEventListener('load', ()=>{
-  const oldRender = window.renderMessagesFlow;
-  if(oldRender){
-    window.renderMessagesFlow = function(list){
-      const flow = document.getElementById('chat-messages-flow-root');
-      flow.innerHTML='';
-      (list||[]).forEach(m=>{
-        const isMe = m.senderId === window.currentUserId;
-        const c=document.createElement('div');
-        c.className='msg-container '+(isMe?'outgoing':'incoming');
-        const bubble=document.createElement('div');
-        bubble.className='msg-bubble-main';
-
-        if(m.fileData){
-          if(m.fileType && m.fileType.startsWith('image/')){
-            const img=document.createElement('img');
-            img.src=m.fileData;
-            img.className='msg-media-preview';
-            bubble.appendChild(img);
-          }else{
-            const a=document.createElement('a');
-            a.href=m.fileData;
-            a.download=(m.fileName||'file').replace(/[<>"]/g,'');
-            a.className='msg-file-badge';
-            a.textContent=m.fileName||'Документ';
-            bubble.appendChild(a);
-          }
-        }
-
-        if(m.text){
+  firebase.database().ref('groups').on('value',snap=>{
+      const groups=snap.val()||{};
+      const list=document.getElementById('groups-list');
+      list.innerHTML='';
+      Object.values(groups).forEach(g=>{
           const d=document.createElement('div');
-          d.textContent=m.text;
-          bubble.appendChild(d);
-        }
-
-        const t=document.createElement('div');
-        t.className='msg-time';
-        t.textContent=m.time||'';
-        bubble.appendChild(t);
-        c.appendChild(bubble);
-        flow.appendChild(c);
+          d.style.cssText='padding:10px;border-bottom:1px solid #ddd;cursor:pointer';
+          d.textContent='👥 '+g.name;
+          list.appendChild(d);
       });
-      flow.scrollTop=flow.scrollHeight;
-    }
-  }
+  });
+};
+
+window.addEventListener('load',()=>{
+  const btn=document.createElement('button');
+  btn.textContent='📚 Группы';
+  btn.style.position='fixed';
+  btn.style.top='10px';
+  btn.style.right='10px';
+  btn.style.zIndex='9999';
+  btn.onclick=window.openGroupsPanel;
+  document.body.appendChild(btn);
 });
+
+window.renderUnreadBadge=function(container,count){
+  let badge=container.querySelector('.unread-badge');
+  if(!badge){
+      badge=document.createElement('span');
+      badge.className='unread-badge';
+      container.appendChild(badge);
+  }
+  badge.textContent=count;
+};
+
+window.listenUnreadCounters=function(){
+ if(!window.currentUserId) return;
+ firebase.database().ref('unread/'+window.currentUserId).on('value',snap=>{
+   window.__unreadCache=snap.val()||{};
+ });
+};
+
+setTimeout(window.listenUnreadCounters,2000);
+
+window.pinMessage=function(messageId){
+  if(!window.activeChatTargetId) return;
+  const chatKey=[window.currentUserId,window.activeChatTargetId].sort().join('__');
+  firebase.database().ref('pins/'+chatKey).set({
+      messageId:messageId,
+      pinnedAt:Date.now()
+  });
+};
+
 })();
 </script>
 </body>
+
 </html>
