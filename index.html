@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HAX MAX</title>
+    <title>COLLAGE PREMIUM</title>
     <style>
         :root {
             --bg-main: #f5f7fa;
@@ -27,7 +27,7 @@
             --sidebar-width: 360px;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
         body, html { width: 100%; height: 100%; background: var(--bg-main); color: var(--text-primary); overflow: hidden; position: relative; }
 
         .ambient-glow { position: absolute; width: 600px; height: 600px; background: radial-gradient(circle, rgba(0,113,227,0.15) 0%, rgba(52,170,220,0) 70%); top: -200px; left: -200px; z-index: 1; pointer-events: none; animation: floatGlow 12s infinite alternate ease-in-out; }
@@ -49,7 +49,8 @@
         }
 
         .sidebar-header { padding: 24px 20px 16px; display: flex; align-items: center; justify-content: space-between; }
-        .brand-title { font-size: 24px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
+        .brand-title { font-size: 24px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; display: flex; align-items: center; gap: 8px; }
+        .dev-tag { font-size: 10px; font-weight: 700; background: rgba(0,0,0,0.05); color: var(--text-secondary); padding: 4px 6px; border-radius: 6px; letter-spacing: 0.5px; -webkit-text-fill-color: initial; }
         
         .search-box { padding: 0 16px 16px; }
         .search-inner { display: flex; align-items: center; background: rgba(0,0,0,0.04); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid transparent; transition: var(--smooth-transition); }
@@ -129,12 +130,12 @@
         .settings-card { width: 90%; max-width: 400px; background: rgba(255,255,255,0.85); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-premium); transform: scale(0.9); transition: var(--spring-transition); }
         #settings-modal-overlay.active .settings-card { transform: scale(1); }
 
-        #video-call-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: #09090b; z-index: 900; display: none; flex-direction: column; justify-content: space-between; animation: zoomIn 0.4s ease; }
+        #video-call-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; height: 100dvh; background: #09090b; z-index: 900; display: none; flex-direction: column; justify-content: space-between; animation: zoomIn 0.4s ease; will-change: transform, opacity; }
         #video-call-overlay.active { display: flex; }
         @keyframes zoomIn { from { transform: scale(1.05); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         
         .remote-video-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
-        .local-video-frame { position: absolute; top: calc(20px + env(safe-area-inset-top)); right: 20px; width: 120px; height: 180px; object-fit: cover; z-index: 5; border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.25); transition: var(--spring-transition); }
+        .local-video-frame { position: absolute; top: calc(20px + env(safe-area-inset-top)); right: 20px; width: 120px; height: 180px; object-fit: cover; z-index: 5; border-radius: var(--radius-md); box-shadow: 0 10px 30px rgba(0,0,0,0.5); border: 2px solid rgba(255,255,255,0.25); transition: var(--spring-transition); transform: translateZ(0); }
         
         .call-controls-bar { position: absolute; bottom: calc(40px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 10; display: flex; gap: 20px; background: rgba(255,255,255,0.15); padding: 14px 28px; border-radius: 40px; backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); border: 1px solid rgba(255,255,255,0.2); }
         .call-btn { width: 56px; height: 56px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; color: white; transition: var(--spring-transition); }
@@ -142,7 +143,7 @@
         .call-btn.hangup { background: #ff3b30; box-shadow: 0 8px 24px rgba(255,59,48,0.4); }
         .call-btn.toggle { background: rgba(255,255,255,0.2); color: white; font-weight: 600; font-size: 13px; }
 
-        #incoming-call-modal { position: fixed; top: calc(20px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%) translateY(-180%); width: 92%; max-width: 420px; background: rgba(255,255,255,0.75); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-premium); z-index: 950; padding: 20px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); transition: var(--spring-transition); }
+        #incoming-call-modal { position: fixed; top: calc(20px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%) translateY(-180%); width: 92%; max-width: 420px; background: rgba(255,255,255,0.75); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); box-shadow: var(--shadow-premium); z-index: 950; padding: 20px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px); transition: var(--spring-transition); will-change: transform; }
         #incoming-call-modal.active { transform: translateX(-50%) translateY(0); }
         .inc-btn { border: none; padding: 10px 20px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; font-size: 14px; transition: var(--smooth-transition); }
         .inc-btn.accept { background: #34c759; color: white; box-shadow: 0 4px 12px rgba(52,199,89,0.3); }
@@ -163,7 +164,6 @@
         <div class="auth-card" id="auth-main-card-node"></div>
     </div>
 
-    <!-- ОКНО НАСТРОЕК ПРОФИЛЯ -->
     <div id="settings-modal-overlay" onclick="closeProfileSettingsModal()">
         <div class="settings-card" onclick="event.stopPropagation()">
             <h3 style="margin-bottom: 16px; font-size: 20px; font-weight: 700; letter-spacing: -0.3px;">Настройки профиля</h3>
@@ -176,12 +176,10 @@
         </div>
     </div>
 
-    <!-- ОКНО ВИДЕОЗВОНКА -->
     <div id="video-call-overlay">
         <video id="remote-video-node" class="remote-video-frame" autoplay playsinline></video>
         <video id="local-video-node" class="local-video-frame" autoplay playsinline muted></video>
         <div class="call-controls-bar">
-            <!-- Заменили иконку на аккуратный текст -->
             <button class="call-btn toggle" onclick="toggleLocalVideoMute()" id="call-cam-toggle">CAM</button>
             <button class="call-btn hangup" onclick="endCurrentActiveCallSession()">
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="transform: rotate(135deg);"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
@@ -189,7 +187,6 @@
         </div>
     </div>
 
-    <!-- ВХОДЯЩИЙ ЗВОНОК -->
     <div id="incoming-call-modal">
         <div>
             <div style="font-weight:700; font-size:16px; color:var(--text-primary);" id="incoming-caller-name">Вызов...</div>
@@ -201,11 +198,10 @@
         </div>
     </div>
 
-    <!-- ОСНОВНОЙ ИНТЕРФЕЙС СЕТКИ -->
     <div id="app-layout">
         <aside id="sidebar-container" class="glass-panel">
             <div class="sidebar-header">
-                <span class="brand-title">КОЛЛАЖ КОНЕКТ</span>
+                <span class="brand-title">КОЛЛАЖ КОНЕКТ <span class="dev-tag">EGORKIN</span></span>
                 <div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileSettingsModal()" title="Профиль"></div>
             </div>
             <div class="search-box">
@@ -244,19 +240,16 @@
 
                 <div class="chat-messages-area" id="chat-messages-flow-root"></div>
 
-                <!-- ПРЕДПРОСМОТР ДОКУМЕНТА -->
                 <div id="attachment-preview-zone">
                     <div class="preview-pill" id="preview-pill-text">Файл <span class="close-btn" onclick="clearSelectedAttachmentSlot()">×</span></div>
                 </div>
 
                 <footer class="chat-input-bar">
                     <div class="input-row-container">
-                        <!-- Чистая SVG скрепка взамен эмодзи -->
                         <button class="circle-action-btn" onclick="document.getElementById('hidden-file-picker').click()" title="Прикрепить файл">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="transform: rotate(45deg);"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
                         </button>
                         <input type="file" id="hidden-file-picker" style="display:none;" onchange="handleFileSelectionPipeline(event)">
-                        
                         <input type="text" id="chat-core-input-field" placeholder="Новое сообщение..." onkeypress="if(event.key==='Enter') dispatchMessagePacket()">
                         <button class="circle-action-btn primary" onclick="dispatchMessagePacket()">➔</button>
                     </div>
@@ -274,17 +267,21 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
+        // Интегрированы ключи строго с вашего скриншота!
         const firebaseConfig = {
-            apiKey: "AIzaSyCUbD08gGbhrkGIGgsIZhTEWNTTU_efY",
+            apiKey: "AIzaSyCUbD08gGbhrkGIGgsIzHTEWeNMTTU_efY",
             authDomain: "yw-83b3e.firebaseapp.com",
             databaseURL: "https://yw-83b3e-default-rtdb.firebaseio.com",
             projectId: "yw-83b3e",
             storageBucket: "yw-83b3e.firebasestorage.app",
             messagingSenderId: "513977614231",
-            appId: "1:513977614231:web:0a04427784e8259fdeced2"
+            appId: "1:513977614231:web:0a04427784e8259fdeced2",
+            measurementId: "G-H4YJ6NC4E9"
         };
 
-        firebase.initializeApp(firebaseConfig);
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
         const database = firebase.database();
 
         let currentUserId = localStorage.getItem('premium_session_uid') || null;
@@ -301,10 +298,16 @@
         let localStream = null;
         let peerConnection = null;
         let currentCallRef = null;
-        const rtcIceConfig = { iceServers: [{ urls: ['stun:stun.l.google.com:19302', 'stun:stun1.l.google.com:19302'] }] };
+        
+        const rtcIceConfig = { 
+            iceServers: [
+                { urls: 'stun:stun.l.google.com:19302' }, 
+                { urls: 'stun:stun1.l.google.com:19302' }
+            ] 
+        };
 
         window.addEventListener('DOMContentLoaded', () => { initializeEcosystemCore(); });
-
+        
         function initializeEcosystemCore() {
             database.ref('users').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
@@ -357,7 +360,6 @@
             renderOnboardingSliderHTML();
         }
 
-        /* ЧИСТЫЙ ОНБОРДИНГ С ВЕКТОРНЫМИ СТРОГИМИ ИКОНКАМИ ВЗАМЕН ЭМОДЗИ */
         function renderOnboardingSliderHTML() {
             const container = document.getElementById('auth-main-card-node');
             container.innerHTML = `
@@ -419,7 +421,6 @@
                 pass: tempRegistrationPayload.pass,
                 color: color
             };
-
             database.ref('users/' + uid).set(packet).then(() => {
                 currentUserId = uid;
                 localStorage.setItem('premium_session_uid', uid);
@@ -457,10 +458,7 @@
             const newRole = document.getElementById('settings-role-input').value.trim();
             if(!newName || !newRole) return;
 
-            database.ref('users/' + currentUserId).update({
-                name: newName,
-                role: newRole
-            }).then(() => {
+            database.ref('users/' + currentUserId).update({ name: newName, role: newRole }).then(() => {
                 closeProfileSettingsModal();
             });
         }
@@ -502,12 +500,8 @@
             const chatKey = [currentUserId, activeChatTargetId].sort().join('__');
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-            const msgNode = {
-                senderId: currentUserId,
-                text: txt,
-                time: time
-            };
-
+            const msgNode = { senderId: currentUserId, text: txt, time: time };
+            
             if (currentSelectedFileBase64) {
                 msgNode.fileData = currentSelectedFileBase64;
                 msgNode.fileName = currentSelectedFileName;
@@ -542,7 +536,6 @@
             root.className = "scroller-content active";
             document.getElementById('tab-content-chats').className = "scroller-content";
             root.innerHTML = '';
-
             allUsers.filter(u => u.id !== currentUserId).forEach(u => {
                 if(searchString && !u.name.toLowerCase().includes(searchString)) return;
                 
@@ -565,7 +558,6 @@
             root.className = "scroller-content active";
             document.getElementById('tab-content-contacts').className = "scroller-content";
             root.innerHTML = '';
-
             database.ref('messages').once('value', (snapshot) => {
                 const allMsgs = snapshot.val() || {};
                 allUsers.filter(u => u.id !== currentUserId).forEach(u => {
@@ -620,7 +612,6 @@
                     if(m.fileType && m.fileType.startsWith('image/')) {
                         fileHTML = `<img src="${m.fileData}" class="msg-media-preview" alt="Image">`;
                     } else {
-                        // Чистый дизайн блока файла без эмодзи
                         fileHTML = `
                             <a href="${m.fileData}" download="${m.fileName || 'file'}" class="msg-file-badge">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 4px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
@@ -660,10 +651,13 @@
         }
 
         // =========================================================================
-        // 📞 ВИДЕОЗВОНКИ WebRTC Engine
+        // ИСПРАВЛЕННЫЙ WEBRTC ENGINE И ЗАЩИТА ОТ ГОНКИ ДАННЫХ В БД
         // =========================================================================
         function listenIncomingCallsSubsystem() {
             if (!currentUserId) return;
+            
+            // Предотвращаем дублирование слушателей
+            database.ref('calls').off('value'); 
             database.ref('calls').on('value', async (snapshot) => {
                 const data = snapshot.val() || {};
                 for (let key in data) {
@@ -671,6 +665,7 @@
                     if (callObj.calleeId === currentUserId && callObj.status === 'ringing') {
                         currentCallRef = database.ref('calls/' + key);
                         const caller = allUsers.find(u => u.id === callObj.callerId);
+                        
                         document.getElementById('incoming-caller-name').innerText = caller ? `Вызов от: ${caller.name}` : "Входящий вызов";
                         document.getElementById('incoming-call-modal').classList.add('active');
                         
@@ -691,7 +686,7 @@
             currentCallRef = database.ref('calls/' + chatKey);
 
             document.getElementById('video-call-overlay').classList.add('active');
-
+            
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                 document.getElementById('local-video-node').srcObject = localStream;
@@ -708,14 +703,14 @@
             };
 
             peerConnection.onicecandidate = (event) => {
-                if (event.candidate) {
+                if (event.candidate && currentCallRef) {
                     currentCallRef.child('callerCandidates').push(event.candidate.toJSON());
                 }
             };
 
             const offer = await peerConnection.createOffer();
             await peerConnection.setLocalDescription(offer);
-
+            
             const callMeta = {
                 id: chatKey,
                 callerId: currentUserId,
@@ -723,18 +718,19 @@
                 status: 'ringing',
                 offer: { type: offer.type, sdp: offer.sdp }
             };
+            
             await currentCallRef.set(callMeta);
 
             currentCallRef.child('answer').on('value', async (snap) => {
                 const answer = snap.val();
-                if (answer && peerConnection.signalingState !== "stable") {
+                if (answer && peerConnection && peerConnection.signalingState !== "stable") {
                     await peerConnection.setRemoteDescription(new RTCSessionDescription(answer));
                 }
             });
 
             currentCallRef.child('calleeCandidates').on('child_added', (snap) => {
                 const data = snap.val();
-                if (data && peerConnection) {
+                if (data && peerConnection && peerConnection.remoteDescription) {
                     peerConnection.addIceCandidate(new RTCIceCandidate(data));
                 }
             });
@@ -744,8 +740,14 @@
             document.getElementById('incoming-call-modal').classList.remove('active');
             document.getElementById('video-call-overlay').classList.add('active');
 
+            if (!currentCallRef) return;
             const snap = await currentCallRef.get();
             const callData = snap.val();
+            
+            if (!callData || !callData.offer) {
+                closeCallOverlayUI();
+                return;
+            }
 
             try {
                 localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -756,13 +758,13 @@
 
             peerConnection = new RTCPeerConnection(rtcIceConfig);
             localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-
+            
             peerConnection.ontrack = (event) => {
                 document.getElementById('remote-video-node').srcObject = event.streams[0];
             };
 
             peerConnection.onicecandidate = (event) => {
-                if (event.candidate) {
+                if (event.candidate && currentCallRef) {
                     currentCallRef.child('calleeCandidates').push(event.candidate.toJSON());
                 }
             };
@@ -775,10 +777,10 @@
                 status: 'connected',
                 answer: { type: answer.type, sdp: answer.sdp }
             });
-
+            
             currentCallRef.child('callerCandidates').on('child_added', (cSnap) => {
                 const data = cSnap.val();
-                if (data && peerConnection) {
+                if (data && peerConnection && peerConnection.remoteDescription) {
                     peerConnection.addIceCandidate(new RTCIceCandidate(data));
                 }
             });
@@ -787,15 +789,18 @@
         function declineIncomingCallSession() {
             document.getElementById('incoming-call-modal').classList.remove('active');
             if (currentCallRef) {
-                currentCallRef.update({ status: 'ended' });
-                currentCallRef.remove();
+                // Избегаем гонки процессов: сначала даем серверу понять, что статус ended, потом удаляем
+                currentCallRef.update({ status: 'ended' }).then(() => {
+                    setTimeout(() => { if (currentCallRef) currentCallRef.remove(); }, 1500);
+                });
             }
         }
 
         function endCurrentActiveCallSession() {
             if (currentCallRef) {
-                currentCallRef.update({ status: 'ended' });
-                currentCallRef.remove();
+                currentCallRef.update({ status: 'ended' }).then(() => {
+                    setTimeout(() => { if (currentCallRef) currentCallRef.remove(); }, 1000);
+                });
             }
             closeCallOverlayUI();
         }
@@ -803,6 +808,12 @@
         function closeCallOverlayUI() {
             document.getElementById('video-call-overlay').classList.remove('active');
             document.getElementById('incoming-call-modal').classList.remove('active');
+            
+            // Зануляем srcObject во избежание зависания последнего кадра на видео 
+            const localVideo = document.getElementById('local-video-node');
+            const remoteVideo = document.getElementById('remote-video-node');
+            if (localVideo) localVideo.srcObject = null;
+            if (remoteVideo) remoteVideo.srcObject = null;
             
             if (localStream) {
                 localStream.getTracks().forEach(track => track.stop());
@@ -824,84 +835,5 @@
             }
         }
     </script>
-
-<style>
-.unread-badge{
-display:inline-flex;align-items:center;justify-content:center;
-min-width:18px;height:18px;border-radius:999px;
-font-size:11px;padding:0 6px;background:#e53935;color:white;
-margin-left:8px;
-}
-</style>
-
-<script>
-/* Advanced messenger pack */
-(function(){
-
-window.openGroupsPanel = function(){
-  let panel=document.getElementById('groups-panel');
-  if(panel){ panel.style.display='block'; return; }
-
-  panel=document.createElement('div');
-  panel.id='groups-panel';
-  panel.style.cssText='position:fixed;inset:10% 10%;background:white;z-index:10000;padding:16px;overflow:auto;border-radius:12px';
-  panel.innerHTML='<h3>Группы</h3><div id="groups-list"></div><button onclick="this.parentNode.style.display=\'none\'">Закрыть</button>';
-  document.body.appendChild(panel);
-
-  firebase.database().ref('groups').on('value',snap=>{
-      const groups=snap.val()||{};
-      const list=document.getElementById('groups-list');
-      list.innerHTML='';
-      Object.values(groups).forEach(g=>{
-          const d=document.createElement('div');
-          d.style.cssText='padding:10px;border-bottom:1px solid #ddd;cursor:pointer';
-          d.textContent='👥 '+g.name;
-          list.appendChild(d);
-      });
-  });
-};
-
-window.addEventListener('load',()=>{
-  const btn=document.createElement('button');
-  btn.textContent='📚 Группы';
-  btn.style.position='fixed';
-  btn.style.top='10px';
-  btn.style.right='10px';
-  btn.style.zIndex='9999';
-  btn.onclick=window.openGroupsPanel;
-  document.body.appendChild(btn);
-});
-
-window.renderUnreadBadge=function(container,count){
-  let badge=container.querySelector('.unread-badge');
-  if(!badge){
-      badge=document.createElement('span');
-      badge.className='unread-badge';
-      container.appendChild(badge);
-  }
-  badge.textContent=count;
-};
-
-window.listenUnreadCounters=function(){
- if(!window.currentUserId) return;
- firebase.database().ref('unread/'+window.currentUserId).on('value',snap=>{
-   window.__unreadCache=snap.val()||{};
- });
-};
-
-setTimeout(window.listenUnreadCounters,2000);
-
-window.pinMessage=function(messageId){
-  if(!window.activeChatTargetId) return;
-  const chatKey=[window.currentUserId,window.activeChatTargetId].sort().join('__');
-  firebase.database().ref('pins/'+chatKey).set({
-      messageId:messageId,
-      pinnedAt:Date.now()
-  });
-};
-
-})();
-</script>
 </body>
-
 </html>
