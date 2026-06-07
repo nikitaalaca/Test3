@@ -6,9 +6,8 @@
     <title>HAX MAX v2 - Concept Edition</title>
     <style>
         :root {
-            /* Базовая палитра на основе концепта, более чистая и светлая */
             --bg-main: #f0f2f5;
-            --panel-bg: rgba(255, 255, 255, 0.7); /* Более прозрачное стекло */
+            --panel-bg: rgba(255, 255, 255, 0.7);
             --panel-border: rgba(255, 255, 255, 0.6);
             --inner-border: rgba(0, 0, 0, 0.05);
             --text-primary: #1c1e21;
@@ -24,8 +23,6 @@
             --radius-md: 14px;
             --radius-sm: 10px;
             --spring-transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-            
-            /* Новые цвета из концепта */
             --light-grey-bg: #f5f7f9;
             --green-active: #31a24c;
         }
@@ -51,7 +48,6 @@
             letter-spacing: -0.01em;
         }
 
-        /* Основной контейнер - Четырёхпанельный макет как на концепте */
         .app-view {
             width: 96%;
             height: 92%;
@@ -64,1143 +60,7 @@
             overflow: hidden;
         }
 
-        /* 1. Узкая левая панель (иконки/быстрый доступ) */
-        .sidebar-app {
-            width: 68px;
-            border-right: 1px solid var(--inner-border);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px 0;
-            background: rgba(255, 255, 255, 0.3);
-        }
-
-        .app-logo {
-            font-size: 24px;
-            font-weight: 800;
-            color: var(--accent);
-            margin-bottom: 30px;
-            cursor: pointer;
-        }
-
-        .sidebar-btn {
-            width: 44px;
-            height: 44px;
-            border-radius: 12px;
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-            transition: var(--spring-transition);
-        }
-
-        .sidebar-btn:hover {
-            background: rgba(0, 0, 0, 0.03);
-            color: var(--text-primary);
-        }
-
-        .sidebar-btn.active {
-            background: var(--light-grey-bg);
-            color: var(--accent);
-        }
-
-        .user-profile-avatar-shortcut {
-            margin-top: auto; /* Прижать к низу */
-            position: relative;
-            cursor: pointer;
-        }
-
-        /* 2. Список чатов/групп */
-        .chat-list-panel {
-            width: 260px;
-            border-right: 1px solid var(--inner-border);
-            display: flex;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .list-header {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--inner-border);
-        }
-
-        .list-header h2 {
-            font-size: 18px;
-            margin-bottom: 12px;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 10px;
-        }
-
-        .btn-create-group {
-            background: #e7f3ff;
-            color: var(--accent);
-            border: none;
-            padding: 8px 14px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .search-wrapper {
-            padding: 12px 20px;
-            position: relative;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 10px 14px 10px 38px;
-            border-radius: 10px;
-            background: var(--light-grey-bg);
-            border: 1px solid var(--inner-border);
-            font-size: 13px;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 32px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-
-        .contacts-scroll {
-            flex: 1;
-            overflow-y: auto;
-            padding: 8px;
-        }
-
-        .contact-card {
-            display: flex;
-            align-items: center;
-            padding: 10px 12px;
-            border-radius: var(--radius-md);
-            cursor: pointer;
-            transition: var(--spring-transition);
-            gap: 12px;
-        }
-
-        .contact-card:hover {
-            background: rgba(0, 0, 0, 0.03);
-        }
-
-        .contact-card.active {
-            background: #e7f3ff;
-        }
-
-        .avatar {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .status-badge {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: -2px;
-            right: -2px;
-            border: 2px solid #e7f3ff;
-            background: #bcc0c4;
-        }
-
-        .status-badge.online { background: var(--green-active); }
-
-        .contact-info-list {
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .contact-name-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            margin-bottom: 2px;
-        }
-
-        .contact-name {
-            font-weight: 600;
-            font-size: 14px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .time-snippet {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .message-snippet {
-            font-size: 12px;
-            color: var(--text-secondary);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .group-tag {
-            font-size: 10px;
-            color: var(--accent);
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-
-        /* 3. Основная панель чата */
-        .main-chat-window {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid var(--inner-border);
-            background: #fff;
-        }
-
-        .chat-header {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--inner-border);
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .chat-header-info h3 {
-            font-size: 15px;
-            font-weight: 600;
-        }
-
-        .chat-status {
-            font-size: 11px;
-            color: var(--text-secondary);
-        }
-
-        .chat-header-actions {
-            margin-left: auto;
-            display: flex;
-            gap: 8px;
-        }
-
-        .action-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--spring-transition);
-        }
-
-        .action-btn:hover {
-            background: var(--light-grey-bg);
-            color: var(--text-primary);
-        }
-
-        .chat-messages-container {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px;
-            background: var(--light-grey-bg);
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .message-bubble {
-            max-width: 70%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.4;
-            position: relative;
-        }
-
-        .message-bubble.incoming {
-            background: var(--bubble-in);
-            align-self: flex-start;
-            border-bottom-left-radius: 4px;
-            box-shadow: var(--shadow-smooth);
-        }
-
-        .message-bubble.outgoing {
-            background: var(--bubble-out);
-            color: var(--bubble-out-text);
-            align-self: flex-end;
-            border-bottom-right-radius: 4px;
-        }
-
-        .chat-input-bar {
-            padding: 12px 20px;
-            border-top: 1px solid var(--inner-border);
-            background: #fff;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .chat-input {
-            flex: 1;
-            padding: 12px 16px;
-            background: var(--light-grey-bg);
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-        }
-
-        .btn-send {
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: var(--accent-gradient);
-            color: white;
-            border: none;
-            font-size: 18px;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 113, 227, 0.2);
-            transition: var(--spring-transition);
-        }
-
-        /* 4. Правая панель (Детали) - по концепту */
-        .chat-details-panel {
-            width: 250px;
-            display: flex;
-            flex-direction: column;
-            background: rgba(255, 255, 255, 0.4);
-        }
-
-        .details-header {
-            padding: 24px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            border-bottom: 1px solid var(--inner-border);
-            text-align: center;
-        }
-
-        .details-header .avatar {
-            width: 80px;
-            height: 80px;
-            margin-bottom: 14px;
-        }
-
-        .details-header h3 {
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .details-header p {
-            font-size: 12px;
-            color: var(--text-secondary);
-        }
-
-        .details-content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 16px;
-        }
-
-        .details-section {
-            margin-bottom: 20px;
-        }
-
-        .details-section h4 {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: var(--text-secondary);
-            letter-spacing: 0.05em;
-            margin-bottom: 12px;
-        }
-
-        .member-list-compact {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .member-card {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .avatar-sm {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background-size: cover;
-        }
-
-        .member-name {
-            font-size: 13px;
-        }
-
-        .media-grid-compact {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 6px;
-        }
-
-        .media-thumb {
-            aspect-ratio: 1;
-            background: var(--light-grey-bg);
-            border-radius: 6px;
-            cursor: pointer;
-            border: 1px solid var(--inner-border);
-        }
-
-        .file-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .file-icon {
-            font-size: 18px;
-            color: var(--accent);
-        }
-
-        /* Переиспользованные Модальные окна из старого кода, доработанные */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .modal-overlay.active { display: flex; opacity: 1; }
-
-        .modal {
-            background: #fff;
-            width: 90%;
-            max-width: 400px;
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--panel-border);
-            padding: 24px;
-            box-shadow: var(--shadow-premium);
-            transform: scale(0.9);
-            transition: var(--spring-transition);
-        }
-
-        .modal-overlay.active .modal { transform: scale(1); }
-
-        .modal-header {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .modal-title { font-size: 18px; font-weight: 700; }
-
-        .form-group { margin-bottom: 16px; }
-
-        .form-label {
-            display: block;
-            font-size: 12px;
-            color: var(--text-secondary);
-            margin-bottom: 6px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border-radius: var(--radius-sm);
-            border: 1px solid var(--inner-border);
-            background: var(--light-grey-bg);
-        }
-
-        .form-actions {
-            margin-top: 24px;
-            display: flex;
-            gap: 10px;
-            justify-content: flex-end;
-        }
-
-        .btn-close-modal {
-            background: none;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            color: var(--text-secondary);
-        }
-
-        .btn-primary {
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 10px 18px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            background: var(--light-grey-bg);
-            border: none;
-            padding: 10px 18px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Контейнер для загрузки аватарки */
-        .avatar-upload-container {
-            position: relative;
-            width: 80px; height: 80px;
-            margin: 0 auto 16px;
-        }
-
-        .avatar-upload-preview {
-            width: 100%; height: 100%;
-            border-radius: 50%;
-            background-size: cover;
-            background-position: center;
-            border: 3px solid #fff;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-
-        .avatar-upload-btn {
-            position: absolute; bottom: 0; right: 0;
-            width: 28px; height: 28px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: #fff;
-            display: flex; justify-content: center; align-items: center;
-            cursor: pointer;
-            border: 2px solid #fff;
-            font-size: 12px;
-        }
-
-        .contact-select-list {
-            max-height: 180px;
-            overflow-y: auto;
-            border: 1px solid var(--inner-border);
-            border-radius: var(--radius-sm);
-            padding: 8px;
-            background: var(--light-grey-bg);
-        }
-
-        .select-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 8px; border-radius: 6px;
-            cursor: pointer;
-        }
-
-        .select-item:hover { background: rgba(0,0,0,0.03); }
-
-        .select-item input { width: 16px; height: 16px; cursor: pointer; }
-
-        /* Иконки FontAwesome (как в оригинале) */
-        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
-
-    </style>
-</head>
-<body>
-
-    <div class="app-view">
-        <aside class="sidebar-app">
-            <div class="app-logo">E</div>
-            <button class="sidebar-btn active" title="Чаты"><i class="fas fa-comment-alt"></i></button>
-            <button class="sidebar-btn" title="Команда"><i class="fas fa-users"></i></button>
-            <button class="sidebar-btn" title="Проекты"><i class="fas fa-layer-group"></i></button>
-            <button class="sidebar-btn" title="Статистика"><i class="fas fa-chart-line"></i></button>
-
-            <div class="user-profile-avatar-shortcut" onclick="openProfileSettings()">
-                <div class="avatar user-current-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png');">
-                    <div class="status-badge online"></div>
-                </div>
-            </div>
-        </aside>
-
-        <aside class="chat-list-panel">
-            <div class="list-header">
-                <h2>Чаты</h2>
-                <div class="header-controls">
-                    <button class="btn-create-group" onclick="openCreateGroupModal()"><i class="fas fa-plus"></i> Групповой чат</button>
-                </div>
-            </div>
-            <div class="search-wrapper">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Поиск контактов или групп">
-            </div>
-            <div class="contacts-scroll" id="contacts-list">
-                </div>
-        </aside>
-
-        <main class="main-chat-window">
-            <div class="chat-header">
-                <div class="avatar" id="chat-header-avatar"></div>
-                <div class="chat-header-info">
-                    <h3 id="chat-header-name">Выберите чат</h3>
-                    <div class="chat-status" id="chat-header-status"></div>
-                </div>
-                <div class="chat-header-actions">
-                    <button class="action-btn"><i class="fas fa-search"></i></button>
-                    <button class="action-btn"><i class="fas fa-bookmark"></i></button>
-                    <button class="action-btn"><i class="fas fa-ellipsis-v"></i></button>
-                </div>
-            </div>
-
-            <div class="chat-messages-container" id="chat-messages">
-                <p style="text-align:center; color: #888; margin-top: auto; padding-bottom: 20px;">Добро пожаловать в HAX MAX Concepts</p>
-                </div>
-
-            <div class="chat-input-bar">
-                <button class="action-btn"><i class="fas fa-plus"></i></button>
-                <input type="text" class="chat-input" id="message-input" placeholder="Напишите сообщение...">
-                <button class="action-btn"><i class="far fa-smile"></i></button>
-                <button class="btn-send" id="send-btn"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </main>
-
-        <aside class="chat-details-panel" id="chat-details">
-            <div class="details-header">
-                <div class="avatar" id="details-avatar"></div>
-                <h3 id="details-name">Детали чата</h3>
-                <p id="details-status"></p>
-                <button class="btn-create-group" id="edit-chat-btn" style="margin-top:12px; display:none;"><i class="fas fa-edit"></i> Редактировать</button>
-            </div>
-            <div class="details-content">
-                <div class="details-section" id="group-members-section" style="display:none;">
-                    <h4>Участники (<span id="members-count">0</span>)</h4>
-                    <div class="member-list-compact" id="details-members-list">
-                        </div>
-                </div>
-
-                <div class="details-section">
-                    <h4>Медиа</h4>
-                    <div class="media-grid-compact">
-                        <div class="media-thumb" style="background-image: url('https://source.unsplash.com/random/101');"></div>
-                        <div class="media-thumb" style="background-image: url('https://source.unsplash.com/random/102');"></div>
-                        <div class="media-thumb" style="background-image: url('https://source.unsplash.com/random/103');"></div>
-                    </div>
-                </div>
-
-                <div class="details-section">
-                    <h4>Файлы</h4>
-                    <div class="file-item">
-                        <i class="fas fa-file-pdf file-icon"></i>
-                        <span>Concept_UI_Layout.pdf</span>
-                    </div>
-                    <div class="file-item">
-                        <i class="fas fa-file-invoice-dollar file-icon"></i>
-                        <span>Client_Report_May.xlxs</span>
-                    </div>
-                </div>
-            </div>
-        </aside>
-    </div>
-
-    <div class="modal-overlay" id="modal-settings">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Мой профиль</div>
-                <button class="btn-close-modal" onclick="closeModals()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview user-current-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png');"></div>
-                    <label class="avatar-upload-btn" for="upload-avatar-file">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                    <input type="file" id="upload-avatar-file" style="display:none;" accept="image/*">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Ваше имя</label>
-                    <input type="text" id="setting-user-name" class="form-input" placeholder="Введите имя">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Статус</label>
-                    <input type="text" class="form-input" placeholder="Я в HAX MAX">
-                </div>
-                <div class="form-actions">
-                    <button class="btn-secondary" onclick="closeModals()">Отмена</button>
-                    <button class="btn-primary" onclick="saveProfileSettings()">Сохранить</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-create-group">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Новый групповой чат</div>
-                <button class="btn-close-modal" onclick="closeModals()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview" id="group-avatar-preview" style="background-color: #ddd;"></div>
-                    <label class="avatar-upload-btn">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Название группы</label>
-                    <input type="text" id="create-group-name" class="form-input" placeholder="Team Sync, Marketing...">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Выбрать участников</label>
-                    <div class="contact-select-list" id="contacts-select-create">
-                        </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn-secondary" onclick="closeModals()">Отмена</button>
-                    <button class="btn-primary" onclick="saveNewGroup()">Создать</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="modal-edit-group">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">Редактировать группу</div>
-                <button class="btn-close-modal" onclick="closeModals()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="edit-group-id">
-                <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview" id="edit-group-avatar-preview"></div>
-                    <label class="avatar-upload-btn">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Название группы</label>
-                    <input type="text" id="edit-group-name" class="form-input">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Добавить/Удалить участников</label>
-                    <div class="contact-select-list" id="contacts-select-edit">
-                        </div>
-                </div>
-                <div class="form-actions">
-                    <button class="btn-secondary" style="color: red;">Покинуть группу</button>
-                    <button class="btn-primary" onclick="saveGroupEdits()">Сохранить</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // --- ДАННЫЕ (Улучшенная структура) ---
-        
-        let usersData = [
-            { id: 1, name: "Иван Иванов", avatar: "https://randomuser.me/api/portraits/men/32.jpg", online: true, details: { phone: "+7 999 000 1122", info: "Software Architect" } },
-            { id: 2, name: "Ольга Суворова", avatar: "https://randomuser.me/api/portraits/women/44.jpg", online: false, details: { phone: "+7 999 111 2233", info: "UI/UX Designer" } },
-            { id: 3, name: "Сергей Петров", avatar: "https://randomuser.me/api/portraits/men/45.jpg", online: true, details: { phone: "+7 999 222 3344", info: "Project Manager" } },
-            { id: 4, name: "Анна Волкова", avatar: "https://randomuser.me/api/portraits/women/65.jpg", online: true, details: { phone: "+7 999 333 4455", info: "Backend Engineer" } },
-            { id: 5, name: "Дмитрий Ли", avatar: "https://randomuser.me/api/portraits/men/78.jpg", online: false, details: { phone: "+7 999 444 5566", info: "Lead Dev" } }
-        ];
-
-        let chatsData = [
-            { id: 'u1', type: 'user', refId: 1, lastMsg: 'Привет! Доделали дизайн?', time: '11:45' },
-            { id: 'u2', type: 'user', refId: 2, lastMsg: 'Да, скинула файлы.', time: '11:32' },
-            // Предзагруженная группа
-            { 
-                id: 'g1', type: 'group', name: "Hax Max Concepts Team", 
-                avatar: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=100", 
-                memberIds: [1, 2, 3, 4], 
-                lastMsg: 'Анна Волкова: Давайте ревью?', time: '10:15'
-            },
-            { id: 'u3', type: 'user', refId: 3, lastMsg: 'Встреча в 14:00?', time: '09:50' },
-        ];
-
-        let currentChatId = null;
-        let myProfileData = {
-            name: "Максим HAX",
-            avatar: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png",
-            status: "Lead Concept Dev"
-        };
-
-        // Генерируем тестовые сообщения
-        const generateMessages = (name) => [
-            { id: 1, type: 'incoming', text: `Привет! Как дела по проекту Hax MaxConcepts?`, time: '11:30' },
-            { id: 2, type: 'incoming', text: `Концепт просто супер! Ребята уже внедряют его.`, time: '11:30' },
-            { id: 3, type: 'outgoing', text: `Спасибо, команда! Нам нужно ещё профиль доработать и группы добавить.`, time: '11:31' },
-            { id: 4, type: 'incoming', text: `Хорошо. Я подготовлю базу данных к вечеру.`, time: '11:32' }
-        ];
-
-        // --- ИНИЦИАЛИЗАЦИЯ ---
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderMyProfile();
-            renderContactsList();
-        });
-
-        // --- РЕНДЕРИНГ ЭЛЕМЕНТОВ ---
-
-        function renderMyProfile() {
-            document.querySelectorAll('.user-current-avatar').forEach(el => el.style.backgroundImage = `url(${myProfileData.avatar})`);
-            document.getElementById('setting-user-name').value = myProfileData.name;
-        }
-
-        function renderContactsList() {
-            const list = document.getElementById('contacts-list');
-            list.innerHTML = '';
-
-            chatsData.forEach(chat => {
-                let name, avatar, online, message, time, isGroup = false;
-
-                if (chat.type === 'user') {
-                    const user = usersData.find(u => u.id === chat.refId);
-                    name = user.name;
-                    avatar = user.avatar;
-                    online = user.online;
-                    message = chat.lastMsg;
-                    time = chat.time;
-                } else {
-                    isGroup = true;
-                    name = chat.name;
-                    avatar = chat.avatar;
-                    message = chat.lastMsg;
-                    time = chat.time;
-                }
-
-                const card = document.createElement('div');
-                card.className = `contact-card ${chat.id === currentChatId ? 'active' : ''}`;
-                card.onclick = () => openChat(chat.id);
-
-                card.innerHTML = `
-                    <div class="avatar" style="background-image: url(${avatar})">
-                        ${!isGroup ? `<div class="status-badge ${online ? 'online' : ''}"></div>` : ''}
-                    </div>
-                    <div class="contact-info-list">
-                        <div class="contact-name-row">
-                            <span class="contact-name">${name}</span>
-                            <span class="time-snippet">${time}</span>
-                        </div>
-                        <div class="contact-name-row">
-                            <span class="message-snippet">${message}</span>
-                            ${isGroup ? '<span class="group-tag">Team</span>' : ''}
-                        </div>
-                    </div>
-                `;
-                list.appendChild(card);
-            });
-        }
-
-        // --- ЧАТ ФУНКЦИОНАЛ ---
-
-        function openChat(chatId) {
-            currentChatId = chatId;
-            renderContactsList(); // Обновить активное состояние в списке
-            const chat = chatsData.find(c => c.id === chatId);
-            
-            let name, avatar, status;
-            const msgs = document.getElementById('chat-messages');
-            const detailsList = document.getElementById('details-members-list');
-            
-            msgs.innerHTML = ''; // Очистить сообщения
-            
-            // Настройка правого сайдбара и заголовка
-            document.getElementById('edit-chat-btn').style.display = 'none';
-            document.getElementById('group-members-section').style.display = 'none';
-            
-            if (chat.type === 'user') {
-                const user = usersData.find(u => u.id === chat.refId);
-                name = user.name;
-                avatar = user.avatar;
-                status = user.online ? 'Online' : 'Offline';
-                document.getElementById('details-status').textContent = user.details.phone;
-
-            } else {
-                // Группа
-                name = chat.name;
-                avatar = chat.avatar;
-                status = `${chat.memberIds.length} участников`;
-                document.getElementById('details-status').textContent = 'Групповой чат Team';
-                document.getElementById('edit-chat-btn').style.display = 'flex';
-                document.getElementById('edit-chat-btn').onclick = () => openEditGroupModal(chat.id);
-                
-                // Рендер участников
-                document.getElementById('group-members-section').style.display = 'block';
-                document.getElementById('members-count').textContent = chat.memberIds.length;
-                detailsList.innerHTML = '';
-                chat.memberIds.forEach(mid => {
-                    const mUser = usersData.find(u => u.id === mid);
-                    const memberEl = document.createElement('div');
-                    memberEl.className = 'member-card';
-                    memberEl.innerHTML = `
-                        <div class="avatar-sm" style="background-image: url(${mUser.avatar});"></div>
-                        <span class="member-name">${mUser.name}</span>
-                    `;
-                    detailsList.appendChild(memberEl);
-                });
-            }
-
-            // Заполнить заголовок и детали
-            document.getElementById('chat-header-name').textContent = name;
-            document.getElementById('chat-header-avatar').style.backgroundImage = `url(${avatar})`;
-            document.getElementById('chat-header-status').textContent = status;
-            document.getElementById('details-name').textContent = name;
-            document.getElementById('details-avatar').style.backgroundImage = `url(${avatar})`;
-            
-            // Рендер сообщений (тестовые)
-            generateMessages(name).forEach(msg => {
-                const bubble = document.createElement('div');
-                bubble.className = `message-bubble ${msg.type}`;
-                bubble.innerHTML = `<div>${msg.text}</div><div class="time-snippet" style="text-align:right; margin-top:4px;">${msg.time}</div>`;
-                msgs.appendChild(bubble);
-            });
-            setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50); // Скролл вниз
-        }
-
-        // --- МОДАЛЬНЫЕ ОКНА И НАСТРОЙКИ ---
-
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeModals() {
-            document.querySelectorAll('.modal-overlay').forEach(m => m.classList.remove('active'));
-        }
-
-        function openProfileSettings() {
-            openModal('modal-settings');
-        }
-
-        function saveProfileSettings() {
-            const newName = document.getElementById('setting-user-name').value;
-            if (newName.trim()) {
-                myProfileData.name = newName;
-                // В реальности мы бы загрузили аватарку, здесь просто сохраняем
-                renderMyProfile();
-                closeModals();
-            }
-        }
-
-        // --- ГРУППОВЫЕ ЧАТЫ ФУНКЦИОНАЛ ---
-
-        // Рендер списка контактов с чекбоксами
-        function renderContactSelect(elementId) {
-            const container = document.getElementById(elementId);
-            container.innerHTML = '';
-            usersData.forEach(user => {
-                const item = document.createElement('div');
-                item.className = 'select-item';
-                item.innerHTML = `
-                    <input type="checkbox" value="${user.id}" id="chk-${elementId}-${user.id}">
-                    <div class="avatar-sm" style="background-image: url(${user.avatar});"></div>
-                    <span>${user.name}</span>
-                `;
-                item.onclick = (e) => {
-                    if (e.target.tagName !== 'INPUT') {
-                        const chk = item.querySelector('input');
-                        chk.checked = !chk.checked;
-                    }
-                }
-                container.appendChild(item);
-            });
-        }
-
-        // 1. Создание группы
-        function openCreateGroupModal() {
-            renderContactSelect('contacts-select-create');
-            document.getElementById('create-group-name').value = '';
-            openModal('modal-create-group');
-        }
-
-        function saveNewGroup() {
-            const name = document.getElementById('create-group-name').value;
-            const selectedChks = document.querySelectorAll('#contacts-select-create input:checked');
-            const memberIds = Array.from(selectedChks).map(chk => parseInt(chk.value));
-            
-            if (name.trim() && memberIds.length > 0) {
-                // Включаем себя по умолчанию в участники
-                memberIds.push(999); // Допустим мы Lead Concept Dev
-
-                const newChat = {
-                    id: 'g' + (chatsData.length + 1),
-                    type: 'group',
-                    name: name,
-                    avatar: "https://source.unsplash.com/random/100?team", // Заглушка
-                    memberIds: memberIds,
-                    lastMsg: `Вы создали группу ${name}`,
-                    time: '12:00'
-                };
-                
-                chatsData.unshift(newChat); // Добавить в начало списка
-                renderContactsList();
-                closeModals();
-                openChat(newChat.id); // Открыть новую группу
-            } else {
-                alert('Введите название группы и выберите участников');
-            }
-        }
-
-        // 2. Редактирование группы
-        function openEditGroupModal(chatId) {
-            const chat = chatsData.find(c => c.id === chatId);
-            if (chat.type !== 'group') return;
-            
-            document.getElementById('edit-group-id').value = chat.id;
-            document.getElementById('edit-group-name').value = chat.name;
-            document.getElementById('edit-group-avatar-preview').style.backgroundImage = `url(${chat.avatar})`;
-            
-            // Рендер контактов и отметка выбранных
-            renderContactSelect('contacts-select-edit');
-            setTimeout(() => { // Ждем рендера
-                chat.memberIds.forEach(mid => {
-                    const chk = document.getElementById(`chk-contacts-select-edit-${mid}`);
-                    if (chk) chk.checked = true;
-                });
-            }, 10);
-            
-            openModal('modal-edit-group');
-        }
-
-        function saveGroupEdits() {
-            const id = document.getElementById('edit-group-id').value;
-            const name = document.getElementById('edit-group-name').value;
-            const selectedChks = document.querySelectorAll('#contacts-select-edit input:checked');
-            const memberIds = Array.from(selectedChks).map(chk => parseInt(chk.value));
-            
-            if (name.trim() && memberIds.length > 0) {
-                const chatIndex = chatsData.findIndex(c => c.id === id);
-                if (chatIndex !== -1) {
-                    chatsData[chatIndex].name = name;
-                    chatsData[chatIndex].memberIds = memberIds;
-                    
-                    closeModals();
-                    openChat(id); // Обновить UI открытого чата
-                    renderContactsList();
-                }
-            } else {
-                alert('Группа должна иметь название и участников');
-            }
-        }
-
-        // Заглушка для отправки сообщений (как в оригинале)
-        document.getElementById('send-btn').addEventListener('click', sendMessage);
-        document.getElementById('message-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
-
-        function sendMessage() {
-            const input = document.getElementById('message-input');
-            const text = input.value.trim();
-            if (text && currentChatId) {
-                const msgs = document.getElementById('chat-messages');
-                const bubble = document.createElement('div');
-                bubble.className = `message-bubble outgoing`;
-                bubble.innerHTML = `<div>${text}Я переработал твой проект, полностью изменив макет, стиль и функционал, чтобы он соответствовал концепту на предоставленном фото, а также добавил требуемые функции: профиль, настройки аватарки, создание и редактирование групповых чатов, и просмотр участников.
-
-Вот полный обновленный код.
-
-### Основные изменения:
-
-1.  **Макет (как на фото)**: Теперь приложение использует **четырёхпанельную структуру**, перенесённую из концепта:
-    * **Панель 1 (Узкая левая)**: Иконки навигации, логотип приложения и аватарка текущего пользователя (доступ к профилю).
-    * **Панель 2 (Сайдбар чатов)**: Список чатов, кнопка создания группы, поиск (дизайн карточек из концепта).
-    * **Панель 3 (Окно чата)**: Заголовок, сообщения, поле ввода (в стиле концепта, белое на сером).
-    * **Панель 4 (Детали)**: Правый сайдбар с аватаром, именем, участниками группы, медиа и файлами (как на скриншоте).
-2.  **Стиль**: Громоздкие "стеклянные" градиенты заменены на чистую, светлую палитру концепта (`f0f2f5` фон, белые панели чата) с сохранением премиальных теней. Дизайн карточек в списке чатов теперь точно соответствует фото (аватар, имя, snippet, время).
-3.  **Функционал**:
-    * **Профиль/Аватарка**: Нажатие на аватар в левом нижнем углу открывает модальное окно настроек. Можно изменить имя и (в коде предусмотрена заглушка) загрузить аватар.
-    * **Групповые чаты**: Добавлена кнопка "+ Групповой чат". Она открывает модальное окно, где можно задать имя группы и выбрать участников из списка (чекбоксы).
-    * **Просмотр участников**: Если открыта группа, в правой панели деталей отображается раздел "Участники" со списком.
-    * **Редактирование**: В панели деталей группы добавлена кнопка "Редактировать", которая позволяет изменить название группы или изменить состав участников.
-
-### Код проекта (HAX MAX Concept Edition)
-
-Скопируй этот код целиком и замени им содержимое твоего файла.
-
-```html
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>HAX MAX v2 - Concept Edition</title>
-    <style>
-        :root {
-            /* Базовая палитра на основе концепта, более чистая и светлая */
-            --bg-main: #f0f2f5;
-            --panel-bg: rgba(255, 255, 255, 0.7); /* Более прозрачное стекло */
-            --panel-border: rgba(255, 255, 255, 0.6);
-            --inner-border: rgba(0, 0, 0, 0.05);
-            --text-primary: #1c1e21;
-            --text-secondary: #65676b;
-            --accent: #0071e3;
-            --accent-gradient: linear-gradient(135deg, #0071e3 0%, #34aadc 100%);
-            --bubble-in: rgba(255, 255, 255, 0.95);
-            --bubble-out: #0071e3;
-            --bubble-out-text: #ffffff;
-            --shadow-premium: 0 10px 40px rgba(0, 0, 0, 0.04);
-            --shadow-smooth: 0 4px 20px rgba(31, 38, 135, 0.05);
-            --radius-lg: 20px;
-            --radius-md: 14px;
-            --radius-sm: 10px;
-            --spring-transition: all 0.35s cubic-bezier(0.23, 1, 0.32, 1);
-            
-            /* Новые цвета из концепта */
-            --light-grey-bg: #f5f7f9;
-            --green-active: #31a24c;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            outline: none;
-            -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Roboto, Arial, sans-serif;
-        }
-
-        body {
-            background: var(--bg-main);
-            color: var(--text-primary);
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            letter-spacing: -0.01em;
-        }
-
-        /* Основной контейнер - Четырёхпанельный макет как на концепте */
-        .app-view {
-            width: 96%;
-            height: 92%;
-            background: var(--panel-bg);
-            backdrop-filter: blur(16px) saturate(160%);
-            border: 1px solid var(--panel-border);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-premium);
-            display: flex;
-            overflow: hidden;
-        }
-
-        /* 1. Узкая левая панель (иконки/быстрый доступ) */
+        /* 1. Левая узкая панель */
         .sidebar-app {
             width: 68px;
             border-right: 1px solid var(--inner-border);
@@ -1247,12 +107,12 @@
         }
 
         .user-profile-avatar-shortcut {
-            margin-top: auto; /* Прижать к низу */
+            margin-top: auto;
             position: relative;
             cursor: pointer;
         }
 
-        /* 2. Список чатов/групп */
+        /* 2. Сайдбар списка чатов */
         .chat-list-panel {
             width: 260px;
             border-right: 1px solid var(--inner-border);
@@ -1402,7 +262,7 @@
             letter-spacing: 0.05em;
         }
 
-        /* 3. Основная панель чата */
+        /* 3. Центральное окно чата */
         .main-chat-window {
             flex: 1;
             display: flex;
@@ -1434,22 +294,6 @@
             margin-left: auto;
             display: flex;
             gap: 8px;
-        }
-
-        .action-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 18px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 50%;
-            transition: var(--spring-transition);
-        }
-
-        .action-btn:hover {
-            background: var(--light-grey-bg);
-            color: var(--text-primary);
         }
 
         .chat-messages-container {
@@ -1517,7 +361,7 @@
             transition: var(--spring-transition);
         }
 
-        /* 4. Правая панель (Детали) - по концепту */
+        /* 4. Правая панель информации */
         .chat-details-panel {
             width: 250px;
             display: flex;
@@ -1587,11 +431,10 @@
             height: 28px;
             border-radius: 50%;
             background-size: cover;
+            background-position: center;
         }
 
-        .member-name {
-            font-size: 13px;
-        }
+        .member-name { font-size: 13px; }
 
         .media-grid-compact {
             display: grid;
@@ -1605,6 +448,8 @@
             border-radius: 6px;
             cursor: pointer;
             border: 1px solid var(--inner-border);
+            background-size: cover;
+            background-position: center;
         }
 
         .file-item {
@@ -1712,7 +557,6 @@
             font-size: 14px;
         }
 
-        /* Контейнер для загрузки аватарки */
         .avatar-upload-container {
             position: relative;
             width: 80px; height: 80px;
@@ -1756,17 +600,15 @@
         }
 
         .select-item:hover { background: rgba(0,0,0,0.03); }
-
         .select-item input { width: 16px; height: 16px; cursor: pointer; }
 
-        /* Иконки FontAwesome (как в оригинале) */
-        @import url('[https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css](https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css)');
-
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
     </style>
 </head>
 <body>
 
     <div class="app-view">
+        <!-- 1. Сайдбар приложений/профиля -->
         <aside class="sidebar-app">
             <div class="app-logo">E</div>
             <button class="sidebar-btn active" title="Чаты"><i class="fas fa-comment-alt"></i></button>
@@ -1775,30 +617,31 @@
             <button class="sidebar-btn" title="Статистика"><i class="fas fa-chart-line"></i></button>
 
             <div class="user-profile-avatar-shortcut" onclick="openProfileSettings()">
-                <div class="avatar user-current-avatar" style="background-image: url('[https://cdn-icons-png.flaticon.com/512/1144/1144760.png](https://cdn-icons-png.flaticon.com/512/1144/1144760.png)');">
+                <div class="avatar user-current-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png');">
                     <div class="status-badge online"></div>
                 </div>
             </div>
         </aside>
 
+        <!-- 2. Сайдбар списка чатов -->
         <aside class="chat-list-panel">
             <div class="list-header">
                 <h2>Чаты</h2>
                 <div class="header-controls">
-                    <button class="btn-create-group" onclick="openCreateGroupModal()"><i class="fas fa-plus"></i> Групповой чат</button>
+                    <button class="btn-create-group" onclick="openCreateGroupModal()"><i class="fas fa-plus"></i> Группа</button>
                 </div>
             </div>
             <div class="search-wrapper">
                 <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Поиск контактов или групп">
+                <input type="text" class="search-input" placeholder="Поиск...">
             </div>
-            <div class="contacts-scroll" id="contacts-list">
-                </div>
+            <div class="contacts-scroll" id="contacts-list"></div>
         </aside>
 
+        <!-- 3. Окно чата -->
         <main class="main-chat-window">
             <div class="chat-header">
-                <div class="avatar" id="chat-header-avatar"></div>
+                <div class="avatar" id="chat-header-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png')"></div>
                 <div class="chat-header-info">
                     <h3 id="chat-header-name">Выберите чат</h3>
                     <div class="chat-status" id="chat-header-status"></div>
@@ -1811,8 +654,8 @@
             </div>
 
             <div class="chat-messages-container" id="chat-messages">
-                <p style="text-align:center; color: #888; margin-top: auto; padding-bottom: 20px;">Добро пожаловать в HAX MAX Concepts</p>
-                </div>
+                <p style="text-align:center; color: #888; margin-top: auto; padding-bottom: 20px;">Выберите чат из списка слева для начала общения.</p>
+            </div>
 
             <div class="chat-input-bar">
                 <button class="action-btn"><i class="fas fa-plus"></i></button>
@@ -1822,26 +665,26 @@
             </div>
         </main>
 
+        <!-- 4. Правая панель информации -->
         <aside class="chat-details-panel" id="chat-details">
             <div class="details-header">
-                <div class="avatar" id="details-avatar"></div>
+                <div class="avatar" id="details-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png')"></div>
                 <h3 id="details-name">Детали чата</h3>
                 <p id="details-status"></p>
-                <button class="btn-create-group" id="edit-chat-btn" style="margin-top:12px; display:none;"><i class="fas fa-edit"></i> Редактировать</button>
+                <button class="btn-create-group" id="edit-chat-btn" style="margin-top:12px; display:none;"><i class="fas fa-edit"></i> Изменить</button>
             </div>
             <div class="details-content">
                 <div class="details-section" id="group-members-section" style="display:none;">
                     <h4>Участники (<span id="members-count">0</span>)</h4>
-                    <div class="member-list-compact" id="details-members-list">
-                        </div>
+                    <div class="member-list-compact" id="details-members-list"></div>
                 </div>
 
                 <div class="details-section">
                     <h4>Медиа</h4>
                     <div class="media-grid-compact">
-                        <div class="media-thumb" style="background-image: url('[https://source.unsplash.com/random/101](https://source.unsplash.com/random/101)');"></div>
-                        <div class="media-thumb" style="background-image: url('[https://source.unsplash.com/random/102](https://source.unsplash.com/random/102)');"></div>
-                        <div class="media-thumb" style="background-image: url('[https://source.unsplash.com/random/103](https://source.unsplash.com/random/103)');"></div>
+                        <div class="media-thumb" style="background-image: url('https://picsum.photos/100/100?random=1');"></div>
+                        <div class="media-thumb" style="background-image: url('https://picsum.photos/100/100?random=2');"></div>
+                        <div class="media-thumb" style="background-image: url('https://picsum.photos/100/100?random=3');"></div>
                     </div>
                 </div>
 
@@ -1851,15 +694,12 @@
                         <i class="fas fa-file-pdf file-icon"></i>
                         <span>Concept_UI_Layout.pdf</span>
                     </div>
-                    <div class="file-item">
-                        <i class="fas fa-file-invoice-dollar file-icon"></i>
-                        <span>Client_Report_May.xlxs</span>
-                    </div>
                 </div>
             </div>
         </aside>
     </div>
 
+    <!-- Модальное окно: Профиль -->
     <div class="modal-overlay" id="modal-settings">
         <div class="modal">
             <div class="modal-header">
@@ -1868,19 +708,14 @@
             </div>
             <div class="modal-body">
                 <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview user-current-avatar" style="background-image: url('[https://cdn-icons-png.flaticon.com/512/1144/1144760.png](https://cdn-icons-png.flaticon.com/512/1144/1144760.png)');"></div>
-                    <label class="avatar-upload-btn" for="upload-avatar-file">
+                    <div class="avatar-upload-preview user-current-avatar" style="background-image: url('https://cdn-icons-png.flaticon.com/512/1144/1144760.png');"></div>
+                    <label class="avatar-upload-btn">
                         <i class="fas fa-camera"></i>
                     </label>
-                    <input type="file" id="upload-avatar-file" style="display:none;" accept="image/*">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Ваше имя</label>
                     <input type="text" id="setting-user-name" class="form-input" placeholder="Введите имя">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Статус</label>
-                    <input type="text" class="form-input" placeholder="Я в HAX MAX Concepts">
                 </div>
                 <div class="form-actions">
                     <button class="btn-secondary" onclick="closeModals()">Отмена</button>
@@ -1890,27 +725,21 @@
         </div>
     </div>
 
+    <!-- Модальное окно: Создание группы -->
     <div class="modal-overlay" id="modal-create-group">
         <div class="modal">
             <div class="modal-header">
-                <div class="modal-title">Новый групповой чат</div>
+                <div class="modal-title">Новая группа</div>
                 <button class="btn-close-modal" onclick="closeModals()">&times;</button>
             </div>
             <div class="modal-body">
-                <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview" id="group-avatar-preview" style="background-color: #ddd;"></div>
-                    <label class="avatar-upload-btn">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                </div>
                 <div class="form-group">
                     <label class="form-label">Название группы</label>
-                    <input type="text" id="create-group-name" class="form-input" placeholder="Team Sync, Marketing...">
+                    <input type="text" id="create-group-name" class="form-input" placeholder="Название...">
                 </div>
                 <div class="form-group">
                     <label class="form-label">Выбрать участников</label>
-                    <div class="contact-select-list" id="contacts-select-create">
-                        </div>
+                    <div class="contact-select-list" id="contacts-select-create"></div>
                 </div>
                 <div class="form-actions">
                     <button class="btn-secondary" onclick="closeModals()">Отмена</button>
@@ -1920,6 +749,7 @@
         </div>
     </div>
 
+    <!-- Модальное окно: Редактирование группы -->
     <div class="modal-overlay" id="modal-edit-group">
         <div class="modal">
             <div class="modal-header">
@@ -1928,23 +758,16 @@
             </div>
             <div class="modal-body">
                 <input type="hidden" id="edit-group-id">
-                <div class="avatar-upload-container">
-                    <div class="avatar-upload-preview" id="edit-group-avatar-preview"></div>
-                    <label class="avatar-upload-btn">
-                        <i class="fas fa-camera"></i>
-                    </label>
-                </div>
                 <div class="form-group">
                     <label class="form-label">Название группы</label>
                     <input type="text" id="edit-group-name" class="form-input">
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Добавить/Удалить участников</label>
-                    <div class="contact-select-list" id="contacts-select-edit">
-                        </div>
+                    <label class="form-label">Участники</label>
+                    <div class="contact-select-list" id="contacts-select-edit"></div>
                 </div>
                 <div class="form-actions">
-                    <button class="btn-secondary" style="color: red;">Покинуть группу</button>
+                    <button class="btn-secondary" onclick="closeModals()">Отмена</button>
                     <button class="btn-primary" onclick="saveGroupEdits()">Сохранить</button>
                 </div>
             </div>
@@ -1952,52 +775,40 @@
     </div>
 
     <script>
-        // --- ДАННЫЕ (Улучшенная структура для поддержки групп) ---
-        
         let usersData = [
-            { id: 1, name: "Иван Иванов", avatar: "[https://randomuser.me/api/portraits/men/32.jpg](https://randomuser.me/api/portraits/men/32.jpg)", online: true, details: { phone: "+7 999 000 1122", info: "Software Architect" } },
-            { id: 2, name: "Ольга Суворова", avatar: "[https://randomuser.me/api/portraits/women/44.jpg](https://randomuser.me/api/portraits/women/44.jpg)", online: false, details: { phone: "+7 999 111 2233", info: "UI/UX Designer" } },
-            { id: 3, name: "Сергей Петров", avatar: "[https://randomuser.me/api/portraits/men/45.jpg](https://randomuser.me/api/portraits/men/45.jpg)", online: true, details: { phone: "+7 999 222 3344", info: "Project Manager" } },
-            { id: 4, name: "Анна Волкова", avatar: "[https://randomuser.me/api/portraits/women/65.jpg](https://randomuser.me/api/portraits/women/65.jpg)", online: true, details: { phone: "+7 999 333 4455", info: "Backend Engineer" } },
-            { id: 5, name: "Дмитрий Ли", avatar: "[https://randomuser.me/api/portraits/men/78.jpg](https://randomuser.me/api/portraits/men/78.jpg)", online: false, details: { phone: "+7 999 444 5566", info: "Lead Dev" } }
+            { id: 1, name: "Иван Иванов", avatar: "https://randomuser.me/api/portraits/men/32.jpg", online: true, details: { phone: "+7 999 000 1122" } },
+            { id: 2, name: "Ольга Суворова", avatar: "https://randomuser.me/api/portraits/women/44.jpg", online: false, details: { phone: "+7 999 111 2233" } },
+            { id: 3, name: "Сергей Петров", avatar: "https://randomuser.me/api/portraits/men/45.jpg", online: true, details: { phone: "+7 999 222 3344" } },
+            { id: 4, name: "Анна Волкова", avatar: "https://randomuser.me/api/portraits/women/65.jpg", online: true, details: { phone: "+7 999 333 4455" } }
         ];
 
         let chatsData = [
             { id: 'u1', type: 'user', refId: 1, lastMsg: 'Привет! Доделали дизайн?', time: '11:45' },
             { id: 'u2', type: 'user', refId: 2, lastMsg: 'Да, скинула файлы.', time: '11:32' },
-            // Предзагруженная группа (для примера)
-            { 
-                id: 'g1', type: 'group', name: "Hax Max Concepts Team", 
-                avatar: "[https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=100](https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=100)", 
-                memberIds: [1, 2, 3, 4], 
-                lastMsg: 'Анна Волкова: Давайте ревью?', time: '10:15'
-            },
-            { id: 'u3', type: 'user', refId: 3, lastMsg: 'Встреча в 14:00?', time: '09:50' },
+            { id: 'g1', type: 'group', name: "Hax Max Concepts Team", avatar: "https://images.unsplash.com/photo-1552664730-d307ca884978?q=80&w=100", memberIds: [1, 2, 3], lastMsg: 'Сергей Петров: Отличный макет!', time: '10:15' }
         ];
 
         let currentChatId = null;
         let myProfileData = {
             name: "Максим HAX",
-            avatar: "[https://cdn-icons-png.flaticon.com/512/1144/1144760.png](https://cdn-icons-png.flaticon.com/512/1144/1144760.png)",
-            status: "Lead Concept Dev"
+            avatar: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"
         };
 
-        // Генерируем тестовые сообщения
-        const generateMessages = (name) => [
-            { id: 1, type: 'incoming', text: `Привет! Как дела по проекту Hax MaxConcepts?`, time: '11:30' },
-            { id: 2, type: 'incoming', text: `Концепт просто супер! Ребята уже внедряют его.`, time: '11:30' },
-            { id: 3, type: 'outgoing', text: `Спасибо, команда! Нам нужно ещё профиль доработать и группы добавить.`, time: '11:31' },
-            { id: 4, type: 'incoming', text: `Хорошо. Я подготовлю базу данных к вечеру.`, time: '11:32' }
+        const generateMessages = () => [
+            { id: 1, type: 'incoming', text: `Привет! Как дела по проекту Hax Max Concepts?`, time: '11:30' },
+            { id: 2, type: 'incoming', text: `Макет выглядит потрясающе.`, time: '11:30' },
+            { id: 3, type: 'outgoing', text: `Спасибо! Теперь у нас есть 4 панели и полноценные группы.`, time: '11:31' }
         ];
-
-        // --- ИНИЦИАЛИЗАЦИЯ ---
 
         document.addEventListener('DOMContentLoaded', () => {
             renderMyProfile();
             renderContactsList();
+            
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            document.getElementById('message-input').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
         });
-
-        // --- РЕНДЕРИНГ ЭЛЕМЕНТОВ ---
 
         function renderMyProfile() {
             document.querySelectorAll('.user-current-avatar').forEach(el => el.style.backgroundImage = `url(${myProfileData.avatar})`);
@@ -2013,6 +824,7 @@
 
                 if (chat.type === 'user') {
                     const user = usersData.find(u => u.id === chat.refId);
+                    if (!user) return;
                     name = user.name;
                     avatar = user.avatar;
                     online = user.online;
@@ -2049,20 +861,17 @@
             });
         }
 
-        // --- ЧАТ ФУНКЦИОНАЛ ---
-
         function openChat(chatId) {
             currentChatId = chatId;
-            renderContactsList(); // Обновить активное состояние в списке
+            renderContactsList();
             const chat = chatsData.find(c => c.id === chatId);
+            if (!chat) return;
             
             let name, avatar, status;
             const msgs = document.getElementById('chat-messages');
             const detailsList = document.getElementById('details-members-list');
             
-            msgs.innerHTML = ''; // Очистить сообщения
-            
-            // Настройка правого сайдбара и заголовка
+            msgs.innerHTML = '';
             document.getElementById('edit-chat-btn').style.display = 'none';
             document.getElementById('group-members-section').style.display = 'none';
             
@@ -2070,25 +879,23 @@
                 const user = usersData.find(u => u.id === chat.refId);
                 name = user.name;
                 avatar = user.avatar;
-                status = user.online ? 'Online' : 'Offline';
+                status = user.online ? 'В сети' : 'Не в сети';
                 document.getElementById('details-status').textContent = user.details.phone;
-
             } else {
-                // Группа
                 name = chat.name;
                 avatar = chat.avatar;
                 status = `${chat.memberIds.length} участников`;
-                document.getElementById('details-status').textContent = 'Групповой чат Team';
-                document.getElementById('edit-chat-btn').style.display = 'flex';
+                document.getElementById('details-status').textContent = 'Групповой рабочий чат';
+                document.getElementById('edit-chat-btn').style.display = 'block';
                 document.getElementById('edit-chat-btn').onclick = () => openEditGroupModal(chat.id);
                 
-                // Рендер участников
                 document.getElementById('group-members-section').style.display = 'block';
                 document.getElementById('members-count').textContent = chat.memberIds.length;
                 detailsList.innerHTML = '';
+                
                 chat.memberIds.forEach(mid => {
                     const mUser = usersData.find(u => u.id === mid);
-                    if(!mUser) return; // На всякий случай
+                    if (!mUser) return;
                     const memberEl = document.createElement('div');
                     memberEl.className = 'member-card';
                     memberEl.innerHTML = `
@@ -2099,24 +906,20 @@
                 });
             }
 
-            // Заполнить заголовок и детали
             document.getElementById('chat-header-name').textContent = name;
             document.getElementById('chat-header-avatar').style.backgroundImage = `url(${avatar})`;
             document.getElementById('chat-header-status').textContent = status;
             document.getElementById('details-name').textContent = name;
             document.getElementById('details-avatar').style.backgroundImage = `url(${avatar})`;
             
-            // Рендер сообщений (тестовые)
-            generateMessages(name).forEach(msg => {
+            generateMessages().forEach(msg => {
                 const bubble = document.createElement('div');
                 bubble.className = `message-bubble ${msg.type}`;
-                bubble.innerHTML = `<div>${msg.text}</div><div class="time-snippet" style="text-align:right; margin-top:4px;">${msg.time}</div>`;
+                bubble.innerHTML = `<div>${msg.text}</div><div class="time-snippet" style="text-align:right; margin-top:4px; color:inherit; opacity:0.6;">${msg.time}</div>`;
                 msgs.appendChild(bubble);
             });
-            setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50); // Скролл вниз
+            setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 50);
         }
-
-        // --- МОДАЛЬНЫЕ ОКНА И НАСТРОЙКИ ---
 
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
@@ -2134,15 +937,11 @@
             const newName = document.getElementById('setting-user-name').value;
             if (newName.trim()) {
                 myProfileData.name = newName;
-                // В реальности мы бы загрузили аватарку, здесь просто сохраняем
                 renderMyProfile();
                 closeModals();
             }
         }
 
-        // --- ГРУППОВЫЕ ЧАТЫ ФУНКЦИОНАЛ ---
-
-        // Рендер списка контактов с чекбоксами (для создания/редактирования группы)
         function renderContactSelect(elementId) {
             const container = document.getElementById(elementId);
             container.innerHTML = '';
@@ -2164,7 +963,6 @@
             });
         }
 
-        // 1. Создание группы
         function openCreateGroupModal() {
             renderContactSelect('contacts-select-create');
             document.getElementById('create-group-name').value = '';
@@ -2177,45 +975,39 @@
             const memberIds = Array.from(selectedChks).map(chk => parseInt(chk.value));
             
             if (name.trim() && memberIds.length > 0) {
-                // Допустим, мы Lead Concept Dev, ID = 999
-                memberIds.push(999); 
-
                 const newChat = {
                     id: 'g' + (chatsData.length + 1),
                     type: 'group',
                     name: name,
-                    avatar: "[https://source.unsplash.com/random/100?team](https://source.unsplash.com/random/100?team)", // Заглушка
+                    avatar: "https://picsum.photos/100/100?random=9",
                     memberIds: memberIds,
-                    lastMsg: `Вы создали группу ${name}`,
+                    lastMsg: `Группа создана`,
                     time: '12:00'
                 };
                 
-                chatsData.unshift(newChat); // Добавить в начало списка
+                chatsData.unshift(newChat);
                 renderContactsList();
                 closeModals();
-                openChat(newChat.id); // Открыть новую группу
+                openChat(newChat.id);
             } else {
-                alert('Введите название группы и выберите участников');
+                alert('Укажите название и выберите участников!');
             }
         }
 
-        // 2. Редактирование группы
         function openEditGroupModal(chatId) {
             const chat = chatsData.find(c => c.id === chatId);
             if (!chat || chat.type !== 'group') return;
             
             document.getElementById('edit-group-id').value = chat.id;
             document.getElementById('edit-group-name').value = chat.name;
-            document.getElementById('edit-group-avatar-preview').style.backgroundImage = `url(${chat.avatar})`;
             
-            // Рендер контактов и отметка выбранных
             renderContactSelect('contacts-select-edit');
-            setTimeout(() => { // Ждем рендера
+            setTimeout(() => {
                 chat.memberIds.forEach(mid => {
                     const chk = document.getElementById(`chk-contacts-select-edit-${mid}`);
                     if (chk) chk.checked = true;
                 });
-            }, 10);
+            }, 50);
             
             openModal('modal-edit-group');
         }
@@ -2231,21 +1023,14 @@
                 if (chatIndex !== -1) {
                     chatsData[chatIndex].name = name;
                     chatsData[chatIndex].memberIds = memberIds;
-                    
                     closeModals();
-                    openChat(id); // Обновить UI открытого чата
+                    openChat(id);
                     renderContactsList();
                 }
             } else {
-                alert('Группа должна иметь название и участников');
+                alert('Заполните поля!');
             }
         }
-
-        // Заглушка для отправки сообщений
-        document.getElementById('send-btn').addEventListener('click', sendMessage);
-        document.getElementById('message-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') sendMessage();
-        });
 
         function sendMessage() {
             const input = document.getElementById('message-input');
@@ -2254,13 +1039,17 @@
                 const msgs = document.getElementById('chat-messages');
                 const bubble = document.createElement('div');
                 bubble.className = `message-bubble outgoing`;
-                bubble.innerHTML = `<div>${text}</div><div class="time-snippet" style="text-align:right; margin-top:4px;">12:01</div>`;
+                bubble.innerHTML = `<div>${text}</div><div class="time-snippet" style="text-align:right; margin-top:4px; opacity:0.6; color:#fff;">12:00</div>`;
                 msgs.appendChild(bubble);
+                
+                const chat = chatsData.find(c => c.id === currentChatId);
+                if (chat) chat.lastMsg = text;
+                
                 input.value = '';
-                setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 1);
+                renderContactsList();
+                setTimeout(() => { msgs.scrollTop = msgs.scrollHeight; }, 10);
             }
         }
-
     </script>
 </body>
 </html>
