@@ -28,7 +28,7 @@
             --sidebar-width: 360px;
         }
 
-        /* Полная блокировка скролла страницы */
+        /* Полное предотвращение нежелательных сдвигов верстки */
         * { 
             box-sizing: border-box; 
             margin: 0; 
@@ -174,13 +174,11 @@
         .voice-play-btn svg { width: 14px; height: 14px; fill: currentColor; display: block; }
         .voice-wave-visual { flex: 1; height: 20px; display: flex; align-items: center; gap: 3px; }
         .voice-wave-bar { flex: 1; height: 60%; background: currentColor; opacity: 0.4; border-radius: 2px; }
-        .voice-wave-bar.active { opacity: 0.9; }
 
         .msg-file-badge { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.05); padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 6px; text-decoration: none; color: inherit; font-size: 13.5px; }
         .outgoing .msg-file-badge { background: rgba(255,255,255,0.15); }
         .msg-time { font-size: 10px; margin-top: 4px; opacity: 0.5; text-align: right; }
 
-        /* Оптимизированная панель ввода под любые экраны */
         .chat-input-bar { 
             padding: 12px 16px calc(14px + env(safe-area-inset-bottom)); 
             border-top: 1px solid var(--inner-border); 
@@ -211,7 +209,6 @@
         .circle-action-btn.recording { background: #ff3b30; color: white; animation: pulseRecord 1s infinite alternate; }
         @keyframes pulseRecord { from { opacity: 0.7; } to { opacity: 1; } }
 
-        /* Док внутри сайдбара */
         .ios-floating-dock { 
             position: absolute; 
             bottom: 20px; 
@@ -236,7 +233,6 @@
         .dock-item:hover { background: rgba(255,255,255,0.3); color: var(--text-primary); transform: scale(1.08) translateY(-2px); }
         .dock-item.active { background: rgba(255,255,255,0.9); color: #0071e3; box-shadow: 0 4px 12px rgba(0,0,0,0.04); }
 
-        /* Модальные окна */
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-main); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s ease; }
         .fullscreen-overlay.active { opacity: 1; pointer-events: auto; }
         .auth-card { width: 92%; max-width: 400px; padding: 32px; border-radius: var(--radius-lg); background: rgba(255,255,255,0.7); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--panel-border); box-shadow: var(--shadow-premium); }
@@ -246,26 +242,44 @@
         .settings-card { width: 90%; max-width: 420px; background: rgba(255,255,255,0.85); border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 28px; box-shadow: var(--shadow-premium); transform: scale(0.95); transition: var(--spring-transition); }
         .active .settings-card { transform: scale(1); }
 
-        /* Адаптированный экран видеозвонка */
-        #video-call-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #09090b; z-index: 1001; display: none; flex-direction: column; }
+        /* ФИКС ОТОБРАЖЕНИЯ И МАСШТАБА ВИДЕОЗВОНКА */
+        #video-call-overlay { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh; 
+            height: 100dvh; 
+            background: #09090b; 
+            z-index: 1001; 
+            display: none; 
+            flex-direction: column; 
+            justify-content: flex-end; /* Контент всегда прижимается к низу корректно */
+            align-items: center;
+            padding-bottom: calc(40px + env(safe-area-inset-bottom)); /* Безопасный отступ */
+            overflow: hidden;
+        }
         #video-call-overlay.active { display: flex; }
-        .remote-video-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .local-video-frame { position: absolute; top: calc(20px + env(safe-area-inset-top)); right: 20px; width: 110px; height: 160px; object-fit: cover; border-radius: var(--radius-md); border: 2px solid rgba(255,255,255,0.2); z-index: 10; }
+        .remote-video-frame { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; }
+        .local-video-frame { position: absolute; top: calc(20px + env(safe-area-inset-top)); right: 20px; width: 105px; height: 150px; object-fit: cover; border-radius: var(--radius-md); border: 2px solid rgba(255,255,255,0.2); z-index: 10; }
         
-        /* Кнопки звонка подняты и увеличены для мобильных */
+        /* Премиальный масштабированный пульт управления вызовом */
         .call-controls-bar {
-            position: absolute; 
-            bottom: calc(50px + env(safe-area-inset-bottom)); 
-            left: 50%; 
-            transform: translateX(-50%); 
+            position: relative; 
             z-index: 10; 
             display: flex; 
-            gap: 24px;
+            gap: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 16px 28px;
+            border-radius: 40px;
+            border: 1px solid rgba(255,255,255,0.18);
+            box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+            transform: scale(1.15); /* Кнопки стали больше и удобнее для тапа */
+            margin-bottom: 20px;
         }
-        .call-controls-bar .circle-action-btn {
-            width: 54px;
-            height: 54px;
-        }
+        .call-controls-bar .circle-action-btn { width: 52px; height: 52px; font-weight: bold; font-size: 13px; }
 
         .premium-input { width: 100%; padding: 14px; background: rgba(0,0,0,0.04); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-primary); outline: none; margin-bottom: 14px; font-size: 15px; transition: var(--smooth-transition); }
         .premium-input:focus { background: white; border-color: var(--accent); }
@@ -307,7 +321,7 @@
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                 </button>
                 <button class="dock-item" id="dock-profile" onclick="openProfileSettingsModal()" title="Профиль">
-                    <div id="dock-avatar-fallback" style="width:24px; height:24px; border-radius:50%; background:currentColor; display:none;"></div>
+                    <div id="dock-avatar-fallback" style="width:24px; height:24px; border-radius:50%; background-size:cover; display:none;"></div>
                     <svg id="dock-profile-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                 </button>
             </div>
@@ -327,7 +341,7 @@
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
-                        <button id="group-edit-action-btn" class="circle-action-btn" style="display:none;" onclick="openGroupEditingModal()" title="Управление группой">
+                        <button id="group-edit-action-btn" class="circle-action-btn" style="display:none;" onclick="openGroupEditingModal()" title="Настройки группы">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
                         </button>
                         <button class="circle-action-btn primary" onclick="initiateOutgoingVideoCall()" title="Видеозвонок">
@@ -440,7 +454,7 @@
         let currentUserId = localStorage.getItem('premium_session_uid') || null;
         let allUsers = [];
         let allGroups = [];
-        let globalMessages = {}; // Локальный кэш структуры сообщений для мгновенной отрисовки
+        let globalMessages = {}; 
         let activeTab = 'chats'; 
         let activeChatTargetId = null;
         let isGroupChatMode = false;
@@ -458,18 +472,15 @@
 
         function initializeEcosystemCore() {
             database.ref('users').on('value', (snapshot) => {
-                const data = snapshot.val() || {};
-                allUsers = Object.values(data);
+                allUsers = Object.values(snapshot.val() || {});
                 buildAppUIRenderers();
             });
 
             database.ref('groups').on('value', (snapshot) => {
-                const data = snapshot.val() || {};
-                allGroups = Object.values(data);
+                allGroups = Object.values(snapshot.val() || {});
                 buildAppUIRenderers();
             });
 
-            // Оптимизация скорости: единый сквозной реактивный слушатель сообщений базы
             database.ref('messages').on('value', (snapshot) => {
                 globalMessages = snapshot.val() || {};
                 buildAppUIRenderers();
@@ -606,11 +617,8 @@
                 try {
                     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                     let options = {};
-                    if (MediaRecorder.isTypeSupported('audio/mp4')) {
-                        options = { mimeType: 'audio/mp4' };
-                    } else if (MediaRecorder.isTypeSupported('audio/webm')) {
-                        options = { mimeType: 'audio/webm' };
-                    }
+                    if (MediaRecorder.isTypeSupported('audio/mp4')) options = { mimeType: 'audio/mp4' };
+                    else if (MediaRecorder.isTypeSupported('audio/webm')) options = { mimeType: 'audio/webm' };
 
                     mediaRecorder = new MediaRecorder(stream, options);
                     voiceChunks = [];
@@ -628,9 +636,7 @@
                     btn.classList.add('recording');
                 } catch(e) { console.error("Микрофон недоступен", e); }
             } else {
-                if(mediaRecorder && mediaRecorder.state !== 'inactive') {
-                    mediaRecorder.stop();
-                }
+                if(mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
                 isVoiceRecording = false;
                 btn.classList.remove('recording');
             }
@@ -639,11 +645,7 @@
         function sendVoicePacketToFirebase(base64Data) {
             const chatKey = isGroupChatMode ? activeChatTargetId : [currentUserId, activeChatTargetId].sort().join('__');
             const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-            database.ref('messages/' + chatKey).push({
-                senderId: currentUserId,
-                voice: base64Data,
-                time: time
-            });
+            database.ref('messages/' + chatKey).push({ senderId: currentUserId, voice: base64Data, time: time });
         }
 
         let editingGroupId = null;
@@ -709,7 +711,6 @@
                 
                 database.ref('groups/' + gId).set(groupData).then(() => { 
                     closeGroupModal(); 
-                    // Мгновенное открытие созданной группы во избежание багов пустого экрана
                     openChatSession(gId, true);
                 });
             }
@@ -783,7 +784,7 @@
                     <div class="avatar-ui" style="${getAvatarStyle(u)}">${u.avatar ? '' : u.name.substring(0,2).toUpperCase()}</div>
                     <div class="row-meta">
                         <div class="row-title">${u.name}</div>
-                        <div class="row-sub">${u.role}</div>
+                        <div class="row-sub">${u.role || 'Пользователь'}</div>
                     </div>
                 `;
                 frag.appendChild(row);
@@ -816,17 +817,29 @@
             root.appendChild(frag);
         }
 
-        // Мгновенная синхронная сборка списка чатов из кэша памяти (Без 5-секундного лага)
+        /* НАДЕЖНАЯ СБОРКА ГЛАВНОГО ЭКРАНА ЧАТОВ: ВСЕГДА ВЫВОДИТ ДОСТУПНЫЕ ДИАЛОГИ И ПОСЛЕДНИЕ СООБЩЕНИЯ */
         function renderChatsTab() {
             const root = document.getElementById('tab-content-chats');
             toggleScrollerVisibility('tab-content-chats');
             root.innerHTML = '';
             const frag = document.createDocumentFragment();
 
+            // Вывод личных диалогов
             allUsers.filter(u => u.id !== currentUserId).forEach(u => {
-                const key = [currentUserId, u.id].sort().join('__');
-                if(!globalMessages[key]) return;
                 if(searchString && !u.name.toLowerCase().includes(searchString)) return;
+                const key = [currentUserId, u.id].sort().join('__');
+                
+                // Получаем последнее сообщение
+                const hasMsgs = globalMessages && globalMessages[key];
+                const msgArray = hasMsgs ? Object.values(globalMessages[key]) : [];
+                const lastMsg = msgArray.length > 0 ? msgArray[msgArray.length - 1] : null;
+                
+                let snippet = "Нет сообщений";
+                if(lastMsg) {
+                    if(lastMsg.voice) snippet = "🎤 Голосовое сообщение";
+                    else if(lastMsg.fileData) snippet = "📁 Файл: " + (lastMsg.fileName || "Документ");
+                    else snippet = lastMsg.text || "";
+                }
 
                 const row = document.createElement('div');
                 row.className = `item-row ${(!isGroupChatMode && activeChatTargetId === u.id) ? 'active' : ''}`;
@@ -835,18 +848,27 @@
                     <div class="avatar-ui" style="${getAvatarStyle(u)}">${u.avatar ? '' : u.name.substring(0,2).toUpperCase()}</div>
                     <div class="row-meta">
                         <div class="row-title">${u.name}</div>
-                        <div class="row-sub">Личный диалог</div>
+                        <div class="row-sub">${snippet}</div>
                     </div>
                 `;
                 frag.appendChild(row);
             });
 
+            // Вывод групп, в которых состоит пользователь
             allGroups.forEach(g => {
                 if(g.members && !g.members.includes(currentUserId)) return;
                 if(searchString && !g.name.toLowerCase().includes(searchString)) return;
 
-                // Отображаем группу, если есть сообщения ИЛИ если группа создана текущим пользователем
-                if(!globalMessages[g.id] && g.creatorId !== currentUserId) return;
+                const hasMsgs = globalMessages && globalMessages[g.id];
+                const msgArray = hasMsgs ? Object.values(globalMessages[g.id]) : [];
+                const lastMsg = msgArray.length > 0 ? msgArray[msgArray.length - 1] : null;
+
+                let snippet = "Групповой чат";
+                if(lastMsg) {
+                    if(lastMsg.voice) snippet = "🎤 Голосовое сообщение";
+                    else if(lastMsg.fileData) snippet = "📁 Файл: " + (lastMsg.fileName || "Документ");
+                    else snippet = lastMsg.text || "";
+                }
 
                 const row = document.createElement('div');
                 row.className = `item-row ${(isGroupChatMode && activeChatTargetId === g.id) ? 'active' : ''}`;
@@ -855,7 +877,7 @@
                     <div class="avatar-ui" style="${getAvatarStyle(g)}">${g.avatar ? '' : g.name.substring(0,2).toUpperCase()}</div>
                     <div class="row-meta">
                         <div class="row-title">${g.name}</div>
-                        <div class="row-sub">Группа: ${g.description || ''}</div>
+                        <div class="row-sub">${snippet}</div>
                     </div>
                 `;
                 frag.appendChild(row);
@@ -905,11 +927,11 @@
                         <div class="voice-player-container">
                             <button class="voice-play-btn" onclick="playAudioTrackNode('${m.voice}', this)">${SVG_PLAY}</button>
                             <div class="voice-wave-visual">
-                                <div class="voice-wave-bar active"></div>
-                                <div class="voice-wave-bar"></div>
-                                <div class="voice-wave-bar active"></div>
-                                <div class="voice-wave-bar"></div>
-                                <div class="voice-wave-bar active"></div>
+                                <div class="voice-wave-bar" style="height:60%"></div>
+                                <div class="voice-wave-bar" style="height:40%"></div>
+                                <div class="voice-wave-bar" style="height:80%"></div>
+                                <div class="voice-wave-bar" style="height:50%"></div>
+                                <div class="voice-wave-bar" style="height:70%"></div>
                             </div>
                         </div>
                     `;
@@ -941,9 +963,7 @@
                 currentPlayingAudio.pause();
                 return;
             }
-            if (currentPlayingAudio) {
-                currentPlayingAudio.pause();
-            }
+            if (currentPlayingAudio) currentPlayingAudio.pause();
 
             const audio = new Audio(base64Url);
             currentPlayingAudio = audio;
@@ -952,21 +972,13 @@
             buttonElement.innerHTML = SVG_PAUSE;
             audio.play();
 
-            audio.onpause = () => {
+            const resetState = () => {
                 buttonElement.innerHTML = SVG_PLAY;
-                if (currentPlayingAudio === audio) {
-                    currentPlayingAudio = null;
-                    currentPlayingBtn = null;
-                }
+                if (currentPlayingAudio === audio) { currentPlayingAudio = null; currentPlayingBtn = null; }
             };
 
-            audio.onended = () => {
-                buttonElement.innerHTML = SVG_PLAY;
-                if (currentPlayingAudio === audio) {
-                    currentPlayingAudio = null;
-                    currentPlayingBtn = null;
-                }
-            };
+            audio.onpause = resetState;
+            audio.onended = resetState;
         }
 
         function updateActiveChatHeader() {
@@ -980,7 +992,7 @@
                 const target = allUsers.find(u => u.id === activeChatTargetId);
                 if(!target) return;
                 document.getElementById('active-chat-name-target').innerText = target.name;
-                document.getElementById('active-chat-status-target').innerText = target.role || '';
+                document.getElementById('active-chat-status-target').innerText = target.role || 'Пользователь';
                 document.getElementById('active-chat-avatar-slot').innerHTML = `<div class="avatar-ui" style="${getAvatarStyle(target)}">${target.avatar ? '' : target.name.substring(0,2).toUpperCase()}</div>`;
             }
         }
@@ -988,6 +1000,7 @@
         function exitActiveChatView() {
             document.getElementById('app-layout').classList.remove('chat-opened');
             activeChatTargetId = null;
+            buildAppUIRenderers();
         }
 
         function triggerLocalSearchFilter() {
@@ -1016,6 +1029,7 @@
             if(localStream && localStream.getVideoTracks()[0]) {
                 const v = localStream.getVideoTracks()[0];
                 v.enabled = !v.enabled;
+                document.getElementById('call-cam-toggle').innerText = v.enabled ? "CAM" : "MUTED";
             }
         }
     </script>
