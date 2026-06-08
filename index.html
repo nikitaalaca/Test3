@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -27,13 +27,27 @@
             --sidebar-width: 340px;
             --success: #34c759;
             --danger: #ff3b30;
+            --input-bg: rgba(0, 0, 0, 0.04);
+        }
+
+        [data-theme="dark"] {
+            --bg-main: #0a0a0c;
+            --panel-bg: rgba(28, 28, 30, 0.6);
+            --panel-border: rgba(255, 255, 255, 0.05);
+            --inner-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #f5f5f7;
+            --text-secondary: #8e8e93;
+            --bubble-in: rgba(44, 44, 46, 0.9);
+            --input-bg: rgba(255, 255, 255, 0.06);
+            --shadow-premium: 0 20px 40px rgba(0, 0, 0, 0.3);
+            --shadow-smooth: 0 8px 32px rgba(0, 0, 0, 0.2);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-font-smoothing: antialiased; }
-        body, html { width: 100%; height: 100dvh; background: var(--bg-main); color: var(--text-primary); overflow: hidden; position: relative; }
+        body, html { width: 100%; height: 100dvh; background: var(--bg-main); color: var(--text-primary); overflow: hidden; position: relative; transition: background 0.3s ease; }
 
-        .ambient-glow { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,113,227,0.1) 0%, rgba(52,170,220,0) 70%); top: -150px; left: -150px; z-index: 1; pointer-events: none; }
-        .ambient-glow-2 { position: absolute; width: 450px; height: 450px; background: radial-gradient(circle, rgba(52,199,89,0.06) 0%, rgba(255,255,255,0) 70%); bottom: -100px; right: -100px; z-index: 1; pointer-events: none; }
+        .ambient-glow { position: absolute; width: 500px; height: 500px; background: radial-gradient(circle, rgba(0,113,227,0.08) 0%, rgba(52,170,220,0) 70%); top: -150px; left: -150px; z-index: 1; pointer-events: none; }
+        .ambient-glow-2 { position: absolute; width: 450px; height: 450px; background: radial-gradient(circle, rgba(52,199,89,0.05) 0%, rgba(255,255,255,0) 70%); bottom: -100px; right: -100px; z-index: 1; pointer-events: none; }
 
         #app-layout { display: flex; width: 100vw; height: 100dvh; position: relative; z-index: 2; overflow: hidden; }
         .glass-panel { background: var(--panel-bg); backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); border: 1px solid var(--panel-border); box-shadow: var(--shadow-smooth); }
@@ -49,13 +63,18 @@
             .mobile-back-btn { display: flex !important; }
         }
 
-        .sidebar-header { padding: 24px 20px 16px; display: flex; align-items: center; justify-content: space-between; }
-        .brand-title { font-size: 20px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; }
-        .dev-tag { font-size: 9px; font-weight: 700; background: rgba(0,0,0,0.05); color: var(--text-secondary); padding: 3px 6px; border-radius: 6px; letter-spacing: 0.5px; -webkit-text-fill-color: initial; }
+        .sidebar-header { padding: 24px 20px 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+        .brand-wrapper { display: flex; align-items: center; gap: 8px; }
+        .brand-title { font-size: 19px; font-weight: 800; background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -0.5px; display: inline-flex; align-items: center; line-height: 1; }
+        .dev-tag { font-size: 9px; font-weight: 700; background: rgba(0,0,0,0.05); color: var(--text-secondary); padding: 3px 6px; border-radius: 6px; letter-spacing: 0.5px; -webkit-text-fill-color: initial; margin-left: 6px; vertical-align: middle; }
+        [data-theme="dark"] .dev-tag { background: rgba(255,255,255,0.08); }
+
+        .header-actions-area { display: flex; align-items: center; gap: 8px; }
         
         .search-box { padding: 0 16px 16px; }
-        .search-inner { display: flex; align-items: center; background: rgba(0,0,0,0.04); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid transparent; transition: var(--smooth); }
-        .search-inner:focus-within { background: #fff; border-color: rgba(0,113,227,0.3); box-shadow: 0 0 0 3px rgba(0,113,227,0.06); }
+        .search-inner { display: flex; align-items: center; background: var(--input-bg); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid transparent; transition: var(--smooth); }
+        .search-inner:focus-within { background: rgba(255,255,255,0.9); border-color: rgba(0,113,227,0.3); box-shadow: 0 0 0 3px rgba(0,113,227,0.06); }
+        [data-theme="dark"] .search-inner:focus-within { background: #2c2c2e; }
         .search-inner input { border: none; background: transparent; outline: none; width: 100%; margin-left: 8px; color: var(--text-primary); font-size: 14px; }
 
         .tab-bar { display: flex; padding: 0 16px 12px; gap: 4px; border-bottom: 1px solid var(--inner-border); }
@@ -66,50 +85,59 @@
         .scroller-content.active { display: block; }
 
         .item-row { display: flex; align-items: center; padding: 12px; border-radius: var(--radius-md); cursor: pointer; transition: var(--smooth); margin-bottom: 4px; border: 1px solid transparent; position: relative; }
-        .item-row:hover { background: rgba(255,255,255,0.6); transform: translateY(-1px); }
+        .item-row:hover { background: rgba(255,255,255,0.4); transform: translateY(-1px); }
+        [data-theme="dark"] .item-row:hover { background: rgba(255,255,255,0.03); }
         .item-row.active { background: #fff; border-color: rgba(0,113,227,0.1); box-shadow: var(--shadow-smooth); }
+        [data-theme="dark"] .item-row.active { background: #2c2c2e; }
         
-        .avatar-ui { width: 42px; height: 42px; border-radius: 50%; color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; position: relative; flex-shrink: 0; background: #8e8e93; }
+        .avatar-ui { width: 42px; height: 42px; border-radius: 50%; color: white; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 13px; position: relative; flex-shrink: 0; background: #8e8e93; background-size: cover; background-position: center; object-fit: cover; }
         .status-dot { position: absolute; width: 11px; height: 11px; background: #cdcdf1; border: 2px solid #fff; border-radius: 50%; bottom: 0; right: 0; transition: var(--smooth); }
+        [data-theme="dark"] .status-dot { border-color: #1c1c1e; }
         .status-dot.online { background: var(--success); }
 
         .row-meta { flex: 1; margin-left: 12px; min-width: 0; }
         .row-title { font-weight: 600; font-size: 14.5px; color: var(--text-primary); display: flex; justify-content: space-between; align-items: center; }
         .row-sub { font-size: 12.5px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-        .typing-text { color: var(--success) !important; font-weight: 500; animation: pulse 1.5s infinite; }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .typing-text { color: var(--success) !important; font-weight: 500; }
 
-        .chat-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--inner-border); background: rgba(255,255,255,0.2); z-index: 10; }
-        .chat-messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(235,238,242,0.2); }
+        .chat-header { padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--inner-border); background: rgba(255,255,255,0.1); z-index: 10; }
+        .chat-messages-area { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: rgba(235,238,242,0.1); }
 
         .msg-container { display: flex; flex-direction: column; max-width: 75%; animation: msgSlide 0.25s ease-out; }
         @keyframes msgSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
         .msg-container.incoming { align-self: flex-start; }
         .msg-container.outgoing { align-self: flex-end; }
         
-        .msg-bubble-main { padding: 10px 14px; border-radius: var(--radius-md); font-size: 14.5px; line-height: 1.4; box-shadow: 0 1px 4px rgba(0,0,0,0.01); position: relative; word-break: break-word; }
+        .msg-bubble-main { padding: 10px 14px; border-radius: var(--radius-md); font-size: 14.5px; line-height: 1.4; position: relative; word-break: break-word; }
         .incoming .msg-bubble-main { background: var(--bubble-in); color: var(--text-primary); border-top-left-radius: 4px; border: 1px solid rgba(0,0,0,0.02); }
         .outgoing .msg-bubble-main { background: var(--accent-gradient); color: var(--bubble-out-text); border-top-right-radius: 4px; }
         
-        .msg-media-preview { max-width: 240px; max-height: 180px; border-radius: var(--radius-sm); margin-bottom: 4px; display: block; object-fit: cover; cursor: pointer; }
+        .msg-media-preview { max-width: 240px; max-height: 180px; border-radius: var(--radius-sm); margin-bottom: 4px; display: block; object-fit: cover; cursor: pointer; transition: transform 0.2s ease; }
+        .msg-media-preview:hover { transform: scale(1.02); }
         .msg-file-badge { display: flex; align-items: center; gap: 6px; background: rgba(0,0,0,0.04); padding: 8px 12px; border-radius: var(--radius-sm); margin-bottom: 4px; text-decoration: none; color: inherit; font-size: 12.5px; font-weight: 500; }
         .outgoing .msg-file-badge { background: rgba(255,255,255,0.15); color: #fff; }
         .msg-time { font-size: 9.5px; margin-top: 4px; opacity: 0.5; text-align: right; }
 
-        #attachment-preview-zone { display: none; padding: 10px 20px; background: #fff; border-top: 1px solid var(--inner-border); align-items: center; gap: 10px; }
+        .voice-player-container { display: flex; align-items: center; gap: 8px; padding: 4px 0; min-width: 200px; }
+        .voice-player-container audio { width: 100%; height: 28px; outline: none; }
+
+        #attachment-preview-zone { display: none; padding: 10px 20px; background: var(--panel-bg); border-top: 1px solid var(--inner-border); align-items: center; gap: 10px; }
         .preview-pill { position: relative; background: var(--bg-main); padding: 6px 30px 6px 12px; border-radius: var(--radius-sm); font-size: 12.5px; font-weight: 600; border: 1px solid var(--inner-border); }
         .preview-pill .close-btn { position: absolute; right: 8px; cursor: pointer; font-size: 14px; color: var(--danger); top: 50%; transform: translateY(-50%); }
 
-        .chat-input-bar { padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--inner-border); background: #fff; z-index: 10; }
+        .chat-input-bar { padding: 12px 20px calc(12px + env(safe-area-inset-bottom)); border-top: 1px solid var(--inner-border); background: var(--panel-bg); z-index: 10; }
         .input-row-container { display: flex; align-items: center; gap: 8px; }
-        .chat-input-bar input[type="text"] { flex: 1; padding: 12px 16px; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--bg-main); color: var(--text-primary); font-size: 14.5px; outline: none; transition: var(--smooth); }
+        .chat-input-bar input[type="text"] { flex: 1; padding: 12px 16px; border: 1px solid transparent; border-radius: var(--radius-md); background: var(--input-bg); color: var(--text-primary); font-size: 14.5px; outline: none; transition: var(--smooth); }
         .chat-input-bar input[type="text"]:focus { background: #fff; border-color: rgba(0,113,227,0.15); box-shadow: var(--shadow-smooth); }
+        [data-theme="dark"] .chat-input-bar input[type="text"]:focus { background: #2c2c2e; }
         
-        .circle-action-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--bg-main); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: var(--smooth); }
-        .circle-action-btn:hover { transform: scale(1.04); background: rgba(0,0,0,0.05); }
-        .circle-action-btn ready { transform: none; }
+        .circle-action-btn { width: 38px; height: 38px; border-radius: 50%; border: none; background: var(--input-bg); color: var(--text-primary); display: flex; align-items: center; justify-content: center; cursor: pointer; flex-shrink: 0; transition: var(--smooth); }
+        .circle-action-btn:hover { transform: scale(1.04); background: rgba(0,0,0,0.08); }
+        [data-theme="dark"] .circle-action-btn:hover { background: rgba(255,255,255,0.1); }
         .circle-action-btn .btn-svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
         .circle-action-btn.primary { background: var(--accent-gradient); color: white; box-shadow: 0 4px 12px rgba(0,113,227,0.15); }
+        .circle-action-btn.recording { background: var(--danger); color: white; animation: recPulse 1s infinite alternate; }
+        @keyframes recPulse { from { transform: scale(1); } to { transform: scale(1.08); } }
         
         .mobile-back-btn { display: none; background: transparent; border: none; color: var(--accent); padding-right: 12px; cursor: pointer; align-items: center; justify-content: center; }
         .mobile-back-btn .btn-svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
@@ -117,6 +145,7 @@
         .fullscreen-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: var(--bg-main); z-index: 999; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s ease; }
         .fullscreen-overlay.active { opacity: 1; pointer-events: auto; }
         .auth-card { width: 90%; max-width: 360px; padding: 28px; border-radius: var(--radius-lg); box-shadow: var(--shadow-premium); background: #fff; border: 1px solid var(--panel-border); }
+        [data-theme="dark"] .auth-card { background: #1c1c1e; }
         
         .onboarding-container { display: none; flex-direction: column; text-align: center; }
         .onboarding-container.active { display: flex; }
@@ -129,9 +158,15 @@
         .dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(0,0,0,0.1); transition: var(--smooth); }
         .dot.active { background: var(--accent); width: 14px; border-radius: 3px; }
 
-        #settings-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.1); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 800; display: none; align-items: center; justify-content: center; }
+        #settings-modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); z-index: 800; display: none; align-items: center; justify-content: center; }
         #settings-modal-overlay.active { display: flex; }
         .settings-card { width: 88%; max-width: 340px; background: #fff; border: 1px solid var(--panel-border); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow-premium); }
+        [data-theme="dark"] .settings-card { background: #1c1c1e; }
+
+        #lightbox-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: rgba(0,0,0,0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); z-index: 1000; display: none; align-items: center; justify-content: center; cursor: pointer; }
+        #lightbox-overlay img { max-width: 90%; max-height: 85%; border-radius: var(--radius-sm); box-shadow: 0 12px 40px rgba(0,0,0,0.5); transform: scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1); }
+        #lightbox-overlay.active { display: flex; }
+        #lightbox-overlay.active img { transform: scale(1); }
 
         #video-call-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100dvh; background: #0c0c0e; z-index: 900; display: none; flex-direction: column; overflow: hidden; }
         #video-call-overlay.active { display: flex; }
@@ -144,20 +179,27 @@
         .call-btn.toggle { background: rgba(255,255,255,0.15); }
 
         #incoming-call-modal { position: fixed; top: calc(15px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%) translateY(-200%); width: 92%; max-width: 360px; background: rgba(255,255,255,0.85); border: 1px solid var(--panel-border); border-radius: var(--radius-md); box-shadow: var(--shadow-premium); z-index: 950; padding: 16px; display: flex; align-items: center; justify-content: space-between; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); transition: var(--spring); }
+        [data-theme="dark"] #incoming-call-modal { background: rgba(28,28,30,0.85); }
         #incoming-call-modal.active { transform: translateX(-50%) translateY(0); }
         .inc-btn { border: none; padding: 10px 16px; border-radius: var(--radius-sm); font-weight: 600; cursor: pointer; font-size: 12.5px; transition: var(--smooth); }
         .inc-btn.accept { background: var(--success); color: white; }
         .inc-btn.decline { background: var(--danger); color: white; }
 
-        .premium-input { width: 100%; padding: 12px; background: var(--bg-main); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-primary); outline: none; margin-bottom: 12px; font-size: 14px; transition: var(--smooth); }
+        .premium-input { width: 100%; padding: 12px; background: var(--input-bg); border: 1px solid transparent; border-radius: var(--radius-sm); color: var(--text-primary); outline: none; margin-bottom: 12px; font-size: 14px; transition: var(--smooth); }
         .premium-input:focus { background: white; border-color: var(--accent); }
-        .empty-chat-stub { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); text-align: center; background: rgba(255,255,255,0.05); }
+        [data-theme="dark"] .premium-input:focus { background: #2c2c2e; }
+        .empty-chat-stub { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--text-secondary); text-align: center; }
     </style>
 </head>
 <body>
 
     <div class="ambient-glow"></div>
     <div class="ambient-glow-2"></div>
+
+    <!-- ПРОСМОТР ИЗОБРАЖЕНИЙ (ЛАЙТБОКС) -->
+    <div id="lightbox-overlay" onclick="closeImageLightbox()">
+        <img id="lightbox-target-img" src="" alt="View">
+    </div>
 
     <!-- ЭКРАН ВХОДА И ОНБОРДИНГА -->
     <div id="auth-screen-layer" class="fullscreen-overlay active">
@@ -172,6 +214,8 @@
             <input type="text" id="settings-name-input" class="premium-input">
             <label style="font-size:11px; color:var(--text-secondary); font-weight:700; display:block; margin-bottom:4px;">ДОЛЖНОСТЬ</label>
             <input type="text" id="settings-role-input" class="premium-input">
+            <label style="font-size:11px; color:var(--text-secondary); font-weight:700; display:block; margin-bottom:4px;">ФОТО ПРОФИЛЯ (BASE64 ИЛИ URL)</label>
+            <input type="text" id="settings-avatar-input" class="premium-input" placeholder="Вставьте ссылку на фото">
             <button class="premium-input" style="background:var(--accent); color:white; font-weight:600; margin-bottom:0; cursor:pointer;" onclick="saveProfileSettingsChanges()">Сохранить изменения</button>
             <button class="tab-btn" style="width:100%; margin-top:8px; color:var(--danger); font-weight:700;" onclick="executeLogoutSystem()">Выйти из аккаунта</button>
         </div>
@@ -203,8 +247,16 @@
     <div id="app-layout">
         <aside id="sidebar-container" class="glass-panel">
             <div class="sidebar-header">
-                <span class="brand-title">COLLAGE <span class="dev-tag">CONNECT</span></span>
-                <div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileSettingsModal()"></div>
+                <div class="brand-wrapper">
+                    <span class="brand-title">КОЛЛАЖ CONNECT</span>
+                    <span class="dev-tag"></span>
+                </div>
+                <div class="header-actions-area">
+                    <button class="circle-action-btn" onclick="toggleAppVisualTheme()" title="Переключить тему">
+                        <svg class="btn-svg" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </button>
+                    <div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileSettingsModal()"></div>
+                </div>
             </div>
             <div class="search-box">
                 <div class="search-inner">
@@ -213,12 +265,12 @@
             </div>
             <nav class="tab-bar">
                 <button class="tab-btn active" id="tab-btn-chats" onclick="switchSidebarTab('chats')">Личные</button>
-                <button class="tab-btn" id="tab-btn-groups" onclick="switchSidebarTab('groups')">Группы</button>
+                <button class="tab-btn" id="tab-btn-groups" onclick="switchSidebarTab('groups')">Команды</button>
                 <button class="tab-btn" id="tab-btn-contacts" onclick="switchSidebarTab('contacts')">Команда</button>
             </nav>
             <div id="tab-content-chats" class="scroller-content active"></div>
             <div id="tab-content-groups" class="scroller-content">
-                <button class="premium-input" style="background:rgba(0,113,227,0.06); color:var(--accent); font-weight:600; border:none; margin-top:4px; cursor:pointer;" onclick="createNewGroupChannel()">Создать новую группу</button>
+                <button class="premium-input" style="background:rgba(0,113,227,0.06); color:var(--accent); font-weight:600; border:none; margin-top:4px; cursor:pointer;" onclick="createNewGroupChannel()">Создать команду</button>
                 <div id="groups-list-root"></div>
             </div>
             <div id="tab-content-contacts" class="scroller-content"></div>
@@ -259,7 +311,13 @@
                             <svg class="btn-svg" viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
                         </button>
                         <input type="file" id="hidden-file-picker" style="display:none;" onchange="handleFileSelectionPipeline(event)">
+                        
                         <input type="text" id="chat-core-input-field" placeholder="Ваше сообщение..." oninput="handleUserTypingBroadcast()" onkeypress="if(event.key==='Enter') dispatchMessagePacket()">
+                        
+                        <button class="circle-action-btn" id="mic-record-btn" onclick="toggleVoiceRecordingSession()" title="Записать голосовое сообщение">
+                            <svg class="btn-svg" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+                        </button>
+
                         <button class="circle-action-btn primary" onclick="dispatchMessagePacket()">
                             <svg class="btn-svg" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                         </button>
@@ -300,18 +358,51 @@
         let isGroupMode = false;
         let onboardingCurrentStep = 0;
         let tempRegistrationPayload = null;
+        
         let currentSelectedFileBase64 = null;
         let currentSelectedFileName = null;
         let currentSelectedFileType = null;
         let searchString = "";
         let typingTimeout = null;
 
+        let voiceMediaRecorder = null;
+        let voiceAudioChunks = [];
+        let isVoiceRecording = false;
+
         let localStream = null;
         let peerConnection = null;
         let currentCallRef = null;
         const rtcIceConfig = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }, { urls: 'stun:stun1.l.google.com:19302' }] };
 
-        window.addEventListener('DOMContentLoaded', () => { initializeEcosystemCore(); });
+        window.addEventListener('DOMContentLoaded', () => { 
+            initVisualThemeConfiguration();
+            requestBrowserNotificationSystem();
+            initializeEcosystemCore(); 
+        });
+
+        function initVisualThemeConfiguration() {
+            const savedTheme = localStorage.getItem('premium_theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        function toggleAppVisualTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', target);
+            localStorage.setItem('premium_theme', target);
+        }
+
+        function requestBrowserNotificationSystem() {
+            if ("Notification" in window && Notification.permission === "default") {
+                Notification.requestPermission();
+            }
+        }
+
+        function triggerWebPushNotification(title, messageText) {
+            if ("Notification" in window && Notification.permission === "granted") {
+                new Notification(title, { body: messageText, icon: "https://cdn-icons-png.flaticon.com/512/2593/2593627.png" });
+            }
+        }
         
         function initializeEcosystemCore() {
             database.ref('users').on('value', (snapshot) => {
@@ -329,7 +420,11 @@
             });
 
             database.ref('messages').on('value', (snapshot) => {
+                const prevCache = globalMessagesCache;
                 globalMessagesCache = snapshot.val() || {};
+                
+                // Проверка на новые входящие сообщения для пушей
+                detectIncomingMessagesForPush(prevCache, globalMessagesCache);
                 buildAppUIRenderers();
             });
 
@@ -340,14 +435,30 @@
             }
         }
 
+        function detectIncomingMessagesForPush(oldCache, newCache) {
+            if (!currentUserId) return;
+            Object.keys(newCache).forEach(chatKey => {
+                if (chatKey.includes(currentUserId)) {
+                    const oldMsgs = oldCache[chatKey] ? Object.keys(oldCache[chatKey]) : [];
+                    const newMsgs = Object.keys(newCache[chatKey]);
+                    if (newMsgs.length > oldMsgs.length) {
+                        const lastKey = newMsgs[newMsgs.length - 1];
+                        const lastMsg = newCache[chatKey][lastKey];
+                        if (lastMsg.senderId !== currentUserId && activeChatTargetId !== lastMsg.senderId) {
+                            const sender = allUsers.find(u => u.id === lastMsg.senderId);
+                            triggerWebPushNotification(`Новое сообщение от ${sender ? sender.name : 'Коллеги'}`, lastMsg.text || "Вложение...");
+                        }
+                    }
+                }
+            });
+        }
+
         function setupPresenceEngine() {
             if (!currentUserId) return;
             const myStatusRef = database.ref(`users/${currentUserId}/online`);
             database.ref('.info/connected').on('value', (snapshot) => {
                 if (snapshot.val() === false) return;
-                myStatusRef.onDisconnect().set(false).then(() => {
-                    myStatusRef.set(true);
-                });
+                myStatusRef.onDisconnect().set(false).then(() => { myStatusRef.set(true); });
             });
         }
 
@@ -355,16 +466,14 @@
             if (!currentUserId || !activeChatTargetId || isGroupMode) return;
             database.ref(`users/${currentUserId}/typingTo`).set(activeChatTargetId);
             clearTimeout(typingTimeout);
-            typingTimeout = setTimeout(() => {
-                database.ref(`users/${currentUserId}/typingTo`).set(false);
-            }, 1800);
+            typingTimeout = setTimeout(() => { database.ref(`users/${currentUserId}/typingTo`).set(false); }, 1800);
         }
 
         function drawAuthUIForm(isRegister) {
             const container = document.getElementById('auth-main-card-node');
             if (!isRegister) {
                 container.innerHTML = `
-                    <h2 style="font-weight:800; font-size:20px; margin-bottom:4px; letter-spacing:-0.5px;">ВХОД В СИСТЕМУ</h2>
+                    <h2 style="font-weight:800; font-size:20px; margin-bottom:4px; letter-spacing:-0.5px; color:#1c1c1e;">ВХОД В СИСТЕМУ</h2>
                     <p style="color:var(--text-secondary); font-size:13px; margin-bottom:16px;">Коллаж Коннект Премиум</p>
                     <input type="text" id="f-login" class="premium-input" placeholder="Корпоративный логин">
                     <input type="password" id="f-pass" class="premium-input" placeholder="Пароль">
@@ -373,7 +482,7 @@
                 `;
             } else {
                 container.innerHTML = `
-                    <h2 style="font-weight:800; font-size:20px; margin-bottom:4px;">РЕГИСТРАЦИЯ</h2>
+                    <h2 style="font-weight:800; font-size:20px; margin-bottom:4px; color:#1c1c1e;">РЕГИСТРАЦИЯ</h2>
                     <p style="color:var(--text-secondary); font-size:13px; margin-bottom:16px;">Заполните профиль сотрудника</p>
                     <input type="text" id="f-reg-login" class="premium-input" placeholder="Логин (латиница)">
                     <input type="text" id="f-reg-name" class="premium-input" placeholder="Имя и Фамилия">
@@ -401,24 +510,24 @@
             let iconCode = '';
             if(onboardingCurrentStep === 0) iconCode = `<svg class="btn-svg" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>`;
             if(onboardingCurrentStep === 1) iconCode = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M23 7l-7 5 7 5V7z"></path><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>`;
-            if(onboardingCurrentStep === 2) iconCode = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`;
+            if(onboardingCurrentStep === 2) iconCode = `<svg class="btn-svg" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
 
             container.innerHTML = `
                 <div class="onboarding-container active">
                     <div class="onboarding-slides">
                         <div class="onboarding-slide ${onboardingCurrentStep===0?'current':''}">
                             <div class="onboarding-icon-ui">${iconCode}</div>
-                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;">Экосистема Коллаж</h3>
+                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px; color:#1c1c1e;">Экосистема Коллаж</h3>
                             <p style="color:var(--text-secondary); font-size:12.5px; padding:0 10px; line-height:1.4;">Премиальный корпоративный мессенджер с защищенными каналами связи.</p>
                         </div>
                         <div class="onboarding-slide ${onboardingCurrentStep===1?'current':''}">
                             <div class="onboarding-icon-ui">${iconCode}</div>
-                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;">Прямые видеозвонки</h3>
+                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px; color:#1c1c1e;">Прямые видеозвонки</h3>
                             <p style="color:var(--text-secondary); font-size:12.5px; padding:0 10px; line-height:1.4;">Общайтесь по WebRTC без посредников. Потоки идут напрямую между устройствами.</p>
                         </div>
                         <div class="onboarding-slide ${onboardingCurrentStep===2?'current':''}">
                             <div class="onboarding-icon-ui">${iconCode}</div>
-                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px;">Обмен документами</h3>
+                            <h3 style="font-size:17px; font-weight:700; margin-bottom:6px; color:#1c1c1e;">Обмен документами</h3>
                             <p style="color:var(--text-secondary); font-size:12.5px; padding:0 10px; line-height:1.4;">Мгновенная передача изображений, отчетов и бинарных файлов внутри диалогов.</p>
                         </div>
                     </div>
@@ -443,7 +552,7 @@
             const uid = "uid_" + Date.now();
             const colors = ["#0071e3", "#ff2d55", "#34c759", "#ff9500", "#af52de", "#5ac8fa"];
             const color = colors[Math.floor(Math.random() * colors.length)];
-            const packet = { id: uid, login: tempRegistrationPayload.login, name: tempRegistrationPayload.name, role: tempRegistrationPayload.role, pass: tempRegistrationPayload.pass, color: color, online: true, typingTo: false };
+            const packet = { id: uid, login: tempRegistrationPayload.login, name: tempRegistrationPayload.name, role: tempRegistrationPayload.role, pass: tempRegistrationPayload.pass, color: color, online: true, typingTo: false, avatarUrl: "" };
             database.ref('users/' + uid).set(packet).then(() => {
                 currentUserId = uid;
                 localStorage.setItem('premium_session_uid', uid);
@@ -468,14 +577,19 @@
             if(!me) return;
             document.getElementById('settings-name-input').value = me.name || '';
             document.getElementById('settings-role-input').value = me.role || '';
+            document.getElementById('settings-avatar-input').value = me.avatarUrl || '';
             document.getElementById('settings-modal-overlay').classList.add('active');
         }
 
         function closeProfileSettingsModal() { document.getElementById('settings-modal-overlay').classList.remove('active'); }
+        
         function saveProfileSettingsChanges() {
             const n = document.getElementById('settings-name-input').value.trim();
             const r = document.getElementById('settings-role-input').value.trim();
-            if(n && r) database.ref(`users/${currentUserId}`).update({ name: n, role: r }).then(() => closeProfileSettingsModal());
+            const av = document.getElementById('settings-avatar-input').value.trim();
+            if(n && r) {
+                database.ref(`users/${currentUserId}`).update({ name: n, role: r, avatarUrl: av }).then(() => closeProfileSettingsModal());
+            }
         }
         function executeLogoutSystem() { localStorage.removeItem('premium_session_uid'); location.reload(); }
 
@@ -499,6 +613,54 @@
             document.getElementById('hidden-file-picker').value = '';
         }
 
+        async function toggleVoiceRecordingSession() {
+            const btn = document.getElementById('mic-record-btn');
+            if (!isVoiceRecording) {
+                // Старт записи
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert("Ваш браузер не поддерживает запись аудио."); return;
+                }
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    voiceAudioChunks = [];
+                    voiceMediaRecorder = new MediaRecorder(stream);
+                    voiceMediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) voiceAudioChunks.push(e.data); };
+                    voiceMediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(voiceAudioChunks, { type: 'audio/mp3' });
+                        const reader = new FileReader();
+                        reader.onloadend = () => {
+                            sendVoiceMessagePacket(reader.result);
+                        };
+                        reader.readAsDataURL(audioBlob);
+                        stream.getTracks().forEach(t => t.stop());
+                    };
+                    voiceMediaRecorder.start();
+                    isVoiceRecording = true;
+                    btn.classList.add('recording');
+                } catch (err) {
+                    alert("Ошибка доступа к микрофону: " + err.message);
+                }
+            } else {
+                // Стоп записи
+                if (voiceMediaRecorder && voiceMediaRecorder.state !== "inactive") {
+                    voiceMediaRecorder.stop();
+                }
+                isVoiceRecording = false;
+                btn.classList.remove('recording');
+            }
+        }
+
+        function sendVoiceMessagePacket(base64Audio) {
+            const time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            const msgNode = { senderId: currentUserId, time: time, voiceData: base64Audio };
+            if(isGroupMode) {
+                database.ref(`groups/${activeChatTargetId}/messages`).push(msgNode);
+            } else {
+                const chatKey = [currentUserId, activeChatTargetId].sort().join('__');
+                database.ref('messages/' + chatKey).push(msgNode);
+            }
+        }
+
         function dispatchMessagePacket() {
             const input = document.getElementById('chat-core-input-field');
             const txt = input.value.trim();
@@ -519,7 +681,7 @@
         }
 
         function createNewGroupChannel() {
-            const name = prompt("Введите название новой группы:");
+            const name = prompt("Введите название новой команды:");
             if(!name || !name.trim()) return;
             database.ref('groups').push({ name: name.trim(), creator: currentUserId });
         }
@@ -535,10 +697,19 @@
             }
         }
 
+        function buildAvatarDOM(userObj, size = 42, fontSize = 13) {
+            const style = `width:${size}px; height:${size}px; font-size:${fontSize}px;`;
+            if (userObj.avatarUrl) {
+                return `<div class="avatar-ui" style="background-image: url('${userObj.avatarUrl}'); ${style}"></div>`;
+            } else {
+                return `<div class="avatar-ui" style="background:${userObj.color || '#8e8e93'}; ${style}">${userObj.name ? userObj.name.substring(0,2).toUpperCase() : '??'}</div>`;
+            }
+        }
+
         function buildAppUIRenderers() {
             const me = allUsers.find(u => u.id === currentUserId);
             if(!me) return;
-            document.getElementById('my-avatar-anchor').innerHTML = `<div class="avatar-ui" style="background:${me.color}; width:34px; height:34px; font-size:11px;">${me.name.substring(0,2).toUpperCase()}</div>`;
+            document.getElementById('my-avatar-anchor').innerHTML = buildAvatarDOM(me, 34, 11);
             if (activeTab === 'chats') renderChatsTab();
             if (activeTab === 'contacts') renderContactsTab();
             if (activeTab === 'groups') renderGroupsTab();
@@ -563,8 +734,10 @@
                 const row = document.createElement('div');
                 row.className = `item-row ${(!isGroupMode && activeChatTargetId === u.id) ? 'active' : ''}`;
                 row.onclick = () => openChatWithUser(u.id, false);
+                
+                const avHtml = buildAvatarDOM(u);
                 row.innerHTML = `
-                    <div class="avatar-ui" style="background:${u.color}">${u.name.substring(0,2).toUpperCase()}<div class="status-dot ${u.online?'online':''}"></div></div>
+                    <div style="position:relative;">${avHtml}<div class="status-dot ${u.online?'online':''}"></div></div>
                     <div class="row-meta"><div class="row-title">${u.name}</div><div class="row-sub">${u.role}</div></div>
                 `;
                 root.appendChild(row);
@@ -579,8 +752,8 @@
                 row.className = `item-row ${(isGroupMode && activeChatTargetId === g.id) ? 'active' : ''}`;
                 row.onclick = () => openChatWithUser(g.id, true);
                 row.innerHTML = `
-                    <div class="avatar-ui" style="background:#8e8e93">G</div>
-                    <div class="row-meta"><div class="row-title">${g.name}</div><div class="row-sub">Общий корпоративный канал</div></div>
+                    <div class="avatar-ui" style="background:var(--accent-gradient)">#</div>
+                    <div class="row-meta"><div class="row-title">${g.name}</div><div class="row-sub">Командный корпоративный канал</div></div>
                 `;
                 root.appendChild(row);
             });
@@ -594,13 +767,15 @@
                 if(searchString && !u.name.toLowerCase().includes(searchString)) return;
 
                 const typingUser = allUsers.find(usr => usr.id === u.id && usr.typingTo === currentUserId);
-                const subText = typingUser ? `<span class="typing-text">печатает...</span>` : 'История переписки';
+                const subText = typingUser ? `<span class="typing-text">печатает...</span>` : 'Рабочий диалог';
 
                 const row = document.createElement('div');
                 row.className = `item-row ${(!isGroupMode && activeChatTargetId === u.id) ? 'active' : ''}`;
                 row.onclick = () => openChatWithUser(u.id, false);
+                
+                const avHtml = buildAvatarDOM(u);
                 row.innerHTML = `
-                    <div class="avatar-ui" style="background:${u.color}">${u.name.substring(0,2).toUpperCase()}<div class="status-dot ${u.online?'online':''}"></div></div>
+                    <div style="position:relative;">${avHtml}<div class="status-dot ${u.online?'online':''}"></div></div>
                     <div class="row-meta"><div class="row-title">${u.name}</div><div class="row-sub">${subText}</div></div>
                 `;
                 root.appendChild(row);
@@ -634,6 +809,17 @@
             });
         }
 
+        function openImageLightbox(src) {
+            const overlay = document.getElementById('lightbox-overlay');
+            const img = document.getElementById('lightbox-target-img');
+            img.src = src;
+            overlay.classList.add('active');
+        }
+
+        function closeImageLightbox() {
+            document.getElementById('lightbox-overlay').classList.remove('active');
+        }
+
         function renderMessagesFlow(list) {
             const flow = document.getElementById('chat-messages-flow-root'); flow.innerHTML = '';
             list.forEach(m => {
@@ -644,10 +830,19 @@
                 let fileHTML = '';
                 if(m.fileData) {
                     if(m.fileType && m.fileType.startsWith('image/')) {
-                        fileHTML = `<img src="${m.fileData}" class="msg-media-preview" onclick="window.open('${m.fileData}')">`;
+                        fileHTML = `<img src="${m.fileData}" class="msg-media-preview" onclick="openImageLightbox('${m.fileData}')">`;
                     } else {
                         fileHTML = `<a href="${m.fileData}" download="${m.fileName || 'file'}" class="msg-file-badge">Документ: ${m.fileName || 'Файл'}</a>`;
                     }
+                }
+
+                let voiceHTML = '';
+                if(m.voiceData) {
+                    voiceHTML = `
+                        <div class="voice-player-container">
+                            <audio src="${m.voiceData}" controls playsinline></audio>
+                        </div>
+                    `;
                 }
 
                 let senderNameLabel = '';
@@ -660,6 +855,7 @@
                     <div class="msg-bubble-main">
                         ${senderNameLabel}
                         ${fileHTML}
+                        ${voiceHTML}
                         <div style="${m.text ? '' : 'display:none;'}">${m.text || ''}</div>
                         <div class="msg-time">${m.time}</div>
                     </div>
@@ -674,8 +870,8 @@
                 const targetGroup = allGroups.find(g => g.id === activeChatTargetId);
                 if(!targetGroup) return;
                 document.getElementById('active-chat-name-target').innerText = targetGroup.name;
-                document.getElementById('active-chat-status-target').innerText = "Общий канал";
-                document.getElementById('active-chat-avatar-slot').innerHTML = `<div class="avatar-ui" style="background:#8e8e93; width:38px; height:38px; font-size:13px;">G</div>`;
+                document.getElementById('active-chat-status-target').innerText = "Командный чат";
+                document.getElementById('active-chat-avatar-slot').innerHTML = `<div class="avatar-ui" style="background:var(--accent-gradient); width:38px; height:38px; font-size:13px;">#</div>`;
             } else {
                 const targetUser = allUsers.find(u => u.id === activeChatTargetId);
                 if(!targetUser) return;
@@ -683,7 +879,7 @@
                 const isTyping = targetUser.typingTo === currentUserId;
                 document.getElementById('active-chat-name-target').innerText = targetUser.name;
                 document.getElementById('active-chat-status-target').innerHTML = isTyping ? `<span class="typing-text">печатает...</span>` : (targetUser.online ? "Online" : "Offline");
-                document.getElementById('active-chat-avatar-slot').innerHTML = `<div class="avatar-ui" style="background:${targetUser.color}; width:38px; height:38px; font-size:13px;">${targetUser.name.substring(0,2).toUpperCase()}</div>`;
+                document.getElementById('active-chat-avatar-slot').innerHTML = buildAvatarDOM(targetUser, 38, 12);
             }
         }
 
@@ -702,6 +898,8 @@
                         const caller = allUsers.find(u => u.id === callObj.callerId);
                         document.getElementById('incoming-caller-name').innerText = caller ? caller.name : "Вызов";
                         document.getElementById('incoming-call-modal').classList.add('active');
+                        
+                        triggerWebPushNotification("Входящий видеозвонок", `${caller ? caller.name : 'Коллега'} вызывает вас.`);
                         
                         currentCallRef.on('value', (innerSnap) => {
                             if(!innerSnap.exists() || innerSnap.val().status === 'ended') closeCallOverlayUI();
