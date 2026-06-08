@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>КОЛЛАЖ КОНЕКТ — ФИНАЛЬНАЯ СБОРКА</title>
+    <title>HAX MAX — ФИНАЛЬНАЯ СБОРКА</title>
     <style>
         :root {
             --bg-main: #f5f7fa;
@@ -114,30 +114,6 @@
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent; 
             letter-spacing: -0.5px; 
-        }
-        
-        .search-box { padding: 0 16px 16px; }
-        .search-inner { 
-            display: flex; 
-            align-items: center; 
-            background: rgba(0,0,0,0.04); 
-            padding: 10px 14px;
-            border-radius: var(--radius-sm); 
-            border: 1px solid transparent; 
-            transition: var(--smooth-transition); 
-        }
-        .search-inner:focus-within { 
-            background: rgba(255,255,255,0.8);
-            border-color: rgba(0,113,227,0.3); 
-        }
-        .search-inner input { 
-            border: none; 
-            background: transparent; 
-            outline: none; 
-            width: 100%; 
-            margin-left: 8px; 
-            color: var(--text-primary); 
-            font-size: 14px;
         }
 
         .tab-bar { 
@@ -294,7 +270,6 @@
             opacity: 0.6;
         }
         
-        /* Панель опций сообщения */
         .msg-options-panel {
             display: none;
             gap: 6px;
@@ -323,7 +298,6 @@
         .opt-btn:hover { background: rgba(0,0,0,0.08); }
         .opt-btn.danger { color: #ff3b30; }
 
-        /* Контейнер реакций */
         .reactions-flow {
             display: flex;
             gap: 4px;
@@ -387,7 +361,6 @@
             color: white; 
         }
 
-        /* Системные Модальные Окна */
         .modal-layer {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
@@ -480,10 +453,10 @@
     <div id="auth-screen-layer" class="modal-layer active">
         <div class="modal-card" id="auth-main-card-node">
             <h2 class="modal-title">ВХОД</h2>
-            <input type="text" id="f-login" class="premium-input" placeholder="Логин">
-            <input type="password" id="f-pass" class="premium-input" placeholder="Пароль">
+            <input type="text" id="f-login" class="premium-input" placeholder="Логин" onkeypress="if(event.key==='Enter') executeLoginFlow()">
+            <input type="password" id="f-pass" class="premium-input" placeholder="Пароль" onkeypress="if(event.key==='Enter') executeLoginFlow()">
             <button class="premium-input primary" style="background:var(--accent-gradient); color:white; font-weight:600; border:none; cursor:pointer;" onclick="executeLoginFlow()">Войти</button>
-            <div style="text-align:center; font-size:13px; color:var(--accent); cursor:pointer;" onclick="toggleAuthModeRegister(true)">Создать новый аккаунт</div>
+            <div style="text-align:center; font-size:13px; color:var(--accent); cursor:pointer;" onclick="toggleAuthModeRegister(true)">Создать новый acкаунт</div>
         </div>
     </div>
 
@@ -581,7 +554,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
-        // Инициализация Firebase с оригинальной конфигурацией
         const firebaseConfig = {
             apiKey: "AIzaSyCUbD08gGbhrkGIGgsIZhTEWNTTU_efY",
             authDomain: "yw-83b3e.firebaseapp.com",
@@ -591,7 +563,6 @@
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
-        // Системные переменные состояния
         let currentUserId = localStorage.getItem('hax_uid') || null;
         let activeTab = 'chats';
         let activeChatTargetId = null;
@@ -617,17 +588,17 @@
             if (!isReg) {
                 container.innerHTML = `
                     <h2 class="modal-title">ВХОД</h2>
-                    <input type="text" id="f-login" class="premium-input" placeholder="Логин">
-                    <input type="password" id="f-pass" class="premium-input" placeholder="Пароль">
+                    <input type="text" id="f-login" class="premium-input" placeholder="Логин" onkeypress="if(event.key==='Enter') executeLoginFlow()">
+                    <input type="password" id="f-pass" class="premium-input" placeholder="Пароль" onkeypress="if(event.key==='Enter') executeLoginFlow()">
                     <button class="premium-input primary" style="background:var(--accent-gradient); color:white; font-weight:600; border:none; cursor:pointer;" onclick="executeLoginFlow()">Войти</button>
                     <div style="text-align:center; font-size:13px; color:var(--accent); cursor:pointer; margin-top:10px;" onclick="toggleAuthModeRegister(true)">Создать новый аккаунт</div>
                 `;
             } else {
                 container.innerHTML = `
                     <h2 class="modal-title">РЕГИСТРАЦИЯ</h2>
-                    <input type="text" id="f-reg-name" class="premium-input" placeholder="Имя и Фамилия">
-                    <input type="text" id="f-login" class="premium-input" placeholder="Придумайте логин">
-                    <input type="password" id="f-pass" class="premium-input" placeholder="Придумайте пароль">
+                    <input type="text" id="f-reg-name" class="premium-input" placeholder="Имя и Фамилия" onkeypress="if(event.key==='Enter') executeRegisterFlow()">
+                    <input type="text" id="f-login" class="premium-input" placeholder="Придумайте логин" onkeypress="if(event.key==='Enter') executeRegisterFlow()">
+                    <input type="password" id="f-pass" class="premium-input" placeholder="Придумайте пароль" onkeypress="if(event.key==='Enter') executeRegisterFlow()">
                     <button class="premium-input primary" style="background:var(--accent-gradient); color:white; font-weight:600; border:none; cursor:pointer;" onclick="executeRegisterFlow()">Зарегистрироваться</button>
                     <div style="text-align:center; font-size:13px; color:var(--accent); cursor:pointer; margin-top:10px;" onclick="toggleAuthModeRegister(false)">Уже есть аккаунт? Войти</div>
                 `;
@@ -639,18 +610,23 @@
             const pas = document.getElementById('f-pass').value.trim();
             if(!log || !pas) return;
 
-            database.ref('users').once('value', (snap) => {
-                const users = snap.val() || {};
-                const found = Object.values(users).find(u => u.login === log && u.password === pas);
-                if(found) {
-                    currentUserId = found.id;
-                    localStorage.setItem('hax_uid', currentUserId);
-                    document.getElementById('auth-screen-layer').classList.remove('active');
-                    initializeCoreSyncEcosystem();
-                } else {
-                    alert("Неверные учетные данные.");
-                }
-            });
+            database.ref('users').once('value')
+                .then((snap) => {
+                    const users = snap.val() || {};
+                    const found = Object.values(users).filter(Boolean).find(u => u.login === log && u.password === pas);
+                    if(found) {
+                        currentUserId = found.id;
+                        localStorage.setItem('hax_uid', currentUserId);
+                        document.getElementById('auth-screen-layer').classList.remove('active');
+                        initializeCoreSyncEcosystem();
+                    } else {
+                        alert("Неверные учетные данные. Проверьте правильность написания.");
+                    }
+                })
+                .catch((err) => {
+                    console.error("Firebase Auth Error:", err);
+                    alert("Ошибка базы данных: " + err.message);
+                });
         }
 
         function executeRegisterFlow() {
@@ -672,32 +648,34 @@
                 status: 'В сети'
             };
 
-            database.ref('users/' + newUid).set(userNode, (err) => {
-                if(!err) {
+            database.ref('users/' + newUid).set(userNode)
+                .then(() => {
                     currentUserId = newUid;
                     localStorage.setItem('hax_uid', currentUserId);
                     document.getElementById('auth-screen-layer').classList.remove('active');
                     initializeCoreSyncEcosystem();
-                }
-            });
+                })
+                .catch((err) => {
+                    alert("Ошибка записи пользователя: " + err.message);
+                });
         }
 
         function initializeCoreSyncEcosystem() {
-            // Синхронизация пользователей
             database.ref('users').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
-                allUsers = Object.values(data);
+                allUsers = Object.values(data).filter(u => u && u.id);
                 renderInterfaceContainers();
             });
 
-            // Синхронизация групп
             database.ref('groups').on('value', (snapshot) => {
                 const data = snapshot.val() || {};
-                allGroups = Object.values(data);
+                allGroups = Object.values(data).filter(g => g && g.id);
                 renderInterfaceContainers();
+                if(document.getElementById('modal-manage-group').classList.contains('active')) {
+                    openGroupManagementModal();
+                }
             });
 
-            // Глобальное прослушивание изменений сообщений для счетчиков и сниппетов
             database.ref('messages').on('value', (snapshot) => {
                 globalMessagesCache = snapshot.val() || {};
                 calculateUnreadIndicators();
@@ -706,7 +684,6 @@
         }
 
         function calculateUnreadIndicators() {
-            // Упрощенная стабильная бизнес-логика счетчиков непрочитанных во время сессии
             Object.keys(globalMessagesCache).forEach(chatKey => {
                 if (chatKey === currentActiveChatKey()) {
                     unreadCounters[chatKey] = 0;
@@ -715,8 +692,8 @@
                 const msgs = Object.values(globalMessagesCache[chatKey] || {});
                 if(msgs.length > 0) {
                     const lastMsg = msgs[msgs.length - 1];
-                    if(lastMsg.senderId !== currentUserId) {
-                        unreadCounters[chatKey] = 1; // Маркер наличия свежего входящего сообщения
+                    if(lastMsg && lastMsg.senderId !== currentUserId) {
+                        unreadCounters[chatKey] = 1;
                     }
                 }
             });
@@ -749,15 +726,14 @@
             const root = document.getElementById('chats-render-target');
             root.innerHTML = '';
 
-            // 1. Сначала выводим группы, в которых состоит пользователь
-            const myGroups = allGroups.filter(g => g.members && g.members[currentUserId]);
+            const myGroups = allGroups.filter(g => g && g.members && g.members[currentUserId]);
             myGroups.forEach(g => {
                 const chatKey = g.id;
                 const msgs = Object.values(globalMessagesCache[chatKey] || {});
                 let snippet = "Нет сообщений";
                 if(msgs.length > 0) {
                     const last = msgs[msgs.length - 1];
-                    snippet = (last.text || "Файл").substring(0, 30);
+                    if(last && last.text) snippet = last.text.substring(0, 30);
                 }
                 
                 const count = unreadCounters[chatKey] || 0;
@@ -777,16 +753,15 @@
                 root.appendChild(row);
             });
 
-            // 2. Затем выводим личные активные чаты
-            allUsers.filter(u => u.id !== currentUserId).forEach(u => {
+            allUsers.filter(u => u && u.id !== currentUserId).forEach(u => {
                 const chatKey = [currentUserId, u.id].sort().join('__');
-                if (!globalMessagesCache[chatKey]) return; // Показываем только активные диалоги в этой вкладке
+                if (!globalMessagesCache[chatKey]) return;
 
                 const msgs = Object.values(globalMessagesCache[chatKey] || {});
                 let snippet = "Нет сообщений";
                 if(msgs.length > 0) {
                     const last = msgs[msgs.length - 1];
-                    snippet = (last.text || "Файл").substring(0, 30);
+                    if(last && last.text) snippet = last.text.substring(0, 30);
                 }
 
                 const count = unreadCounters[chatKey] || 0;
@@ -811,7 +786,7 @@
             const root = document.getElementById('contacts-render-target');
             root.innerHTML = '';
 
-            allUsers.filter(u => u.id !== currentUserId).forEach(u => {
+            allUsers.filter(u => u && u.id !== currentUserId).forEach(u => {
                 const isActive = (activeChatTargetId === u.id && !isGroupChatMode);
                 const row = document.createElement('div');
                 row.className = `item-row ${isActive ? 'active' : ''}`;
@@ -836,13 +811,12 @@
             document.getElementById('active-chat-subsystem').style.display = 'flex';
 
             const chatKey = currentActiveChatKey();
-            unreadCounters[chatKey] = 0; // Сброс счетчика при открытии
+            unreadCounters[chatKey] = 0;
 
             if (activeMessageListenerRef) {
                 activeMessageListenerRef.off();
             }
 
-            // Переключение интерфейсных блоков заголовка
             if (isGroupChatMode) {
                 document.getElementById('group-management-header-action').style.display = 'block';
                 const group = allGroups.find(g => g.id === targetId);
@@ -857,7 +831,6 @@
                 document.getElementById('active-chat-avatar-slot').innerHTML = `<div class="avatar-ui" style="background:${user?.color};">${user?.name.substring(0,2).toUpperCase()}</div>`;
             }
 
-            // Вешаем изолированное слушание сообщений для текущего открытого чата
             activeMessageListenerRef = database.ref('messages/' + chatKey);
             activeMessageListenerRef.on('value', (snapshot) => {
                 renderMessagesStream(snapshot.val() || {});
@@ -872,17 +845,17 @@
 
             Object.keys(messagesObj).forEach(msgId => {
                 const m = messagesObj[msgId];
+                if (!m) return;
                 const isOwn = m.senderId === currentUserId;
 
                 const container = document.createElement('div');
                 container.className = `msg-container ${isOwn ? 'outgoing' : 'incoming'}`;
 
-                // Парсинг реакций
                 let reactionsHTML = '';
                 if (m.reactions) {
                     const summary = {};
                     Object.values(m.reactions).forEach(rText => {
-                        summary[rText] = (summary[rText] || 0) + 1;
+                        if(rText) summary[rText] = (summary[rText] || 0) + 1;
                     });
                     reactionsHTML = `<div class="reactions-flow">`;
                     Object.keys(summary).forEach(text => {
@@ -891,7 +864,6 @@
                     reactionsHTML += `</div>`;
                 }
 
-                // Сборка контейнера опций управления (Удаление / Реакции)
                 const optionsPanelHTML = `
                     <div class="msg-options-panel" id="opt-${msgId}">
                         <button class="opt-btn" onclick="submitMessageReaction('${msgId}', 'ВАЖНО')">ВАЖНО</button>
@@ -906,7 +878,7 @@
                         <div>${m.text || ''}</div>
                         ${reactionsHTML}
                         <div class="msg-meta-line">
-                            <span>${m.senderId === currentUserId ? 'Вы' : (allUsers.find(u=>u.id===m.senderId)?.name || 'Коллега')}</span>
+                            <span>${m.senderId === currentUserId ? 'Вы' : (allUsers.find(u=>u && u.id===m.senderId)?.name || 'Коллега')}</span>
                             <span>${m.time || ''}</span>
                         </div>
                     </div>
@@ -956,7 +928,6 @@
             input.value = '';
         }
 
-        // Логика создания групп
         function openGroupCreationModal() { document.getElementById('modal-create-group').classList.add('active'); }
         function closeGroupCreationModal() { document.getElementById('modal-create-group').classList.remove('active'); }
 
@@ -967,7 +938,7 @@
 
             const gId = 'grp_' + Date.now();
             const membersNode = {};
-            membersNode[currentUserId] = true; // Автоматически добавляем создателя
+            membersNode[currentUserId] = true;
 
             const groupData = {
                 id: gId,
@@ -976,16 +947,14 @@
                 members: membersNode
             };
 
-            database.ref('groups/' + gId).set(groupData, (err) => {
-                if(!err) {
+            database.ref('groups/' + gId).set(groupData)
+                .then(() => {
                     input.value = '';
                     closeGroupCreationModal();
                     selectActiveConversation(gId, true);
-                }
-            });
+                });
         }
 
-        // Логика редактирования и управления группами (Добавление / Удаление участников)
         function openGroupManagementModal() {
             if(!isGroupChatMode || !activeChatTargetId) return;
             document.getElementById('modal-manage-group').classList.add('active');
@@ -1000,6 +969,7 @@
             availableColleaguesList.innerHTML = '';
 
             allUsers.forEach(u => {
+                if(!u) return;
                 const isMember = group && group.members && group.members[u.id];
                 
                 const div = document.createElement('div');
@@ -1025,22 +995,18 @@
 
         function pipelineAddUserToGroup(userId) {
             if(!activeChatTargetId) return;
-            database.ref('groups/' + activeChatTargetId + '/members/' + userId).set(true, () => {
-                openGroupManagementModal(); // Обновляем списки в модальном окне
-            });
+            database.ref('groups/' + activeChatTargetId + '/members/' + userId).set(true);
         }
 
         function pipelineRemoveUserFromGroup(userId) {
             if(!activeChatTargetId) return;
-            database.ref('groups/' + activeChatTargetId + '/members/' + userId).remove(() => {
-                if(userId === currentUserId) {
-                    // Если пользователь исключил сам себя, закрываем чат
-                    closeGroupManagementModal();
-                    exitActiveChatInterfaceStub();
-                } else {
-                    openGroupManagementModal();
-                }
-            });
+            database.ref('groups/' + activeChatTargetId + '/members/' + userId).remove()
+                .then(() => {
+                    if(userId === currentUserId) {
+                        closeGroupManagementModal();
+                        exitActiveChatInterfaceStub();
+                    }
+                });
         }
 
         function pipelineDeleteCurrentGroup() {
@@ -1050,7 +1016,7 @@
             closeGroupManagementModal();
             
             database.ref('groups/' + target).remove();
-            database.ref('messages/' + target).remove(); // Каскадное удаление переписки группы
+            database.ref('messages/' + target).remove(); 
         }
 
         function exitActiveChatInterfaceStub() {
@@ -1061,10 +1027,9 @@
             renderInterfaceContainers();
         }
 
-        // Раздел управления настройками
         function triggerSystemNotificationCheck() {
             if (!("Notification" in window)) {
-                alert("Системные уведомления не поддерживаются текущим веб-браузером.");
+                alert("Системные уведомления не поддерживаются вашим браузером.");
                 return;
             }
             if (Notification.permission === "granted") {
@@ -1076,7 +1041,7 @@
                     }
                 });
             } else {
-                alert("Доступ к уведомлениям заблокирован в настройках вашего браузера.");
+                alert("Доступ к уведомлениям заблокирован в настройках браузера.");
             }
         }
 
