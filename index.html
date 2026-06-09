@@ -212,7 +212,7 @@
         .chat-input-bar input[type="text"] { 
             -webkit-appearance: none; appearance: none; flex: 1 1 auto; min-width: 0; height: 42px;
             padding: 0 16px; margin: 0; border: 1px solid var(--inner-border); border-radius: 21px; 
-            background: var(--input-bg); color: var(--text-primary); font-size: 15px; outline: none;
+            background: var(--input-bg); color: var(--text-primary); font-size: 15px; outline: none; transition: background 0.3s;
         }
         
         .circle-action-btn { 
@@ -510,7 +510,7 @@
             <span>Главная</span>
         </button>
         <button class="dock-item" onclick="openAppSettings()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             <span>Настройки</span>
         </button>
     </div>
@@ -540,7 +540,7 @@
         let globalMessages = {};
         
         let processedMessages = new Set();
-        let isInitialMessagesLoad = true; // Фикс шквала уведомлений при старте
+        let isInitialMessagesLoad = true;
         
         let activeTab = 'chats';
         let activeChatId = null;
@@ -556,6 +556,8 @@
         let isRecording = false;
         let localStream = null;
         let callAudioMuted = false;
+        
+        let uiRenderTimer = null; // Дебаунсер для оптимизации рендера
 
         let notificationsEnabled = storage.get('notifications_enabled') !== 'false';
 
@@ -621,7 +623,6 @@
         }
 
         function checkNotificationStatus() {
-            // Если мы в Telegram Mini App или браузере без поддержки, Notification может не быть
             if (window.Notification && Notification.permission === 'granted') notificationsEnabled = storage.get('notifications_enabled') !== 'false';
         }
 
@@ -653,10 +654,8 @@
             if (!notificationsEnabled || msg.uid === currentUserId) return;
             const txt = msg.file ? (msg.file.startsWith('data:audio') ? '🎤 Голосовое сообщение' : '📎 Вложение') : msg.text;
             
-            // Внутреннее уведомление работает всегда (решает проблему браузеров)
             showInAppToast(msg.uname || "Новое сообщение", txt);
 
-            // Нативное уведомление (если браузер свернут)
             if (window.Notification && Notification.permission === "granted" && document.hidden) {
                 new Notification(msg.uname || "Новое сообщение", { body: txt });
             }
@@ -713,7 +712,7 @@
             
             db.ref('users').once('value').then(s => {
                 const data = s.val() || {};
-                const u = Object.keys(data).map(k => ({ id: k, ...data[k] })).find(x => (x.login||'').toLowerCase()===log && (x.password===pas || x.pass===pas));
+                const u = Object.keys(data).map(k => ({ id: k, ...data[key] })).find(x => (x.login||'').toLowerCase()===log && (x.password===pas || x.pass===pas));
                 if(u) {
                     currentUserId = u.id; storage.set('hax_uid', u.id);
                     document.getElementById('auth-modal').classList.remove('active'); initCore();
@@ -766,7 +765,6 @@
                 const newData = s.val()||{};
                 
                 if(isInitialMessagesLoad) {
-                    // При первой загрузке просто добавляем все в сет обработанных (без уведомлений)
                     for(let chatKey in newData) {
                         for(let msgKey in newData[chatKey]) processedMessages.add(msgKey);
                     }
@@ -796,10 +794,13 @@
         }
 
         function updateUI() {
-            const me = allUsers.find(u => u.id === currentUserId);
-            if(me) document.getElementById('my-avatar-anchor').innerHTML = getAvatar(me, 36);
-            renderLists();
-            if(activeChatId) updateChatHeader();
+            clearTimeout(uiRenderTimer);
+            uiRenderTimer = setTimeout(() => {
+                const me = allUsers.find(u => u.id === currentUserId);
+                if(me) document.getElementById('my-avatar-anchor').innerHTML = getAvatar(me, 36);
+                renderLists();
+                if(activeChatId) updateChatHeader();
+            }, 50);
         }
 
         function getAvatar(obj, size=48) {
@@ -864,16 +865,18 @@
             });
             document.getElementById('content-groups').innerHTML = ''; document.getElementById('content-groups').appendChild(fragG);
 
-            // ФИКС ЧАТОВ: Ищем по самой базе сообщений, чтобы удаленные аккаунты не пропадали
+            // ФИКС ЧАТОВ (O(N) алгоритм)
             let chatArr = [];
             for (let k in globalMessages) {
                 const msgs = globalMessages[k];
                 if(!msgs) continue;
-                const msgArr = Object.values(msgs).sort((a,b) => a.ts - b.ts);
-                if(msgArr.length === 0) continue;
-                const last = msgArr[msgArr.length - 1];
+                
+                let last = null;
+                for (let mKey in msgs) {
+                    if (!last || msgs[mKey].ts > last.ts) last = msgs[mKey];
+                }
+                if (!last) continue;
 
-                // Группа?
                 const g = allGroups.find(x => x.id === k);
                 if (g) {
                     if (g.members && g.members[currentUserId] && (!search || g.name.toLowerCase().includes(search))) {
@@ -882,12 +885,19 @@
                     continue;
                 }
 
-                // Личный чат?
-                const parts = k.split('_');
-                if (parts.length >= 2 && parts.includes(currentUserId)) {
-                    const otherId = parts[0] === currentUserId ? parts[1] : parts[0];
+                if (k.includes(currentUserId)) {
+                    let otherId = '';
+                    if (k.startsWith(currentUserId + '_')) {
+                        otherId = k.replace(currentUserId + '_', '');
+                    } else if (k.endsWith('_' + currentUserId)) {
+                        otherId = k.replace('_' + currentUserId, '');
+                    } else {
+                        otherId = k.replace(currentUserId, '').replace(/^_|_$/g, '');
+                    }
+                    if (otherId === '') otherId = currentUserId; 
+
                     let u = allUsers.find(x => x.id === otherId);
-                    if (!u) u = { id: otherId, name: 'Неизвестный пользователь', status: '' }; // Фолбэк для удаленных!
+                    if (!u) u = { id: otherId, name: 'Неизвестный пользователь', status: '' }; 
                     
                     if (!search || u.name.toLowerCase().includes(search)) {
                         chatArr.push({ id: otherId, isG: false, obj: u, last: last, realKey: k });
@@ -935,12 +945,10 @@
             chRoot.appendChild(fragChats);
         }
 
-        // Фикс логики ключей (на всякий случай, если чат открывается впервые)
         function getComputedChatKey(uid1, uid2) { return [uid1, uid2].sort().join('_'); }
 
         function openChat(id, isG, realKeyOverride = null) {
             activeChatId = id; isGroupMode = isG;
-            // Если открываем старый чат - используем реальный ключ БД, иначе генерируем
             activeChatRealKey = isG ? id : (realKeyOverride || getComputedChatKey(currentUserId, id));
             
             document.getElementById('empty-stub').style.display = 'none';
@@ -969,7 +977,7 @@
                 vrole.innerText = 'Команда'; vstatus.innerText = `${Object.keys(g.members||{}).length} участников`;
             } else {
                 let u = allUsers.find(x => x.id === activeChatId); 
-                if(!u) u = { name: 'Неизвестный пользователь', role: 'Удаленный аккаунт', status: 'Нет данных' }; // Фикс краша профиля
+                if(!u) u = { name: 'Неизвестный пользователь', role: 'Удаленный аккаунт', status: 'Нет данных' }; 
                 vavatar.innerHTML = getAvatar(u, 90); vname.innerText = u.name;
                 vrole.innerText = u.role || 'Должность не указана'; vstatus.innerHTML = getStatusText(u.status);
             }
@@ -985,7 +993,7 @@
                 document.getElementById('chat-name-slot').innerText = g.name;
                 document.getElementById('chat-status-slot').innerText = `${Object.keys(g.members||{}).length} участников`;
                 document.getElementById('chat-avatar-slot').innerHTML = getAvatar(g, 42);
-                slotActions.innerHTML = videoCallBtn + `<button class="circle-action-btn" onclick="openEditGroup()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>`;
+                slotActions.innerHTML = videoCallBtn + `<button class="circle-action-btn" onclick="openEditGroup()" title="Настройки команды"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>`;
             } else {
                 let u = allUsers.find(x => x.id === activeChatId); if(!u) u = { name: 'Неизвестный', status: '' };
                 document.getElementById('chat-name-slot').innerText = u.name;
@@ -1029,7 +1037,7 @@
             if(!activeChatRealKey) activeChatRealKey = getComputedChatKey(currentUserId, activeChatId);
             
             const newRef = db.ref(`messages/${activeChatRealKey}`).push();
-            processedMessages.add(newRef.key); // Не уведомляем себя
+            processedMessages.add(newRef.key); 
             newRef.set(payload); i.value = '';
         }
 
