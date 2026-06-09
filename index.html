@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>КОЛЛАЖ CONNECTING</title>
+    <title>C CONNECT</title>
     <style>
         /* Светлая тема (по умолчанию) */
         :root {
@@ -332,7 +332,7 @@
         <div class="modal-card" id="auth-card-content">
             <h3 style="text-align:center; display:flex; flex-direction:column; align-items:center; gap:12px;">
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
-                Загрузка системы...
+                Котики трудятся над этим ...
             </h3>
             <style>@keyframes spin { 100% { transform: rotate(360deg); } }</style>
         </div>
@@ -353,9 +353,9 @@
             </div>
 
             <div style="margin-bottom: 24px; padding: 16px; background: var(--hover-bg); border-radius: 16px; text-align: center;">
-                <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">COLLAGE CONNECTING</div>
-                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Версия 2.2 • Оптимизировано</div>
-                <div style="font-size: 12px; color: var(--accent); font-weight: 600;">Высокопроизводительный движок UI<br>Адаптировано для экспертов</div>
+                <div style="font-size: 18px; font-weight: 800; margin-bottom: 4px;">Connecta MESSENGER</div>
+                <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">Версия 2.2 • beta</div>
+                <div style="font-size: 12px; color: var(--accent); font-weight: 600;">EGORKIN NIKITA Developer.<br>актуальная сборка на 09.06.2026</div>
             </div>
 
             <button class="btn-full primary" onclick="closeModals()">Закрыть</button>
@@ -423,8 +423,8 @@
         <aside id="sidebar-container" class="glass-panel">
             <div class="sidebar-header">
                 <div class="brand-title">
-                    <span>COLLAGE</span>
-                    <span class="dev-badge">CONNECTING</span>
+                    <span>CONNECTA</span>
+                    <span class="dev-badge">MESSENGER</span>
                 </div>
                 <div class="header-actions">
                     <button class="btn-icon" id="theme-toggle-btn" onclick="toggleTheme()" title="Сменить тему">
@@ -447,7 +447,7 @@
             <nav class="tab-bar">
                 <button class="tab-btn active" id="tab-chats" onclick="switchTab('chats')">Чаты</button>
                 <button class="tab-btn" id="tab-groups" onclick="switchTab('groups')">Команды</button>
-                <button class="tab-btn" id="tab-contacts" onclick="switchTab('contacts')">Коллеги</button>
+                <button class="tab-btn" id="tab-contacts" onclick="switchTab('contacts')">Пользователи</button>
             </nav>
 
             <div id="content-chats" class="scroller-content active"></div>
@@ -652,7 +652,7 @@
 
         function notifyNewMessage(msg) {
             if (!notificationsEnabled || msg.uid === currentUserId) return;
-            const txt = msg.file ? (msg.file.startsWith('data:audio') ? '🎤 Голосовое сообщение' : '📎 Вложение') : msg.text;
+            const txt = msg.file ? (msg.file.startsWith('data:audio') ? 'Голосовое сообщение' : 'Вложение') : msg.text;
             
             showInAppToast(msg.uname || "Новое сообщение", txt);
 
