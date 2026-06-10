@@ -52,6 +52,8 @@
         body, html { 
             width: 100%; height: 100dvh; background: var(--bg-main); color: var(--text-primary); 
             overflow: hidden; position: relative; transition: background 0.3s ease, color 0.3s ease;
+            /* Запрет нативной "резинки" браузера для плавного Pull-to-Refresh */
+            overscroll-behavior-y: none;
         }
 
         .ambient-glow { 
@@ -72,7 +74,7 @@
         #sidebar-container { 
             width: 360px; height: 100%; display: flex; flex-direction: column;
             z-index: 10; flex-shrink: 0; transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-            position: relative; padding-bottom: 80px; /* Отступ под док */
+            position: relative; padding-bottom: 80px; 
         }
         
         #main-chat-container { 
@@ -108,31 +110,34 @@
         .btn-icon svg { width: 18px; height: 18px; stroke-width: 2.5px; }
 
         /* Поиск */
-        .search-box { padding: 0 20px 12px; }
+        .search-box { padding: 0 20px 12px; z-index: 10; position: relative; }
         .search-inner { display: flex; align-items: center; background: var(--hover-bg); padding: 10px 14px; border-radius: 14px; }
         .search-inner input { border: none; background: transparent; outline: none; width: 100%; margin-left: 8px; color: var(--text-primary); font-size: 15px; }
 
         /* Табы */
-        .tab-bar { display: flex; padding: 0 16px 8px; gap: 4px; border-bottom: 1px solid var(--inner-border); }
+        .tab-bar { display: flex; padding: 0 16px 8px; gap: 4px; border-bottom: 1px solid var(--inner-border); z-index: 10; position: relative; }
         .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; }
         .tab-btn.active { background: var(--hover-bg); color: var(--text-primary); }
 
-        /* Pull to Refresh Indicator */
-        #ptr-wrapper {
-            overflow: hidden; height: 0; display: flex; justify-content: center; align-items: flex-end;
-            transition: height 0s; /* Высота управляется через JS */
-        }
-        .ptr-content {
-            padding-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-secondary);
+        /* Плавный Pull to Refresh */
+        #ptr-indicator {
+            position: absolute; top: 130px; left: 0; width: 100%; text-align: center; font-size: 13px; font-weight: 600;
+            color: var(--accent); opacity: 0; transform: translate3d(0, -20px, 0); 
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1; pointer-events: none; display: flex; justify-content: center; align-items: center; gap: 8px;
         }
 
         /* Списки и Свайпы */
-        .scroller-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 12px; display: none; position: relative; z-index: 2; -webkit-overflow-scrolling: touch; }
-        .scroller-content.active { display: block; animation: fadeIn 0.2s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .scroller-content { 
+            flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 12px; display: none; 
+            position: relative; z-index: 2; -webkit-overflow-scrolling: touch; 
+            overscroll-behavior-y: contain; /* Чтобы внутренний скролл не дергал страницу */
+        }
+        .scroller-content.active { display: block; animation: tabFadeIn 0.35s cubic-bezier(0.25, 1, 0.5, 1) forwards; }
+        @keyframes tabFadeIn { from { opacity: 0; transform: translate3d(0, 10px, 0); } to { opacity: 1; transform: translate3d(0, 0, 0); } }
 
         .item-row { position: relative; overflow: hidden; border-radius: var(--radius-md); margin-bottom: 4px; }
-        .swipe-wrapper { display: flex; width: calc(100% + 80px); transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1); }
+        .swipe-wrapper { display: flex; width: calc(100% + 80px); transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1); will-change: transform; }
         .swipe-content { 
             width: calc(100% - 80px); flex-shrink: 0; display: flex; align-items: center; 
             padding: 12px; cursor: pointer; border-radius: var(--radius-md); transition: background 0.15s;
@@ -268,7 +273,7 @@
         .toggle-knob {
             position: absolute; top: 2px; left: 2px; width: 24px; height: 24px; background: white; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.25s cubic-bezier(0.25, 1, 0.5, 1);
         }
-        .toggle-switch.active .toggle-knob { transform: translateX(20px); }
+        .toggle-switch.active .toggle-knob { transform: translate3d(20px, 0, 0); }
 
         /* Внутренние уведомления (Toast / Push Style) */
         #toast-container { position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; width: 90%; max-width: 360px; }
@@ -278,10 +283,8 @@
             animation: slideToastDown 0.4s cubic-bezier(0.25, 1, 0.5, 1) forwards; pointer-events: auto;
         }
         [data-theme="dark"] .in-app-toast { background: rgba(30,30,30,0.85); color: #fff; border-color: rgba(255,255,255,0.1); }
-        
         .toast-icon { width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: bold; font-size: 16px; }
         .toast-text { flex: 1; min-width: 0; }
-        
         @keyframes slideToastDown { from { transform: translate3d(0, -100%, 0); opacity: 0; } to { transform: translate3d(0, 0, 0); opacity: 1; } }
         @keyframes slideToastUp { from { transform: translate3d(0, 0, 0); opacity: 1; } to { transform: translate3d(0, -120%, 0); opacity: 0; } }
 
@@ -321,7 +324,7 @@
 
             <div style="margin-bottom: 24px; padding: 20px; background: var(--hover-bg); border-radius: 18px; text-align: center;">
                 <div style="font-size: 18px; font-weight: 800; margin-bottom: 6px;">Connecta MESSENGER</div>
-                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Версия 2.4 • Stable</div>
+                <div style="font-size: 14px; color: var(--text-secondary); margin-bottom: 16px;">Версия 2.5 • Final Smooth</div>
                 <div style="font-size: 13px; color: var(--accent); font-weight: 600; line-height: 1.4;">EGORKIN NIKITA Developer.<br>Сборка 09.06.2026</div>
             </div>
 
@@ -434,11 +437,9 @@
                 <button class="tab-btn" id="tab-contacts" onclick="switchTab('contacts')">Люди</button>
             </nav>
 
-            <div id="ptr-wrapper">
-                <div class="ptr-content" id="ptr-indicator">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>
-                    <span>Потяните для обновления</span>
-                </div>
+            <div id="ptr-indicator">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>
+                <span id="ptr-text">Потяните для обновления</span>
             </div>
 
             <div id="content-chats" class="scroller-content active"></div>
@@ -535,8 +536,6 @@
         let allGroups = [];
         let globalMessages = {};
         
-        let processedMessages = new Set();
-        
         let activeTab = 'chats';
         let activeChatId = null;
         let activeChatRealKey = null;
@@ -606,7 +605,7 @@
         function goHome() { closeModals(); closeChat(); }
         function openAppSettings() { closeModals(); updateSettingsUI(); document.getElementById('app-settings-modal').classList.add('active'); }
 
-        // --- УВЕДОМЛЕНИЯ ВНУТРЕННИЕ (КАК В iOS) ---
+        // --- УВЕДОМЛЕНИЯ ВНУТРЕННИЕ (КАК В iOS) И СИСТЕМНЫЕ ---
         function showInAppToast(title, body) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -652,6 +651,7 @@
             
             showInAppToast(msg.uname || "Новое сообщение", txt);
 
+            // Нативные PWA Push-уведомления
             if (window.Notification && Notification.permission === "granted" && document.hidden) {
                 new Notification(msg.uname || "Новое сообщение", { body: txt });
             }
@@ -665,7 +665,7 @@
             zone.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
             chatContainer.addEventListener('touchend', e => {
                 if(startX === 0) return;
-                if(e.changedTouches[0].clientX - startX > 80 && startX < 40 && document.getElementById('app-layout').classList.contains('chat-opened')) { closeChat(); }
+                if(e.changedTouches[0].clientX - startX > 80 && startX < 40 && document.getElementById('app-layout').classList.contains('chat-opened-mobile')) { closeChat(); }
                 startX = 0;
             }, {passive: true});
         }
@@ -675,7 +675,8 @@
             const sidebar = document.getElementById('sidebar-container');
             
             sidebar.addEventListener('touchstart', e => {
-                if (e.target.closest('.item-row')) { isHorizontalSwipe = false; return; } // Отключаем для свайпа удаления
+                // Если свайпаем по списку чатов - отключаем, так как там есть свайп на удаление
+                if (e.target.closest('.item-row')) { isHorizontalSwipe = false; return; } 
                 isHorizontalSwipe = null; startX = e.touches[0].clientX; startY = e.touches[0].clientY;
             }, {passive: true});
 
@@ -698,43 +699,47 @@
 
         function setupPullToRefresh() {
             let startY = 0, currentY = 0, isRefreshing = false;
-            const wrapper = document.getElementById('ptr-wrapper');
             const indicator = document.getElementById('ptr-indicator');
+            const textEl = document.getElementById('ptr-text');
             const scrollers = document.querySelectorAll('.scroller-content');
             
             scrollers.forEach(scroller => {
                 scroller.addEventListener('touchstart', e => {
-                    if (scroller.scrollTop <= 0 && !isRefreshing) startY = e.touches[0].clientY;
+                    if (scroller.scrollTop <= 0 && !isRefreshing) {
+                        startY = e.touches[0].clientY;
+                        indicator.style.transition = 'none';
+                    }
                 }, {passive: true});
 
                 scroller.addEventListener('touchmove', e => {
                     if (startY === 0 || isRefreshing) return;
                     const diff = e.touches[0].clientY - startY;
                     if (diff > 0 && scroller.scrollTop <= 0) {
-                        currentY = Math.min(diff / 2.5, 60); // Сопротивление натяжению
-                        wrapper.style.height = `${currentY}px`;
-                        if(currentY > 50) indicator.innerHTML = '↑ Отпустите для обновления';
-                        else indicator.innerHTML = '↓ Потяните для обновления';
+                        // Тяжело тянется (сопротивление резинки)
+                        currentY = Math.min(diff / 2.5, 60); 
+                        indicator.style.transform = `translate3d(0, ${currentY - 20}px, 0)`;
+                        indicator.style.opacity = currentY / 60;
+                        if(currentY > 50) textEl.innerText = 'Отпустите для обновления';
+                        else textEl.innerText = 'Потяните для обновления';
                     }
                 }, {passive: true});
 
                 scroller.addEventListener('touchend', e => {
                     if (currentY >= 50 && !isRefreshing) {
                         isRefreshing = true;
-                        indicator.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" style="animation: spin 1s linear infinite;"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><polyline points="21 3 21 8 16 8"></polyline></svg>';
-                        wrapper.style.transition = 'height 0.3s ease';
-                        wrapper.style.height = '40px';
+                        indicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                        indicator.style.transform = `translate3d(0, 20px, 0)`;
+                        textEl.innerText = 'Синхронизация...';
                         
                         forceDataRefresh(() => {
-                            wrapper.style.height = '0px';
-                            setTimeout(() => {
-                                isRefreshing = false; wrapper.style.transition = 'height 0s';
-                                indicator.innerHTML = '↓ Потяните для обновления';
-                            }, 300);
+                            indicator.style.transform = `translate3d(0, -20px, 0)`;
+                            indicator.style.opacity = 0;
+                            setTimeout(() => { isRefreshing = false; }, 300);
                         });
                     } else if(currentY > 0) {
-                        wrapper.style.transition = 'height 0.3s ease'; wrapper.style.height = '0px';
-                        setTimeout(() => { wrapper.style.transition = 'height 0s'; }, 300);
+                        indicator.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+                        indicator.style.transform = `translate3d(0, -20px, 0)`;
+                        indicator.style.opacity = 0;
                     }
                     startY = 0; currentY = 0;
                 }, {passive: true});
@@ -747,6 +752,7 @@
             setTimeout(() => { if(callback) callback(); }, 600);
         }
 
+        // --- АВТОРИЗАЦИЯ И ДАННЫЕ (ПОЛНОСТЬЮ ИСПРАВЛЕННЫЙ ВЫХОД) ---
         function forceReset() {
             localStorage.clear();
             window.location.reload();
@@ -770,7 +776,7 @@
                 const u = Object.keys(data).map(k => ({ id: k, ...data[k] })).find(x => (x.login||'').toLowerCase()===log && (x.password===pas || x.pass===pas));
                 if(u) {
                     storage.set('hax_uid', u.id);
-                    window.location.reload(); // Перезагружаем интерфейс для 100% чистой загрузки
+                    window.location.reload(); 
                 } else { alert('Неверный логин или пароль'); }
             });
         }
@@ -790,14 +796,18 @@
         }
 
         function logout() {
+            // ЖЕСТКИЙ СБРОС И ВЫХОД
             if(currentUserId) {
                 db.ref(`users/${currentUserId}/status`).setValue(Date.now()).then(() => {
                     localStorage.clear();
-                    window.location.reload();
+                    window.location.href = window.location.pathname; // Полная перезагрузка без хэшей
+                }).catch(() => {
+                    localStorage.clear();
+                    window.location.href = window.location.pathname;
                 });
             } else {
                 localStorage.clear();
-                window.location.reload();
+                window.location.href = window.location.pathname;
             }
         }
 
@@ -817,11 +827,11 @@
                 for(let chatKey in newData) {
                     for(let msgKey in newData[chatKey]) {
                         const msg = newData[chatKey][msgKey];
-                        // Фильтр: уведомляем только о новых сообщениях после старта приложения
+                        // Если сообщение новее чем время запуска приложения - уведомляем
                         if (msg.ts > APP_START_TIME && !processedMessages.has(msgKey)) {
                             notifyNewMessage(msg);
+                            processedMessages.add(msgKey);
                         }
-                        processedMessages.add(msgKey);
                     }
                 }
                 globalMessages = newData; updateUI(); 
@@ -877,19 +887,20 @@
             wrapper.addEventListener('touchmove', e => {
                 if (isHorizontal === null) isHorizontal = Math.abs(e.touches[0].clientX - startX) > Math.abs(e.touches[0].clientY - startY);
                 if (isHorizontal) {
+                    if (e.cancelable) e.preventDefault(); // Останавливает нативный вертикальный скролл страницы
                     const diff = e.touches[0].clientX - startX;
                     if(diff < 0) { currentX = Math.max(diff, -80); wrapper.style.transform = `translate3d(${currentX}px, 0, 0)`; }
                 }
-            }, {passive: true});
+            }, {passive: false}); // passive false важен для e.preventDefault()
             wrapper.addEventListener('touchend', e => {
-                wrapper.style.transition = 'transform 0.25s cubic-bezier(0.25, 1, 0.5, 1)';
-                wrapper.style.transform = currentX < -40 ? `translate3d(-80px, 0, 0)` : `translate3d(0, 0, 0)`;
+                if(!isHorizontal) return;
+                wrapper.style.transition = 'transform 0.3s cubic-bezier(0.25, 1, 0.5, 1)';
+                if(currentX < -45) { wrapper.style.transform = `translate3d(-80px, 0, 0)`; }
+                else { wrapper.style.transform = `translate3d(0, 0, 0)`; }
             });
             el.querySelector('.swipe-action').onclick = (e) => {
                 e.stopPropagation();
-                if(!confirm('Удалить переписку?')) {
-                    wrapper.style.transform = `translate3d(0, 0, 0)`; return;
-                }
+                if(!confirm('Удалить переписку?')) { wrapper.style.transform = `translate3d(0, 0, 0)`; return; }
                 db.ref(`messages/${realKey}`).remove();
                 if(activeChatId === id) closeChat();
             };
@@ -988,13 +999,13 @@
             activeChatRealKey = isG ? id : (realKeyOverride || getComputedChatKey(currentUserId, id));
             document.getElementById('empty-stub').style.display = 'none';
             document.getElementById('chat-subsystem').style.display = 'flex';
-            document.getElementById('app-layout').classList.add('chat-opened', 'chat-opened-mobile');
+            document.getElementById('app-layout').classList.add('chat-opened-mobile');
             updateUI(); renderMessages();
         }
 
         function closeChat() {
             activeChatId = null; activeChatRealKey = null;
-            document.getElementById('app-layout').classList.remove('chat-opened', 'chat-opened-mobile');
+            document.getElementById('app-layout').classList.remove('chat-opened-mobile');
             document.getElementById('chat-subsystem').style.display = 'none';
             document.getElementById('empty-stub').style.display = 'flex';
             updateUI();
@@ -1012,7 +1023,7 @@
                 vrole.innerText = 'Командный чат'; vstatus.innerText = `${Object.keys(g.members||{}).length} участников`;
             } else {
                 let u = allUsers.find(x => x.id === activeChatId); 
-                if(!u) u = { name: 'Неизвестный', role: 'Удаленный', status: 'Нет данных' }; 
+                if(!u) u = { name: 'Неизвестный пользователь', role: 'Удаленный аккаунт', status: 'Нет данных' }; 
                 vavatar.innerHTML = getAvatar(u, 100); vname.innerText = u.name;
                 vrole.innerText = u.role || 'Коллега'; vstatus.innerHTML = getStatusText(u.status);
             }
@@ -1028,7 +1039,7 @@
                 document.getElementById('chat-name-slot').innerText = g.name;
                 document.getElementById('chat-status-slot').innerText = `${Object.keys(g.members||{}).length} участников`;
                 document.getElementById('chat-avatar-slot').innerHTML = getAvatar(g, 42);
-                slotActions.innerHTML = videoCallBtn + `<button class="circle-action-btn" onclick="openEditGroup()" title="Настройки"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>`;
+                slotActions.innerHTML = videoCallBtn + `<button class="circle-action-btn" onclick="openEditGroup()" title="Настройки команды"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></button>`;
             } else {
                 let u = allUsers.find(x => x.id === activeChatId); if(!u) u = { name: 'Неизвестный', status: '' };
                 document.getElementById('chat-name-slot').innerText = u.name;
@@ -1235,14 +1246,12 @@
         }
 
         function toggleCallMute() {
-            if(localStream) { callAudioMuted = !callAudioMuted; localStream.getAudioTracks().forEach(t => t.enabled = !callAudioMuted); document.getElementById('call-mute-btn').style.background = callAudioMuted ? 'var(--danger)' : 'rgba(255,255,255,0.2)'; }
+            if(localStream) { callAudioMuted = !callAudioMuted; localStream.getAudioTracks().forEach(t => t.enabled = !callAudioMuted); document.getElementById('call-mute-btn').style.background = callAudioMuted ? 'var(--danger)' : 'rgba(255,255,255,0.15)'; }
         }
 
-        // --- ВЛОЖЕНИЯ ---
         function handleFileSelect(e) { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = ev => { attachFile = ev.target.result; document.getElementById('attach-preview').style.display = 'flex'; document.getElementById('attach-name').innerText = f.name; }; r.readAsDataURL(f); }
         function clearAttach() { attachFile=null; document.getElementById('attach-preview').style.display='none'; document.getElementById('file-upload').value=''; }
 
-        // --- УПРАВЛЕНИЕ КОМАНДАМИ ---
         function openCreateGroupModal() {
             document.getElementById('new-group-name').value = ''; const list = document.getElementById('create-group-members'); list.innerHTML = '';
             allUsers.filter(u=>u.id!==currentUserId).forEach(u => { list.innerHTML += `<div class="member-item"><label style="display:flex; align-items:center; gap:10px; cursor:pointer; width:100%;"><input type="checkbox" id="cgm_${u.id}"> ${getAvatar(u, 32)} ${u.name}</label></div>`; });
@@ -1273,7 +1282,6 @@
 
         function deleteGroup() { if(!confirm('Удалить команду и всю историю сообщений?')) return; db.ref(`groups/${editGroupId}`).remove().then(() => { db.ref(`messages/${editGroupId}`).remove(); closeModals(); closeChat(); }); }
 
-        // --- УПРАВЛЕНИЕ ПРОФИЛЕМ ---
         function openProfileModal() {
             const me = allUsers.find(u=>u.id===currentUserId); if(!me) return;
             document.getElementById('profile-name').value = me.name; document.getElementById('profile-role').value = me.role || ''; tempProfileImg = me.img || '';
