@@ -695,10 +695,40 @@
 
         // Инициализация
         window.onload = () => {
-            initTheme();
-            setupMobileSwipeBack();
-            setupTabSwiping();
-            setupPullToRefresh();
+    initTheme();
+    setupMobileSwipeBack();
+    setupTabSwiping();
+    setupPullToRefresh();
+
+    const loadingTimeout = setTimeout(() => {
+        const modal = document.getElementById('auth-card-content');
+
+        if (document.getElementById('auth-modal').classList.contains('active')) {
+            modal.innerHTML = `
+                <h3 style="text-align:center;color:red">
+                    Ошибка загрузки системы
+                </h3>
+                <button class="btn-full primary"
+                        onclick="location.reload()">
+                    Перезагрузить
+                </button>
+            `;
+        }
+    }, 10000);
+
+    auth.onAuthStateChanged(user => {
+        clearTimeout(loadingTimeout);
+
+        if (user) {
+            currentUserId = user.uid;
+            document.getElementById('auth-modal')
+                .classList.remove('active');
+            initCore();
+        } else {
+            renderAuth(false);
+        }
+    });
+};
             
             // НОВАЯ СИСТЕМА АВТОРИЗАЦИИ ЧЕРЕЗ FIREBASE AUTH
             auth.onAuthStateChanged(user => {
@@ -921,7 +951,7 @@
 
         function logout() {
             if(currentUserId) {
-                db.ref(`users/${currentUserId}/status`).setValue(Date.now()).then(() => {
+                .then(() => {
                     auth.signOut().then(() => { localStorage.clear(); window.location.reload(); });
                 });
             } else { localStorage.clear(); window.location.reload(); }
