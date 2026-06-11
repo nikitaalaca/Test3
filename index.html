@@ -83,8 +83,9 @@
         .search-inner { display: flex; align-items: center; background: var(--hover-bg); padding: 10px 14px; border-radius: 14px; }
         .search-inner input { border: none; background: transparent; outline: none; width: 100%; margin-left: 8px; color: var(--text-primary); font-size: 15px; }
         .tab-bar { display: flex; padding: 0 16px 8px; gap: 4px; border-bottom: 1px solid var(--inner-border); }
-        .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; }
+        .tab-btn { flex: 1; padding: 8px; border: none; background: transparent; color: var(--text-secondary); font-size: 13px; font-weight: 600; border-radius: 10px; cursor: pointer; transition: all 0.2s ease; white-space: nowrap; position: relative; }
         .tab-btn.active { background: var(--hover-bg); color: var(--text-primary); }
+        .tab-badge { position: absolute; top: 2px; right: 2px; min-width: 18px; height: 18px; background: var(--danger); color: white; border-radius: 9px; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; padding: 0 4px; }
         #ptr-wrapper { overflow: hidden; height: 0; display: flex; justify-content: center; align-items: flex-end; transition: height 0s; }
         .ptr-content { padding-bottom: 15px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
         .scroller-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 8px 12px; display: none; position: relative; z-index: 2; -webkit-overflow-scrolling: touch; }
@@ -224,7 +225,7 @@
     <div id="lightbox" onclick="this.classList.remove('active')"><img id="lightbox-img" src="" alt="Фото"></div>
     <div id="loading-overlay" class="modal-overlay"><div style="display:flex; flex-direction:column; align-items:center; gap:16px;"><div class="spinner"></div><div style="color:white; font-weight:600;">Загрузка...</div></div></div>
     <div id="auth-modal" class="modal-overlay active" style="z-index: 9998;"><div class="modal-card" id="auth-card-content"><h3 style="text-align:center;">Загрузка...</h3></div></div>
-    <div id="app-settings-modal" class="modal-overlay" onclick="closeModals()"><div class="modal-card" onclick="event.stopPropagation()"><h3 style="margin-bottom:20px;">Настройки</h3><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Push-уведомления</div><div class="settings-sub">Звук и баннеры</div></div><div class="toggle-switch" id="notif-toggle" onclick="toggleNotifications()"><div class="toggle-knob"></div></div></div><div style="font-weight:600; margin-bottom:12px;">Разрешения</div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Микрофон</div><div class="settings-sub" id="mic-status-text">Проверка...</div></div><div class="toggle-switch" id="mic-perm-toggle" onclick="requestMicrophonePermission()"><div class="toggle-knob"></div></div></div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Камера</div><div class="settings-sub" id="cam-status-text">Проверка...</div></div><div class="toggle-switch" id="cam-perm-toggle" onclick="requestCameraPermission()"><div class="toggle-knob"></div></div></div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Системные уведомления</div><div class="settings-sub" id="notif-perm-status-text">Проверка...</div></div><div class="toggle-switch" id="notif-perm-toggle" onclick="requestNotificationPermission()"><div class="toggle-knob"></div></div></div><div style="margin-bottom:24px; padding:20px; background:var(--hover-bg); border-radius:18px; text-align:center;"><div style="font-size:18px; font-weight:800;">Connecta MESSENGER</div><div style="font-size:14px;">Версия 1.2 • beta (b15511106)</div><div style="font-size:13px; color:var(--accent);">EGORKIN NIKITA DEV</div></div><button class="btn-full primary" onclick="closeModals()">Закрыть</button></div></div>
+    <div id="app-settings-modal" class="modal-overlay" onclick="closeModals()"><div class="modal-card" onclick="event.stopPropagation()"><h3 style="margin-bottom:20px;">Настройки</h3><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Push-уведомления</div><div class="settings-sub">Звук и баннеры</div></div><div class="toggle-switch" id="notif-toggle" onclick="toggleNotifications()"><div class="toggle-knob"></div></div></div><div style="font-weight:600; margin-bottom:12px;">Разрешения</div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Микрофон</div><div class="settings-sub" id="mic-status-text">Проверка...</div></div><div class="toggle-switch" id="mic-perm-toggle" onclick="requestMicrophonePermission()"><div class="toggle-knob"></div></div></div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Камера</div><div class="settings-sub" id="cam-status-text">Проверка...</div></div><div class="toggle-switch" id="cam-perm-toggle" onclick="requestCameraPermission()"><div class="toggle-knob"></div></div></div><div class="settings-row"><div class="settings-row-text"><div class="settings-title">Системные уведомления</div><div class="settings-sub" id="notif-perm-status-text">Проверка...</div></div><div class="toggle-switch" id="notif-perm-toggle" onclick="requestNotificationPermission()"><div class="toggle-knob"></div></div></div><div style="margin-bottom:24px; padding:20px; background:var(--hover-bg); border-radius:18px; text-align:center;"><div style="font-size:18px; font-weight:800;">Connecta MESSENGER</div><div style="font-size:14px;">Версия 1.2.4 • beta (b01191206)</div><div style="font-size:13px; color:var(--accent);">EGORKIN NIKITA DEV</div></div><button class="btn-full primary" onclick="closeModals()">Закрыть</button></div></div>
     <div id="incoming-call-modal" class="modal-overlay" style="z-index:2500; background:rgba(0,0,0,0.85);"><div class="modal-card" style="text-align:center;"><div class="avatar-ui" style="width:90px; height:90px; margin:0 auto 20px;" id="inc-call-avatar"></div><h3 id="inc-call-name"></h3><p style="margin-bottom:30px;">Входящий видеозвонок</p><div style="display:flex; gap:16px;"><button class="btn-full danger" onclick="rejectCall()">Отклонить</button><button class="btn-full success" onclick="acceptCall()" style="background:var(--success);">Принять</button></div></div></div>
     <div id="call-modal" class="modal-overlay" style="background:#000;"><div class="modal-card"><div class="call-top-bar"><h3 id="call-title" style="font-size:22px; margin-bottom:4px;">Видеозвонок</h3><p id="call-status" style="font-size:14px; opacity:0.8;">Соединение...</p></div><div class="call-video-container"><div class="call-placeholder" id="call-placeholder"><div id="call-avatar-container" style="margin-bottom:16px;"></div><p id="remote-stream-status" style="font-size:14px; opacity:0.7;">Ожидание ответа...</p></div><video id="remote-video-node" class="call-remote-video" autoplay playsinline></video><video id="local-video" class="call-local-video" autoplay playsinline muted></video></div><div class="call-controls-bar"><button class="call-control-btn mute-btn" id="call-mute-btn" onclick="toggleCallMute()"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button><button class="call-control-btn end-btn" onclick="endVideoCall(true)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M10.68 13.31a16 16 0 0 0 3.41 2.6l1.27-1.27a1 1 0 0 1 1-.27c1.4.45 2.9.7 4.44.7a1 1 0 0 1 1 1v3.5a1 1 0 0 1-1 1A18 18 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.54.25 3.04.7 4.44a1 1 0 0 1-.27 1L7.66 10.69a16 16 0 0 0 3.02 2.62z"/></svg></button></div></div></div>
     <div id="view-profile-modal" class="modal-overlay" onclick="closeModals()"><div class="modal-card" style="text-align:center;"><div class="profile-view-header"><div id="vp-avatar" style="position:relative;"></div><div id="vp-name" class="profile-name-large"></div><div id="vp-description" class="profile-description"></div><div id="vp-status-badge" class="profile-status-badge"></div></div><button class="btn-full primary" onclick="closeModals()">Закрыть</button></div></div>
@@ -235,7 +236,11 @@
         <aside id="sidebar-container" class="glass-panel">
             <div class="sidebar-header"><div class="brand-title"><span>CONNECTA</span><span class="dev-badge">beta</span></div><div class="header-actions"><button class="btn-icon" id="theme-toggle-btn" onclick="toggleTheme()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></button><button class="btn-icon" onclick="openCreateGroupModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileModal()"></div></div></div>
             <div class="search-box"><div class="search-inner"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-secondary)"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><input type="text" id="search-input" placeholder="Поиск..."></div></div>
-            <nav class="tab-bar"><button class="tab-btn active" id="tab-chats" onclick="switchTab('chats')">Чаты</button><button class="tab-btn" id="tab-groups" onclick="switchTab('groups')">Команды</button><button class="tab-btn" id="tab-contacts" onclick="switchTab('contacts')">Люди</button></nav>
+            <nav class="tab-bar">
+                <button class="tab-btn active" id="tab-chats" onclick="switchTab('chats')">Чаты<span class="tab-badge" id="chats-badge" style="display:none;">0</span></button>
+                <button class="tab-btn" id="tab-groups" onclick="switchTab('groups')">Команды<span class="tab-badge" id="groups-badge" style="display:none;">0</span></button>
+                <button class="tab-btn" id="tab-contacts" onclick="switchTab('contacts')">Люди</button>
+            </nav>
             <div id="ptr-wrapper"><div class="ptr-content" id="ptr-indicator"><svg width="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg><span>Потяните для обновления</span></div></div>
             <div id="content-chats" class="scroller-content active"></div>
             <div id="content-groups" class="scroller-content"></div>
@@ -268,7 +273,7 @@
     <script>
         // ============ КОНФИГУРАЦИЯ ============
         const APP_START_TIME = Date.now();
-        const CREATOR_UID = "6SlyQPtxjGZodEOtmWbbgoefV4k1"; // Ваш UID из Firebase
+        const CREATOR_UID = "6SlyQPtxjGZodEOtmWbbgoefV4k1";
         const storage = { get: (k) => localStorage.getItem(k), set: (k,v) => localStorage.setItem(k,v), remove: (k) => localStorage.removeItem(k) };
         const firebaseConfig = { apiKey: "AIzaSyCUbD08gGbhrkGIGgsIzHTEWeNMTTU_efY", authDomain: "yw-83b3e.firebaseapp.com", databaseURL: "https://yw-83b3e-default-rtdb.firebaseio.com", projectId: "yw-83b3e", storageBucket: "yw-83b3e.firebasestorage.app", messagingSenderId: "513977614231", appId: "1:513977614231:web:0a04427784e8259fdeced2" };
         firebase.initializeApp(firebaseConfig);
@@ -345,13 +350,43 @@
 
         // ============ ИНИЦИАЛИЗАЦИЯ ============
         function initCore() { isFirstChatsLoad = true; db.ref('users').on('value', s => { allUsers = Object.values(s.val()||{}).map(v => ({...v, name:v.name||'Пользователь', description: v.description||''})); updateUI(); }); db.ref('groups').on('value', s => { allGroups = Object.values(s.val()||{}).map(v => ({...v, name:v.name||'Команда'})); updateUI(); }); db.ref(`user_chats/${currentUserId}`).on('value', s => { const nd = s.val()||{}; if(!isFirstChatsLoad) { for(let k in nd) { const ci = nd[k]; if(ci.ts > APP_START_TIME && (!myChats[k] || ci.ts > myChats[k].ts) && ci.senderUid !== currentUserId && ci.senderUid !== 'system') notifyNewMessage(ci.senderName, ci.lastMsg); } } else isFirstChatsLoad = false; myChats = nd; updateUI(); }); db.ref('.info/connected').on('value', s => { if(s.val()===true && currentUserId) { db.ref(`users/${currentUserId}/status`).set('в сети'); db.ref(`users/${currentUserId}/status`).onDisconnect().set(Date.now()); hideLoading(); } else if(s.val() === false) showInAppToast("Соединение", "Потеряно подключение к сети"); }); listenForCalls(); }
-        function updateUI() { clearTimeout(uiRenderTimer); uiRenderTimer = setTimeout(() => { const me = allUsers.find(u => u.id === currentUserId); if(me) document.getElementById('my-avatar-anchor').innerHTML = getAvatar(me, 36); renderLists(); if(activeChatId) updateChatHeader(); }, 50); }
+        function updateUI() { clearTimeout(uiRenderTimer); uiRenderTimer = setTimeout(() => { const me = allUsers.find(u => u.id === currentUserId); if(me) document.getElementById('my-avatar-anchor').innerHTML = getAvatar(me, 36); renderLists(); updateTabBadges(); if(activeChatId) updateChatHeader(); }, 50); }
         function switchTab(tab) { activeTab = tab; document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.getElementById('tab-'+tab).classList.add('active'); document.querySelectorAll('.scroller-content').forEach(c => c.classList.remove('active')); document.getElementById('content-'+tab).classList.add('active'); renderLists(); }
         function getComputedChatKey(uid1, uid2) { return [uid1, uid2].sort().join('_'); }
+        
+        function updateTabBadges() {
+            let chatsUnread = 0, groupsUnread = 0;
+            for(let key in myChats) {
+                const chat = myChats[key];
+                if(chat.unread && chat.senderUid !== currentUserId) {
+                    if(chat.isG) groupsUnread += chat.unread;
+                    else chatsUnread += chat.unread;
+                }
+            }
+            updateBadge('chats-badge', chatsUnread);
+            updateBadge('groups-badge', groupsUnread);
+        }
+        function updateBadge(id, count) {
+            const badge = document.getElementById(id);
+            if(!badge) return;
+            if(count > 0) { badge.style.display = 'flex'; badge.textContent = count > 99 ? '99+' : count; }
+            else { badge.style.display = 'none'; }
+        }
+
+        // ============ СВАЙП ДЛЯ УДАЛЕНИЯ ============
+        function attachSwipeToDelete(el, realKey, id, isG) { 
+            const wrap = el.querySelector('.swipe-wrapper'); 
+            let startX=0, startY=0, curX=0, isHor=null; 
+            wrap.addEventListener('touchstart', e => { startX=e.touches[0].clientX; startY=e.touches[0].clientY; isHor=null; wrap.style.transition='none'; }, {passive:true}); 
+            wrap.addEventListener('touchmove', e => { if(isHor===null) isHor = Math.abs(e.touches[0].clientX-startX) > Math.abs(e.touches[0].clientY-startY); if(isHor) { const diff = e.touches[0].clientX - startX; if(diff<0) { curX = Math.max(diff, -80); wrap.style.transform = `translate3d(${curX}px,0,0)`; } } }, {passive:true}); 
+            wrap.addEventListener('touchend', e => { wrap.style.transition = 'transform 0.25s'; wrap.style.transform = curX < -40 ? 'translate3d(-80px,0,0)' : 'translate3d(0,0,0)'; }); 
+            el.querySelector('.swipe-action').onclick = (e) => { e.stopPropagation(); if(!confirm('Удалить переписку?')) { wrap.style.transform = 'translate3d(0,0,0)'; return; } db.ref(`user_chats/${currentUserId}/${realKey}`).remove(); if(activeChatId === id && isGroupMode === isG) closeChat(); }; 
+        }
 
         // ============ СПИСКИ ============
         function renderLists() { 
             const search = document.getElementById('search-input').value.toLowerCase(); 
+            // Контакты
             const fragC = document.createDocumentFragment(); 
             allUsers.filter(u => u.id!==currentUserId && (!search || u.name.toLowerCase().includes(search) || (u.description||'').toLowerCase().includes(search))).forEach(u => { 
                 const div = document.createElement('div'); div.className = `item-row ${activeChatId===u.id && !isGroupMode ? 'active' : ''}`; 
@@ -361,13 +396,33 @@
                 fragC.appendChild(div); 
             }); 
             document.getElementById('content-contacts').innerHTML = ''; document.getElementById('content-contacts').appendChild(fragC); 
+            
+            // Группы
             const fragG = document.createDocumentFragment(); 
             allGroups.filter(g => g.members && g.members[currentUserId] && (!search || g.name.toLowerCase().includes(search))).forEach(g => { 
                 const div = document.createElement('div'); div.className = `item-row ${activeChatId===g.id && isGroupMode ? 'active' : ''}`; 
-                div.innerHTML = `<div class="swipe-wrapper"><div class="swipe-content" onclick="openChat('${g.id}', true)"><div style="position:relative">${getAvatar(g)}</div><div class="row-meta"><div class="row-title">${escapeHTML(g.name)}</div><div class="row-sub">${Object.keys(g.members||{}).length} участн.</div></div></div></div>`; 
+                const chat = myChats[g.id];
+                const lastMsg = chat ? chat.lastMsg : '';
+                const lastTime = chat ? chat.time : '';
+                const senderName = chat && chat.senderName ? chat.senderName : '';
+                const prefix = senderName ? `<span style="color:var(--accent)">${escapeHTML(senderName)}:</span> ` : '';
+                const unreadBadge = chat && chat.unread && chat.senderUid !== currentUserId ? `<div class="unread-badge">${chat.unread}</div>` : '';
+                div.innerHTML = `<div class="swipe-wrapper">
+                    <div class="swipe-content" onclick="openChat('${g.id}', true)">
+                        <div style="position:relative">${getAvatar(g)}${unreadBadge}</div>
+                        <div class="row-meta">
+                            <div class="row-title-container"><div class="row-title">${escapeHTML(g.name)}</div><div class="row-time">${escapeHTML(lastTime)}</div></div>
+                            <div class="row-sub">${prefix}${escapeHTML(lastMsg)}</div>
+                        </div>
+                    </div>
+                    <div class="swipe-action"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+                </div>`; 
                 fragG.appendChild(div); 
+                attachSwipeToDelete(div, g.id, g.id, true);
             }); 
             document.getElementById('content-groups').innerHTML = ''; document.getElementById('content-groups').appendChild(fragG); 
+            
+            // Чаты
             let chatArr = []; 
             for(let key in myChats) { 
                 const meta = myChats[key]; 
@@ -384,8 +439,19 @@
                 const prefix = c.isG && c.last.senderName ? `<span style="color:var(--accent)">${escapeHTML(c.last.senderName)}:</span> ` : ''; 
                 const unreadBadge = c.last.unread && c.last.senderUid !== currentUserId ? `<div class="unread-badge">${c.last.unread}</div>` : '';
                 const checksHTML = !c.isG && c.last.senderUid === currentUserId ? getMessageChecks(c.last.msgStatus || 'sent') : '';
-                div.innerHTML = `<div class="swipe-wrapper"><div class="swipe-content" onclick="openChat('${c.id}', ${c.isG}, '${c.realKey}')"><div style="position:relative">${getAvatar(c.obj)}${showOnline}${unreadBadge}</div><div class="row-meta"><div class="row-title-container"><div class="row-title">${escapeHTML(c.obj.name)}</div><div class="row-time">${escapeHTML(c.last.time||'')}</div></div><div class="row-sub">${prefix}${escapeHTML(txt)}${checksHTML}</div></div></div></div>`; 
+                const verifiedIcon = !c.isG && isVerified(c.obj.id) ? getVerifiedIcon() : '';
+                div.innerHTML = `<div class="swipe-wrapper">
+                    <div class="swipe-content" onclick="openChat('${c.id}', ${c.isG}, '${c.realKey}')">
+                        <div style="position:relative">${getAvatar(c.obj)}${showOnline}${unreadBadge}</div>
+                        <div class="row-meta">
+                            <div class="row-title-container"><div class="row-title">${escapeHTML(c.obj.name)}${verifiedIcon}</div><div class="row-time">${escapeHTML(c.last.time||'')}</div></div>
+                            <div class="row-sub">${prefix}${escapeHTML(txt)}${checksHTML}</div>
+                        </div>
+                    </div>
+                    <div class="swipe-action"><svg width="24" viewBox="0 0 24 24" fill="none" stroke="white"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></div>
+                </div>`; 
                 fragChats.appendChild(div); 
+                attachSwipeToDelete(div, c.realKey, c.id, c.isG);
             }); 
             chRoot.appendChild(fragChats); 
         }
@@ -401,7 +467,7 @@
                 else { vavatar.innerHTML = `<div class="profile-avatar-large" style="background:${g.color||'#007aff'}; display:flex; align-items:center; justify-content:center; color:white; font-size:48px; font-weight:700;">${escapeHTML(g.name.substring(0,2).toUpperCase())}</div>`; }
                 vname.innerHTML = escapeHTML(g.name); 
                 vdesc.textContent = ''; 
-                vstatus.innerHTML = `👥 ${Object.keys(g.members||{}).length} участников`; 
+                vstatus.innerHTML = `${Object.keys(g.members||{}).length} участников`; 
             } else { 
                 let u = allUsers.find(x => x.id===activeChatId); if(!u) u = {name:'Неизвестный',description:'',status:''};
                 const verifiedIcon = isVerified(u.id) ? getProfileVerifiedIcon() : '';
@@ -413,7 +479,7 @@
             }
         }
 
-        // ============ РЕАКЦИИ ПО КЛИКУ ============
+        // ============ РЕАКЦИИ ============
         function toggleReactionPicker(msgKey, element) {
             if(activeReactionPicker && activeReactionPicker.parentNode) {
                 activeReactionPicker.remove();
@@ -460,52 +526,24 @@
         }
 
         // ============ ЧАТ, ОТПРАВКА, ЗВОНКИ, ГРУППЫ, ПРОФИЛЬ ============
+        // (Все функции openChat, closeChat, sendMessage, toggleVoiceRecord, видеозвонки, группы, профиль - полные версии из предыдущего ответа)
         async function loadMoreMessages() { if(isLoadingMoreMessages || !activeChatRealKey) return; isLoadingMoreMessages = true; let query = db.ref(`messages/${activeChatRealKey}`).orderByKey(); if(lastLoadedMsgKey) { query = query.endAt(lastLoadedMsgKey).limitToLast(21); } else { query = query.limitToLast(20); } const snap = await query.once('value'); const newMsgs = snap.val() || {}; const keys = Object.keys(newMsgs).sort(); if(keys.length > 1) { if(lastLoadedMsgKey) delete newMsgs[keys[keys.length - 1]]; currentChatMessages = { ...newMsgs, ...currentChatMessages }; lastLoadedMsgKey = keys[0]; renderMessages(true); } isLoadingMoreMessages = false; }
         function openChat(id, isG, realKeyOverride=null) { 
             if(activeChatRealKey) { db.ref(`messages/${activeChatRealKey}`).off(); db.ref(`typing/${activeChatRealKey}`).off(); db.ref(`reactions/${activeChatRealKey}`).off(); reactionListenersRefs.forEach(ref => db.ref(ref).off()); reactionListenersRefs = []; } 
             activeChatId = id; isGroupMode = isG; activeChatRealKey = isG ? id : (realKeyOverride || getComputedChatKey(currentUserId, id)); 
-            // Сбрасываем счетчик непрочитанных
-            if(myChats[activeChatRealKey] && myChats[activeChatRealKey].unread) {
-                db.ref(`user_chats/${currentUserId}/${activeChatRealKey}/unread`).remove();
-            }
+            if(myChats[activeChatRealKey] && myChats[activeChatRealKey].unread) { db.ref(`user_chats/${currentUserId}/${activeChatRealKey}/unread`).remove(); }
             document.getElementById('empty-stub').style.display = 'none'; document.getElementById('chat-subsystem').style.display = 'flex'; document.getElementById('app-layout').classList.add('chat-opened','chat-opened-mobile'); document.body.classList.add('chat-opened'); updateUI(); 
             currentChatMessages = {}; lastLoadedMsgKey = null; isLoadingMoreMessages = false; 
             const messagesFlow = document.getElementById('messages-flow'); messagesFlow.innerHTML = '<div style="text-align:center; padding:20px;"><div class="spinner" style="margin:0 auto;"></div></div>'; 
             db.ref(`messages/${activeChatRealKey}`).limitToLast(20).on('value', s => { currentChatMessages = s.val() || {}; const keys = Object.keys(currentChatMessages).sort(); if(keys.length) lastLoadedMsgKey = keys[0]; renderMessages(); messagesFlow.scrollTop = messagesFlow.scrollHeight; }); 
             messagesFlow.onscroll = () => { if(messagesFlow.scrollTop < 50) loadMoreMessages(); }; 
-            const input = document.getElementById('msg-input'); 
-            input.oninput = () => { db.ref(`typing/${activeChatRealKey}/${currentUserId}`).set(true); clearTimeout(typingTimeout); typingTimeout = setTimeout(() => db.ref(`typing/${activeChatRealKey}/${currentUserId}`).remove(), 2000); }; 
+            const input = document.getElementById('msg-input'); input.oninput = () => { db.ref(`typing/${activeChatRealKey}/${currentUserId}`).set(true); clearTimeout(typingTimeout); typingTimeout = setTimeout(() => db.ref(`typing/${activeChatRealKey}/${currentUserId}`).remove(), 2000); }; 
             db.ref(`typing/${activeChatRealKey}`).on('value', snap => { const typingUsers = snap.val(); if(typingUsers && Object.keys(typingUsers).some(u => u !== currentUserId)) document.getElementById('chat-status-slot').innerHTML = 'печатает...'; else updateChatHeader(); }); 
         }
         function closeChat() { if(activeChatRealKey) { db.ref(`messages/${activeChatRealKey}`).off(); db.ref(`typing/${activeChatRealKey}`).off(); db.ref(`reactions/${activeChatRealKey}`).off(); reactionListenersRefs.forEach(ref => db.ref(ref).off()); reactionListenersRefs = []; } activeChatId = null; activeChatRealKey = null; currentChatMessages = {}; document.getElementById('app-layout').classList.remove('chat-opened','chat-opened-mobile'); document.body.classList.remove('chat-opened'); document.getElementById('chat-subsystem').style.display = 'none'; document.getElementById('empty-stub').style.display = 'flex'; updateUI(); }
         function updateChatHeader() { const slotActions = document.getElementById('chat-actions-slot'); const videoCallBtn = `<button class="circle-action-btn" onclick="startVideoCall()" title="Видеозвонок"><svg width="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></button>`; if(isGroupMode) { const g = allGroups.find(x => x.id===activeChatId); if(!g) return; document.getElementById('chat-name-slot').innerText = g.name; document.getElementById('chat-status-slot').innerText = `${Object.keys(g.members||{}).length} участников`; document.getElementById('chat-avatar-slot').innerHTML = getAvatar(g,42); slotActions.innerHTML = videoCallBtn + `<button class="circle-action-btn" onclick="openEditGroup()"><svg width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>`; } else { let u = allUsers.find(x => x.id===activeChatId); if(!u) u = {name:'Неизвестный',status:''}; document.getElementById('chat-name-slot').innerText = u.name; document.getElementById('chat-status-slot').innerHTML = getStatusText(u.status); document.getElementById('chat-avatar-slot').innerHTML = getAvatar(u,42); slotActions.innerHTML = videoCallBtn; } }
 
-        function sendMessage() { 
-            if(!currentUserId) { showInAppToast("Ошибка", "Вы не авторизованы"); return; } 
-            const inp = document.getElementById('msg-input'); const txt = inp.value.trim(); 
-            if(!txt && !attachFile) return; 
-            const me = allUsers.find(u => u.id===currentUserId); if(!me) return; 
-            const ts = Date.now(); const timeStr = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); 
-            const payload = {uid:currentUserId, uname:me.name, text:txt, time:timeStr, ts:ts, status:'sent'}; 
-            if(attachFile) { if(attachFile.length > 5 * 1024 * 1024) { showInAppToast("Ошибка", "Файл слишком большой"); clearAttach(); return; } payload.file = attachFile; attachFile = null; document.getElementById('attach-preview').style.display = 'none'; document.getElementById('attach-preview').innerHTML = ''; } 
-            if(!activeChatRealKey) activeChatRealKey = getComputedChatKey(currentUserId, activeChatId); 
-            const newRef = db.ref(`messages/${activeChatRealKey}`).push(); 
-            newRef.set(payload).then(() => {
-                // Обновляем статус на "доставлено" через 1 секунду
-                setTimeout(() => newRef.update({status:'delivered'}), 1000);
-            }).catch(err => showInAppToast("Ошибка", "Не удалось отправить сообщение")); 
-            inp.value = ''; 
-            let snippetTxt = txt || (payload.file ? (payload.file.startsWith('data:audio')?'🎤 Голосовое':'📎 Вложение') : ''); 
-            const snippet = {lastMsg:snippetTxt, ts:ts, time:timeStr, isG:isGroupMode, senderUid:currentUserId, senderName:me.name, msgStatus:'sent'}; 
-            if(!isGroupMode) { 
-                db.ref(`user_chats/${currentUserId}/${activeChatRealKey}`).update(snippet); 
-                const targetSnippet = {...snippet, unread: (myChats[activeChatRealKey]?.unread || 0) + 1};
-                db.ref(`user_chats/${activeChatId}/${activeChatRealKey}`).update(targetSnippet); 
-            } else { 
-                const g = allGroups.find(x => x.id===activeChatId); if(g && g.members) { const updates = {}; Object.keys(g.members).forEach(mid => { updates[`user_chats/${mid}/${activeChatRealKey}`] = mid === currentUserId ? snippet : {...snippet, unread: (myChats[activeChatRealKey]?.unread || 0) + 1}; }); db.ref().update(updates); } 
-            } 
-            db.ref(`typing/${activeChatRealKey}/${currentUserId}`).remove(); 
-        }
+        function sendMessage() { if(!currentUserId) { showInAppToast("Ошибка", "Вы не авторизованы"); return; } const inp = document.getElementById('msg-input'); const txt = inp.value.trim(); if(!txt && !attachFile) return; const me = allUsers.find(u => u.id===currentUserId); if(!me) return; const ts = Date.now(); const timeStr = new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); const payload = {uid:currentUserId, uname:me.name, text:txt, time:timeStr, ts:ts, status:'sent'}; if(attachFile) { if(attachFile.length > 5 * 1024 * 1024) { showInAppToast("Ошибка", "Файл слишком большой"); clearAttach(); return; } payload.file = attachFile; attachFile = null; document.getElementById('attach-preview').style.display = 'none'; document.getElementById('attach-preview').innerHTML = ''; } if(!activeChatRealKey) activeChatRealKey = getComputedChatKey(currentUserId, activeChatId); const newRef = db.ref(`messages/${activeChatRealKey}`).push(); newRef.set(payload).then(() => { setTimeout(() => newRef.update({status:'delivered'}), 1000); }).catch(err => showInAppToast("Ошибка", "Не удалось отправить сообщение")); inp.value = ''; let snippetTxt = txt || (payload.file ? (payload.file.startsWith('data:audio')?'🎤 Голосовое':'📎 Вложение') : ''); const snippet = {lastMsg:snippetTxt, ts:ts, time:timeStr, isG:isGroupMode, senderUid:currentUserId, senderName:me.name, msgStatus:'sent'}; if(!isGroupMode) { db.ref(`user_chats/${currentUserId}/${activeChatRealKey}`).update(snippet); const targetSnippet = {...snippet, unread: (myChats[activeChatRealKey]?.unread || 0) + 1}; db.ref(`user_chats/${activeChatId}/${activeChatRealKey}`).update(targetSnippet); } else { const g = allGroups.find(x => x.id===activeChatId); if(g && g.members) { const updates = {}; Object.keys(g.members).forEach(mid => { updates[`user_chats/${mid}/${activeChatRealKey}`] = mid === currentUserId ? snippet : {...snippet, unread: (myChats[activeChatRealKey]?.unread || 0) + 1}; }); db.ref().update(updates); } } db.ref(`typing/${activeChatRealKey}/${currentUserId}`).remove(); }
 
         function toggleVoiceRecord() { if(!activeChatId) { showInAppToast("Ошибка", "Сначала выберите чат"); return; } const btn = document.getElementById('mic-btn'); const inp = document.getElementById('msg-input'); const sendBtn = document.getElementById('send-msg-btn'); if(!isRecording) { let mime = 'audio/webm;codecs=opus'; if (!MediaRecorder.isTypeSupported(mime)) mime = 'audio/mp4'; navigator.mediaDevices.getUserMedia({audio:true}).then(stream => { mediaRecorder = new MediaRecorder(stream, mime?{mimeType:mime}:undefined); audioChunks = []; mediaRecorder.ondataavailable = e => { if(e.data.size) audioChunks.push(e.data); }; mediaRecorder.onstop = () => { const blob = new Blob(audioChunks, {type:mediaRecorder.mimeType||mime||'audio/mp4'}); const fr = new FileReader(); fr.onload = ev => { attachFile = ev.target.result; if (isSendingRecording) { sendMessage(); isSendingRecording = false; } else { showAudioPreview(blob); } }; fr.readAsDataURL(blob); stream.getTracks().forEach(t => t.stop()); }; mediaRecorder.start(); isRecording = true; recordingSeconds = 0; updateRecordingTimer(); audioRecordingTimer = setInterval(() => { recordingSeconds++; updateRecordingTimer(); }, 1000); btn.style.color = 'var(--danger)'; btn.style.background = 'rgba(255,59,48,0.1)'; btn.innerHTML = `<svg width="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="6" y="4" width="12" height="16" rx="2"/></svg>`; showRecordingIndicator(); sendBtn.style.background = 'var(--danger)'; sendBtn.innerHTML = `<svg width="20" viewBox="0 0 24 24" fill="none" stroke="white"><rect x="6" y="4" width="12" height="16" rx="2"/></svg>`; sendBtn.onclick = (e) => { e.stopPropagation(); stopRecordingAndSend(); }; inp.placeholder = 'Запись...'; }).catch(() => { showInAppToast("Ошибка", "Нет доступа к микрофону"); stopRecording(); }); } else { stopRecording(); } }
         function stopRecording() { if(mediaRecorder && mediaRecorder.state !== 'inactive') { isSendingRecording = false; mediaRecorder.stop(); } isRecording = false; clearInterval(audioRecordingTimer); const btn = document.getElementById('mic-btn'); const inp = document.getElementById('msg-input'); const sendBtn = document.getElementById('send-msg-btn'); btn.style.color = 'var(--accent)'; btn.style.background = 'transparent'; btn.innerHTML = `<svg width="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v1a7 7 0 0 1-14 0v-1"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>`; sendBtn.style.background = 'var(--accent)'; sendBtn.innerHTML = `<svg width="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>`; sendBtn.onclick = sendMessage; inp.placeholder = 'Сообщение...'; hideRecordingIndicator(); }
