@@ -921,7 +921,7 @@
 
         function logout() {
             if(currentUserId) {
-                db.ref(`users/${currentUserId}/status`).setValue(Date.now()).then(() => {
+                db.ref(`users/${currentUserId}/status`).set(Date.now()).then(() => {
                     auth.signOut().then(() => { localStorage.clear(); window.location.reload(); });
                 });
             } else { localStorage.clear(); window.location.reload(); }
@@ -959,7 +959,7 @@
             db.ref('.info/connected').on('value', s => {
                 if(s.val()===true && currentUserId) {
                     const r = db.ref(`users/${currentUserId}/status`);
-                    r.setValue('в сети'); r.onDisconnect().setValue(Date.now());
+                    r.set('в сети'); r.onDisconnect().setValue(Date.now());
                 }
             });
             listenForCalls();
