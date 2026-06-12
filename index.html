@@ -6,7 +6,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="transparent">
-    <title>Connecta Pro</title>
+    <title>Connecta</title>
     <style>
         :root {
             --bg-main: #f4f6f9;
@@ -414,7 +414,7 @@
             <div class="settings-row"><div class="settings-row-text"><div class="settings-title">Микрофон</div><div class="settings-sub" id="mic-status-text">Проверка...</div></div><div class="toggle-switch" id="mic-perm-toggle" onclick="requestMicrophonePermission()"><div class="toggle-knob"></div></div></div>
             <div class="settings-row"><div class="settings-row-text"><div class="settings-title">Камера</div><div class="settings-sub" id="cam-status-text">Проверка...</div></div><div class="toggle-switch" id="cam-perm-toggle" onclick="requestCameraPermission()"><div class="toggle-knob"></div></div></div>
             <div class="settings-row"><div class="settings-row-text"><div class="settings-title">Системные уведомления</div><div class="settings-sub" id="notif-perm-status-text">Проверка...</div></div><div class="toggle-switch" id="notif-perm-toggle" onclick="requestNotificationPermission()"><div class="toggle-knob"></div></div></div>
-            <div style="margin-bottom:24px; padding:20px; background:var(--hover-bg); border-radius:18px; text-align:center;"><div style="font-size:18px; font-weight:800;">Connecta PRO</div><div style="font-size:14px;">Версия 2.0 • beta</div><div style="font-size:13px; color:var(--accent);">EGORKIN NIKITA DEV</div></div>
+            <div style="margin-bottom:24px; padding:20px; background:var(--hover-bg); border-radius:18px; text-align:center;"><div style="font-size:18px; font-weight:800;">Connecta messenger</div><div style="font-size:14px;">Версия 1.4.1 • beta (b0149130626)</div><div style="font-size:13px; color:var(--accent);">EGORKIN NIKITA DEV</div></div>
             <button class="btn-full primary" onclick="closeModals()">Закрыть</button>
         </div>
     </div>
@@ -430,7 +430,7 @@
     
     <div id="app-layout">
         <aside id="sidebar-container" class="glass-panel">
-            <div class="sidebar-header"><div class="brand-title"><span>CONNECTA</span><span class="dev-badge">PRO</span></div><div class="header-actions"><button class="btn-icon" id="theme-toggle-btn" onclick="openAppSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn-icon" onclick="openCreateGroupModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileModal()"></div></div></div>
+            <div class="sidebar-header"><div class="brand-title"><span>CONNECTA</span><span class="dev-badge">beta</span></div><div class="header-actions"><button class="btn-icon" id="theme-toggle-btn" onclick="openAppSettings()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button><button class="btn-icon" onclick="openCreateGroupModal()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><div id="my-avatar-anchor" style="cursor:pointer;" onclick="openProfileModal()"></div></div></div>
             
             <div class="stories-bar" id="stories-bar"></div>
             
