@@ -344,5 +344,173 @@ document.addEventListener('touchend',e=>{if(sx<28&&e.changedTouches[0].clientX-s
 document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeSheet();closeSt()}});
 actUI();
 </script>
+  <!-- CONNECTA v2: вставьте весь этот блок в свой файл прямо перед </body> (после последнего </script>). Оригинальный код не удаляется. -->
+<style id="v2-css">
+:root{--bg-main:#fff;--panel-bg:#fff;--panel-border:#dbdbdb;--inner-border:#efefef;--text-primary:#262626;--text-secondary:#737373;--accent:#0095f6;--accent-rgb:0,149,246;--bubble-out:#0095f6;--bubble-in:#efefef;--hover-bg:#f2f2f2;--input-bg:#fafafa;--unread-badge:#ff3040;--verified-color:#0095f6;--shadow-premium:0 8px 30px rgba(0,0,0,.14);--v2nav:calc(52px + env(safe-area-inset-bottom))}
+[data-theme=dark]{--bg-main:#000;--panel-bg:#000;--panel-border:#262626;--inner-border:#262626;--text-primary:#f5f5f5;--text-secondary:#a8a8a8;--bubble-in:#262626;--hover-bg:#1c1c1c;--input-bg:#121212}
+.bg-particles,.ambient-glow,.floating-dock{display:none!important}
+*{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+.glass-panel,.sidebar-header,.chat-header,.chat-input-bar,.modal-card{background:var(--bg-main)}
+#sidebar-container{padding-bottom:var(--v2nav)}
+.story-ring{width:66px;height:66px}
+.story-ring.has-story,.pf-av.ring{background:linear-gradient(45deg,#feda75,#fa7e1e,#d62976,#962fbf,#4f5bd5)}
+.story-ring.viewed{background:#c7c7c7}
+.story-add-icon{pointer-events:auto!important}
+.tab-btn.active{background:none;border-radius:0;box-shadow:inset 0 -2px 0 var(--text-primary)}
+.msg-bubble-main{box-shadow:none;border-radius:22px}
+.incoming .msg-bubble-main{background:var(--bubble-in)}
+body:not([data-theme]) .outgoing .msg-bubble-main{background:linear-gradient(160deg,#7a5cff,#0095f6)}
+.item-row.active .swipe-content{background:var(--hover-bg)}
+.v2-nav{position:fixed;left:0;right:0;bottom:0;z-index:1500;display:flex;height:var(--v2nav);padding-bottom:env(safe-area-inset-bottom);background:var(--bg-main);border-top:1px solid var(--inner-border);transition:transform .3s}
+.chat-opened .v2-nav{transform:translateY(110%)}
+.v2-nav button{flex:1;height:52px;border:0;background:none;color:var(--text-primary);opacity:.5;position:relative;display:flex;align-items:center;justify-content:center;transition:opacity .2s,transform .15s}
+.v2-nav button.act{opacity:1}.v2-nav button:active{transform:scale(.88)}
+.nb{position:absolute;top:6px;left:calc(50% + 6px);min-width:16px;height:16px;border-radius:8px;background:#ff3040;color:#fff;font:700 10px/16px sans-serif;font-style:normal;text-align:center;padding:0 4px;display:none}
+.v2-page{position:fixed;inset:0 0 var(--v2nav) 0;z-index:1400;background:var(--bg-main);color:var(--text-primary);overflow-y:auto;display:none;-webkit-overflow-scrolling:touch}
+.v2-page.on{display:block}#v2-profile{z-index:1450}
+.chat-opened .v2-page{bottom:0}
+.v2-top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:var(--bg-main);border-bottom:1px solid var(--inner-border)}
+.v2-top h1{font:italic 700 28px/1 "Snell Roundhand","Segoe Script","Brush Script MT",cursive}
+.tbtn{position:relative;width:34px;height:34px;border:0;background:none;color:var(--text-primary);display:flex;align-items:center;justify-content:center}
+.tbtn .nb{top:-2px;left:auto;right:-4px}
+.v2-w{max-width:470px;margin:0 auto}
+#feed-stories{display:flex;gap:12px;padding:12px;overflow-x:auto;scrollbar-width:none}
+.ftabs{display:flex;border-bottom:1px solid var(--inner-border)}
+.ftab{flex:1;padding:12px;border:0;background:none;color:var(--text-secondary);font-weight:600;font-size:14px}
+.ftab.act{color:var(--text-primary);box-shadow:inset 0 -2px 0 var(--text-primary)}
+.post{border-bottom:1px solid var(--inner-border);padding-bottom:10px}
+.ph{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.pn{flex:1;min-width:0;font-weight:600;font-size:14px;display:flex;align-items:center;cursor:pointer}
+.pn small{color:var(--text-secondary);font-weight:400;margin-left:8px}
+.pb{border:0;background:none;color:var(--danger);font-size:13px}
+.pi{position:relative;background:var(--hover-bg);line-height:0;user-select:none;-webkit-user-select:none}
+.pi img{width:100%;max-height:75vh;object-fit:cover;display:block}
+.pa{display:flex;gap:14px;padding:10px 12px 4px}
+.pa button{border:0;background:none;color:var(--text-primary);padding:0;line-height:0;transition:transform .15s}.pa button:active{transform:scale(.85)}
+.pl,.pt,.pc{padding:2px 12px;font-size:14px;line-height:1.4}.pc{color:var(--text-secondary);cursor:pointer}
+.burst{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:90px;color:#fff;pointer-events:none;text-shadow:0 2px 20px rgba(0,0,0,.4);animation:bst .7s forwards}
+@keyframes bst{0%{transform:scale(0);opacity:0}30%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:0}}
+.pf-top{display:flex;align-items:center;gap:22px;padding:16px}
+.pf-av{padding:3px;border-radius:50%;flex-shrink:0}.pf-av.ring{cursor:pointer}.pf-av .avatar-ui{border:3px solid var(--bg-main)}
+.pf-st{flex:1;display:flex;justify-content:space-around;text-align:center}
+.pf-st b{display:block;font-size:17px}.pf-st span{font-size:12px;color:var(--text-secondary)}
+.pf-nm{padding:0 16px;font-weight:700;display:flex;align-items:center}
+.pf-ds,.pf-ds2{padding:2px 16px;font-size:14px}.pf-ds2{color:var(--text-secondary)}
+.pf-bt{display:flex;gap:8px;padding:12px 16px}
+.pf-bt button{flex:1;height:34px;border:0;border-radius:8px;background:var(--hover-bg);color:var(--text-primary);font-weight:600;font-size:14px}
+.pf-bt .pr{background:var(--accent);color:#fff}
+.pf-gr{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;border-top:1px solid var(--inner-border)}
+.pf-gr>div{aspect-ratio:1;background:var(--hover-bg);overflow:hidden;cursor:pointer}.pf-gr img{width:100%;height:100%;object-fit:cover}
+.v2-sheet{position:fixed;inset:0;z-index:3500;background:rgba(0,0,0,.5);display:flex;align-items:flex-end;justify-content:center;opacity:0;transition:opacity .25s}
+.v2-sheet.on{opacity:1}
+.sh{width:100%;max-width:520px;max-height:88dvh;overflow-y:auto;background:var(--bg-main);color:var(--text-primary);border-radius:16px 16px 0 0;padding:14px 16px calc(14px + env(safe-area-inset-bottom));transform:translateY(30px);transition:transform .25s}
+.v2-sheet.on .sh{transform:none}.sh .post{border:0}
+.sh-h{text-align:center;font-weight:700;margin-bottom:12px}.sh-e{text-align:center;color:var(--text-secondary);padding:28px 16px;font-size:14px}
+.cm{padding:8px 0;font-size:14px;line-height:1.4}.cm b{cursor:pointer}.cm small{display:block;color:var(--text-secondary);font-size:12px}
+.sh-f{display:flex;gap:8px;margin-top:10px}
+.sh-f input{flex:1;height:40px;border:1px solid var(--inner-border);border-radius:20px;padding:0 14px;background:var(--input-bg);color:var(--text-primary);font-size:15px;outline:0}
+.sh-f button{border:0;background:none;color:var(--accent);font-weight:700}
+.np{width:100%;max-height:46dvh;object-fit:contain;border-radius:8px}
+#np-t{width:100%;margin:10px 0;min-height:70px;padding:10px;border:1px solid var(--inner-border);border-radius:12px;background:var(--input-bg);color:var(--text-primary);font-size:15px;resize:none;outline:0}
+</style>
+<script id="v2-js">
+/* ===== CONNECTA v2 ===== */
+const E=id=>document.getElementById(id),sid=s=>String(s==null?'':s).replace(/[^\w-]/g,'');
+var attachName='',pendingPoll=null;
+let posts={},follows={},feedMode='all',v2Page=null,feedQ=null,cmRef=null,pfSig='';
+
+/* Патчер: правит исходник существующей функции на лету (пробелы в шаблоне не важны) */
+function P(n,a,b){try{const s=window[n].toString(),r=new RegExp(a.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s*'));if(!r.test(s)){console.warn('[v2] фрагмент не найден в',n,a.slice(0,40));return}window[n]=(0,eval)('('+s.replace(r,()=>b)+')')}catch(x){console.warn('[v2]',n,x)}}
+
+/* --- Истории: навигация (innerHTML стирал зоны нажатия), "моя история", очистка >24ч --- */
+P('showCurrentStory',"content.innerHTML = ''; if(story.image) {","content.querySelectorAll('.story-image,.story-err').forEach(e=>e.remove()); if(story.image) {");
+P('showCurrentStory',`content.innerHTML = '<div style="color:white;text-align:center;">Не удалось загрузить изображение</div>';`,"img.remove(); const d=document.createElement('div'); d.className='story-err'; d.style.color='#fff'; d.textContent='Не удалось загрузить изображение'; content.appendChild(d);");
+P('closeStoryViewer',"if(content) content.innerHTML = '';","if(content) content.querySelectorAll('.story-image,.story-err').forEach(e=>e.remove());");
+P('renderStories','onclick="event.stopPropagation(); openStoryCreator()"','onclick="event.stopPropagation(); ${hasMyStories?\'viewUserStories(currentUserId)\':\'openStoryCreator()\'}"');
+P('renderStories','<div class="story-add-icon">+</div>','<div class="story-add-icon" onclick="event.stopPropagation();openStoryCreator()">+</div>');
+P('initCore',"stories=s.val()||{}; renderStories();","stories=pruneStories(s.val()||{}); renderStories();");
+/* --- Чат: уведомления, опросы, подписи, файлы, прокрутка, пагинация, счётчики, прочтение --- */
+P('initCore',"notifyNewMessage(ci.senderName,ci.lastMsg);","if(!(k===activeChatRealKey&&!document.hidden)) notifyNewMessage(ci.senderName,ci.lastMsg);");
+P('renderMessages','if(m.poll) { renderPoll(m.key,m.poll,div); }',"if(m.poll) { const tp=document.createElement('div'); renderPoll(m.key,m.poll,tp); html+=tp.innerHTML; }");
+P('renderMessages','else html+=`<a href="${m.file}" download target="_blank" onclick="event.stopPropagation();">Файл</a>`;','else if(m.file.startsWith(\'data:video\')) html+=`<video src="${m.file}" controls playsinline class="msg-media-preview"></video>`; else if(m.file.startsWith(\'data:\')) html+=`<a href="${m.file}" download="${escapeHTML(m.fileName||\'file\')}" onclick="event.stopPropagation();">📎 ${escapeHTML(m.fileName||\'Файл\')}</a>`;');
+P('renderMessages','} else html+=`<div>${formatText(escapeHTML(m.text))}</div>`;','} if((m.text||!m.file)&&!m.poll) html+=`<div>${linkify(formatText(escapeHTML(m.text)))}</div>`;');
+P('renderMessages','const oldScroll=keepScroll?flow.scrollTop:null;',"const lm=Object.values(currentChatMessages).sort((a,b)=>a.ts-b.ts).pop()||{}; const stick=flow.scrollHeight-flow.scrollTop-flow.clientHeight<150||(lm.uid===currentUserId&&lm.ts!==window.__lm); window.__lm=lm.ts; const oldScroll=(keepScroll||!stick)?flow.scrollTop:null;");
+P('renderMessages','if(keepScroll&&oldScroll!==null) flow.scrollTop=oldScroll;','if(oldScroll!==null) flow.scrollTop=oldScroll;');
+P('openChat',"currentChatMessages=s.val()||{}; const keys=Object.keys(currentChatMessages).sort(); if(keys.length) lastLoadedMsgKey=keys[0]; renderMessages(); if(messagesFlow) messagesFlow.scrollTop=messagesFlow.scrollHeight;","const first=!Object.keys(currentChatMessages).length; currentChatMessages={...currentChatMessages,...(s.val()||{})}; if(first){const keys=Object.keys(currentChatMessages).sort(); if(keys.length) lastLoadedMsgKey=keys[0];} renderMessages(); markRead();");
+P('sendMessage','if(!txt&&!attachFile) return;','if(!txt&&!attachFile&&!pendingPoll) return;');
+P('sendMessage',"const payload={uid:currentUserId,uname:me.name,text:txt,time:timeStr,ts:ts,status:'sent'};","const payload={uid:currentUserId,uname:me.name,text:txt,time:timeStr,ts:ts,status:'sent'}; if(pendingPoll){payload.poll=pendingPoll;pendingPoll=null;}");
+P('sendMessage','payload.file=attachFile; attachFile=null;',"payload.file=attachFile; if(attachName) payload.fileName=attachName; attachFile=null; attachName='';");
+P('sendMessage',"let snippetTxt=txt||(payload.file?(payload.file.startsWith('data:audio')?'Голосовое сообщение':'Вложение'):'');","let snippetTxt=txt||(payload.poll?'📊 '+payload.poll.question:payload.file?(payload.file.startsWith('data:audio')?'🎤 Голосовое сообщение':payload.file.startsWith('data:image')?'📷 Фото':'📎 Вложение'):'');");
+for(let i=0;i<2;i++)P('sendMessage','unread:(myChats[activeChatRealKey]?.unread||0)+1','unread:firebase.database.ServerValue.increment(1)');
+P('stopRecording','{ isSendingRecording=false; mediaRecorder.stop(); }','{ mediaRecorder.stop(); }');
+P('attachSwipeActions',"isHor=null; wrap.style.transition='none';","isHor=null; curX=0; wrap.style.transition='none';");
+P('renderLists',`onclick="openChat('\${u.id}',false)"`,`onclick="openProfile('\${u.id}')"`);
+/* --- Звонки: чистка старых данных, гонка ICE-кандидатов, устаревшие вызовы, TURN --- */
+P('startVideoCall','const callDoc=db.ref(`calls/${activeChatId}`);','const callDoc=db.ref(`calls/${activeChatId}`); await callDoc.remove();');
+P('startVideoCall','await callDoc.set({offer:','await callDoc.update({answer:null,ts:Date.now(),offer:');
+P('listenForCalls',"data.status==='calling'&&data.callerId&&!isCallActive","data.status==='calling'&&data.callerId&&!isCallActive&&(!data.ts||Date.now()-data.ts<6e4)");
+try{rtcConfig.iceServers.push({urls:['turn:openrelay.metered.ca:80','turn:openrelay.metered.ca:443','turn:openrelay.metered.ca:443?transport=tcp'],username:'openrelayproject',credential:'openrelayproject'})}catch(x){}
+
+/* --- Утилиты --- */
+function compress(f,max,q){return new Promise((ok,no)=>{const fr=new FileReader();fr.onerror=no;fr.onload=()=>{const im=new Image();im.onerror=no;im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(im.width*k));c.height=Math.max(1,Math.round(im.height*k));const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);ok(c.toDataURL('image/jpeg',q))};im.src=fr.result};fr.readAsDataURL(f)})}
+const readURL=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)});
+const safeImg=s=>/^data:image\/(png|jpe?g|webp|gif);base64,/.test(s||'')?s:'';
+function linkify(h){return h.replace(/(https?:\/\/[^\s<"]+)/g,'<a href="$1" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:inherit;text-decoration:underline">$1</a>')}
+function ago(t){const s=(Date.now()-t)/1e3;return s<60?'сейчас':s<3600?Math.floor(s/60)+' мин':s<86400?Math.floor(s/3600)+' ч':Math.floor(s/86400)+' дн'}
+function pruneStories(o){const lim=Date.now()-864e5,r={};for(const u in o){const v=o[u];if(!v||typeof v!=='object')continue;const m={};for(const k in v){const s=v[k];if(s&&s.time>lim)m[k]=s;else if(u===currentUserId)db.ref(`stories/${u}/${k}`).remove()}if(Object.keys(m).length)r[u]=m}return r}
+function markRead(){if(!activeChatRealKey||document.hidden)return;const u={};for(const k in currentChatMessages){const m=currentChatMessages[k];if(m.uid!==currentUserId&&m.status!=='read')u[k+'/status']='read'}if(Object.keys(u).length)db.ref('messages/'+activeChatRealKey).update(u);if(!isGroupMode){const o=activeChatId;db.ref(`user_chats/${o}/${activeChatRealKey}`).transaction(n=>{if(n&&n.senderUid===o)n.msgStatus='read';return n})}}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)markRead()});
+
+/* --- Переопределения с сжатием фото (быстрее и легче для БД) --- */
+window.handleFileSelect=async function(e){const f=e.target.files[0];if(!f)return;if(f.size>2e7){showInAppToast('Ошибка','Файл слишком большой');e.target.value='';return}try{attachFile=/^image\/(png|jpe?g|webp)$/.test(f.type)?await compress(f,1280,.82):await readURL(f)}catch(x){showInAppToast('Ошибка','Не удалось прочитать файл');return}attachName=f.name;const p=E('attach-preview');p.style.cssText='display:flex;align-items:center;gap:12px;padding:12px 20px';p.innerHTML=`<div style="display:flex;gap:8px;align-items:center;min-width:0;flex:1"><span>📎</span><span style="font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${escapeHTML(f.name)}</span></div><button style="border:none;background:none;color:var(--danger);cursor:pointer;padding:4px 8px;font-size:14px" onclick="clearAttach()">Удалить</button>`;e.target.value=''};
+window.openStoryCreator=function(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async e=>{const f=e.target.files[0];if(!f)return;showLoading();try{createStory(await compress(f,1080,.8))}catch(x){showInAppToast('Ошибка','Не удалось прочитать файл')}hideLoading()};i.click()};
+window.handleProfileImgUpload=async function(e){const f=e.target.files[0];if(!f)return;try{tempProfileImg=await compress(f,256,.85)}catch(x){showInAppToast('Ошибка','Не удалось прочитать фото');return}E('profile-avatar-preview').innerHTML=`<div class="avatar-ui" style="background-image:url('${tempProfileImg}');width:70px;height:70px"></div>`};
+window.handleGroupImgUpload=async function(e){const f=e.target.files[0];if(!f)return;try{tempGroupImg=await compress(f,256,.85)}catch(x){showInAppToast('Ошибка','Не удалось прочитать фото');return}E('edit-group-avatar-preview').innerHTML=`<div class="avatar-ui" style="background-image:url('${tempGroupImg}');width:64px;height:64px"></div>`};
+window.createPoll=function(){const q=E('poll-question').value.trim(),o=[...document.querySelectorAll('.poll-option-input')].map(i=>i.value.trim()).filter(Boolean).map(t=>({text:t,votes:0}));if(!q||o.length<2){showInAppToast('Ошибка','Нужен вопрос и минимум 2 варианта');return}pendingPoll={question:q,options:o,totalVotes:0};E('poll-question').value='';document.querySelectorAll('.poll-option-input').forEach(i=>i.value='');closeModals();sendMessage()};
+window.votePoll=function(id,i){db.ref(`messages/${activeChatRealKey}/${id}/poll`).transaction(p=>{if(!p||!p.options[i])return p;p.options.forEach(o=>{if(o.voters&&o.voters[currentUserId]){delete o.voters[currentUserId];o.votes--;p.totalVotes--}});const o=p.options[i];o.voters=o.voters||{};o.voters[currentUserId]=true;o.votes++;p.totalVotes++;return p})};
+window.initParticles=function(){};
+
+/* --- Иконки и каркас интерфейса --- */
+const IC=(p,f)=>`<svg viewBox="0 0 24 24" width="26" height="26" fill="${f||'none'}" stroke="${f||'currentColor'}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const HRT='<path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/>';
+const I={home:IC('<path d="M3 11l9-8 9 8v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>'),send:IC('<path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/>'),plus:IC('<rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 8v8M8 12h8"/>'),search:IC('<circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/>'),user:IC('<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>'),cmt:IC('<path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.2A8 8 0 1 1 21 12z"/>'),like:IC(HRT),liked:IC(HRT,'#ed4956'),back:IC('<path d="M15 18l-6-6 6-6"/>')};
+document.body.insertAdjacentHTML('beforeend',`<nav class="v2-nav" id="v2-nav"><button id="nv-feed" class="act" onclick="v2Go('feed')">${I.home}</button><button id="nv-chats" onclick="v2Go('chats')">${I.send}<i class="nb" id="nv-badge"></i></button><button onclick="openPostCreator()">${I.plus}</button><button id="nv-people" onclick="v2Go('people')">${I.search}</button><button id="nv-me" onclick="openProfile(currentUserId)">${I.user}</button></nav><div class="v2-page" id="v2-feed"><div class="v2-top"><h1>Connecta</h1><button class="tbtn" onclick="v2Go('chats')">${I.send}<i class="nb" id="top-badge"></i></button></div><div class="v2-w"><div id="feed-stories"></div><div class="ftabs"><button class="ftab act" data-m="all" onclick="feedTab('all')">Для вас</button><button class="ftab" data-m="follow" onclick="feedTab('follow')">Подписки</button></div><div id="feed-list"></div><div id="feed-empty" class="sh-e">Здесь пока пусто.<br>Нажмите «+» и опубликуйте первое фото.</div></div></div><div class="v2-page" id="v2-profile"><div class="v2-top"><button class="tbtn" onclick="closeProfile()">${I.back}</button><b id="pf-title"></b><span style="width:34px"></span></div><div class="v2-w" id="pf-body"></div></div>`);
+
+function v2Go(t){closeSheet();closeProfile();closeChat();E('v2-feed').classList.toggle('on',t==='feed');if(t==='chats')switchTab('chats');if(t==='people')switchTab('contacts');document.querySelectorAll('#v2-nav button[id]').forEach(b=>b.classList.toggle('act',b.id==='nv-'+t))}
+function goChat(uid){v2Go('chats');openChat(uid,false)}
+function closeProfile(){v2Page=null;E('v2-profile').classList.remove('on')}
+function v2Badge(){let n=0;for(const k in myChats){const c=myChats[k];if(c.unread&&c.senderUid!==currentUserId)n+=c.unread}['nv-badge','top-badge'].forEach(i=>{const b=E(i);if(b){b.style.display=n?'block':'none';b.textContent=n>99?'99+':n}})}
+
+/* --- Нижние панели: комментарии, новая публикация --- */
+function sheet(h){closeSheet();const o=document.createElement('div');o.className='v2-sheet';o.id='v2-sheet';o.onclick=e=>{if(e.target===o)closeSheet()};o.innerHTML=`<div class="sh">${h}</div>`;document.body.appendChild(o);requestAnimationFrame(()=>o.classList.add('on'))}
+function closeSheet(){if(cmRef){cmRef.off();cmRef=null}const o=E('v2-sheet');if(o)o.remove()}
+function openComments(id){sheet(`<div class="sh-h">Комментарии</div><div id="cm-list"></div><div class="sh-f"><input id="cm-in" placeholder="Добавьте комментарий…" maxlength="300" onkeypress="if(event.key==='Enter')sendComment('${id}')"><button onclick="sendComment('${id}')">Опубл.</button></div>`);cmRef=db.ref('comments/'+id);cmRef.on('value',x=>{const l=E('cm-list');if(l)l.innerHTML=Object.values(x.val()||{}).sort((a,b)=>a.ts-b.ts).map(c=>`<div class="cm"><b onclick="openProfile('${sid(c.uid)}')">${escapeHTML(c.name)}</b> ${linkify(escapeHTML(c.text))}<small>${ago(c.ts)}</small></div>`).join('')||'<div class="sh-e">Пока нет комментариев.<br>Напишите первым.</div>'})}
+function sendComment(id){const i=E('cm-in'),t=i.value.trim();if(!t)return;const me=allUsers.find(u=>u.id===currentUserId);db.ref('comments/'+id).push({uid:currentUserId,name:me?me.name:'Я',text:t,ts:Date.now()});db.ref(`posts/${id}/cc`).transaction(v=>(v||0)+1);i.value=''}
+function openPostCreator(){const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async e=>{const f=e.target.files[0];if(!f)return;showLoading();let img;try{img=await compress(f,1080,.8)}catch(x){hideLoading();showInAppToast('Ошибка','Не удалось прочитать фото');return}hideLoading();sheet(`<div class="sh-h">Новая публикация</div><img class="np" src="${img}" alt=""><textarea id="np-t" placeholder="Добавьте подпись…" maxlength="500"></textarea><button class="btn-full primary" id="np-b">Опубликовать</button><button class="btn-full secondary" onclick="closeSheet()">Отмена</button>`);E('np-b').onclick=()=>{const me=allUsers.find(u=>u.id===currentUserId);E('np-b').disabled=true;db.ref('posts').push({uid:currentUserId,uname:me?me.name:'',img,text:E('np-t').value.trim(),ts:Date.now()}).then(()=>{closeSheet();v2Go('feed');showInAppToast('Публикация','Опубликовано')}).catch(()=>{E('np-b').disabled=false;showInAppToast('Ошибка','Не удалось опубликовать. Проверьте правила Firebase')})}};i.click()}
+
+/* --- Лента --- */
+function postEl(id,p){const u=allUsers.find(x=>x.id===p.uid)||{id:p.uid,name:p.uname||'Пользователь'},k=sid(id),d=document.createElement('article');d.className='post';d.dataset.pid=id;d.dataset.uid=p.uid;d.dataset.ts=p.ts;d.innerHTML=`<div class="ph"><div onclick="openProfile('${sid(p.uid)}')" style="cursor:pointer">${getAvatar(u,34)}</div><div class="pn" onclick="openProfile('${sid(p.uid)}')">${escapeHTML(u.name)}${isVerified(p.uid)?getVerifiedIcon():''}<small>${ago(p.ts)}</small></div>${p.uid===currentUserId?`<button class="pb" onclick="delPost('${k}')">Удалить</button>`:''}</div><div class="pi" ondblclick="likePost('${k}',1,this)"><img src="${safeImg(p.img)}" alt=""></div><div class="pa"><button class="lk" onclick="likePost('${k}')"></button><button onclick="openComments('${k}')">${I.cmt}</button></div><div class="pl"></div>${p.text?`<div class="pt"><b>${escapeHTML(u.name)}</b> ${linkify(escapeHTML(p.text))}</div>`:''}<div class="pc" onclick="openComments('${k}')"></div>`;return d}
+function updPost(id){const p=posts[id];if(!p)return;const n=p.likes?Object.keys(p.likes).length:0,on=!!(p.likes&&p.likes[currentUserId]);document.querySelectorAll(`.post[data-pid="${id}"]`).forEach(d=>{d.querySelector('.lk').innerHTML=on?I.liked:I.like;d.querySelector('.pl').textContent=n?`Нравится: ${n}`:'';d.querySelector('.pc').textContent=p.cc?`Все комментарии (${p.cc})`:'Добавить комментарий…'})}
+function burst(el){const h=document.createElement('div');h.className='burst';h.textContent='❤';el.appendChild(h);setTimeout(()=>h.remove(),700)}
+function likePost(id,dbl,el){const p=posts[id];if(!p)return;const on=p.likes&&p.likes[currentUserId];if(dbl){burst(el);if(on)return}db.ref(`posts/${id}/likes/${currentUserId}`).set(on?null:true)}
+function delPost(id){if(!confirm('Удалить публикацию?'))return;closeSheet();db.ref('posts/'+id).remove();db.ref('comments/'+id).remove()}
+function openPost(id){const p=posts[id];if(!p)return;sheet('<div id="op"></div>');E('op').appendChild(postEl(id,p));updPost(id)}
+function feedFilter(){const l=E('feed-list'),f=follows[currentUserId]||{};[...l.children].forEach(c=>c.style.display=feedMode==='all'||c.dataset.uid===currentUserId||f[c.dataset.uid]?'':'none');E('feed-empty').style.display=[...l.children].some(c=>c.style.display!=='none')?'none':'block'}
+function feedTab(m){feedMode=m;document.querySelectorAll('.ftab').forEach(b=>b.classList.toggle('act',b.dataset.m===m));feedFilter()}
+function addPost(id){const p=posts[id],l=E('feed-list');if(!p||!p.img||l.querySelector(`[data-pid="${id}"]`))return;const el=postEl(id,p),nx=[...l.children].find(c=>+c.dataset.ts<p.ts);nx?l.insertBefore(el,nx):l.appendChild(el);updPost(id);feedFilter();if(v2Page)profileDraw()}
+function feedStart(){feedQ=db.ref('posts').orderByChild('ts').limitToLast(40);feedQ.on('child_added',s=>{posts[s.key]=s.val();addPost(s.key)});feedQ.on('child_changed',s=>{posts[s.key]=s.val();updPost(s.key);if(v2Page)profileDraw()});feedQ.on('child_removed',s=>{delete posts[s.key];document.querySelectorAll(`.post[data-pid="${s.key}"]`).forEach(n=>n.remove());feedFilter();if(v2Page)profileDraw()});db.ref('follows').on('value',s=>{follows=s.val()||{};feedFilter();if(v2Page)profileDraw()});feedFilter()}
+
+/* --- Страницы профилей --- */
+function pfSigOf(uid){const u=allUsers.find(x=>x.id===uid)||{};return[u.name,(u.img||'').length,u.description,u.statusText,u.status].join('|')}
+function openProfile(uid){uid=sid(uid);if(!uid)return;closeSheet();v2Page=uid;E('v2-profile').classList.add('on');E('v2-profile').scrollTop=0;profileDraw()}
+function toggleFollow(uid){db.ref(`follows/${currentUserId}/${uid}`).set(follows[currentUserId]&&follows[currentUserId][uid]?null:true)}
+function profileDraw(){const uid=v2Page,box=E('pf-body');if(!uid||!box)return;pfSig=pfSigOf(uid);const u=allUsers.find(x=>x.id===uid)||{id:uid,name:'Пользователь',color:'#999'},mine=uid===currentUserId,my=Object.entries(posts).filter(([k,p])=>p.uid===uid&&p.img).sort((a,b)=>b[1].ts-a[1].ts),fl=Object.values(follows).filter(f=>f&&f[uid]).length,fg=follows[uid]?Object.keys(follows[uid]).length:0,isF=!!(follows[currentUserId]&&follows[currentUserId][uid]),hs=stories[uid]&&Object.keys(stories[uid]).length;E('pf-title').textContent=u.name;box.innerHTML=`<div class="pf-top"><div class="pf-av${hs?' ring':''}" ${hs?`onclick="viewUserStories('${uid}')"`:''}>${getAvatar(u,86)}</div><div class="pf-st"><div><b>${my.length}</b><span>публикаций</span></div><div><b>${fl}</b><span>подписчиков</span></div><div><b>${fg}</b><span>подписок</span></div></div></div><div class="pf-nm">${escapeHTML(u.name)}${isVerified(uid)?getVerifiedIcon():''}</div>${u.description?`<div class="pf-ds">${escapeHTML(u.description)}</div>`:''}<div class="pf-ds2">${escapeHTML(u.statusText||getStatusPlainText(u.status))}</div><div class="pf-bt">${mine?`<button onclick="openProfileModal()">Редактировать</button><button onclick="openAppSettings()">Настройки</button>`:`<button class="${isF?'':'pr'}" onclick="toggleFollow('${uid}')">${isF?'Вы подписаны':'Подписаться'}</button><button onclick="goChat('${uid}')">Сообщение</button>`}</div><div class="pf-gr">${my.map(([k,p])=>`<div onclick="openPost('${sid(k)}')"><img src="${safeImg(p.img)}" loading="lazy" alt=""></div>`).join('')||'<div class="sh-e" style="grid-column:1/-1">Публикаций пока нет</div>'}</div>`}
+
+/* --- Обёртки существующих функций --- */
+const _ic=window.initCore;window.initCore=function(){['users','groups','stories','.info/connected'].forEach(p=>db.ref(p).off());if(currentUserId)db.ref('user_chats/'+currentUserId).off();db.ref('follows').off();if(feedQ)feedQ.off();posts={};E('feed-list').innerHTML='';_ic();feedStart();if(!window.v2s){window.v2s=1;v2Go('feed')}};
+const _uu=window.updateUI;window.updateUI=function(){_uu();v2Badge();if(v2Page&&pfSigOf(v2Page)!==pfSig)profileDraw();const c=myChats[activeChatRealKey];if(c&&c.unread&&!document.hidden)db.ref(`user_chats/${currentUserId}/${activeChatRealKey}/unread`).remove()};
+const _rs=window.renderStories;window.renderStories=function(){_rs();const f=E('feed-stories'),b=E('stories-bar');if(f&&b)f.innerHTML=b.innerHTML};
+const _ov=window.openViewProfile;window.openViewProfile=function(){if(!isGroupMode&&activeChatId)openProfile(activeChatId);else _ov()};
+</script>
 </body>
 </html>
